@@ -1,4 +1,4 @@
-// Wrogowie: ork, goblin, złodziej, zły mag, smok
+// Enemies: orc, goblin, thief, dark mage, dragon
 const enemies = [];
 const _v = new THREE.Vector3();
 
@@ -34,7 +34,7 @@ const BUILDERS = {
     BOX(0.9, 0.2, 0.5, M.iron, 0, 1.45, 0, r.userData.g);
     [-1, 1].forEach(s => { const sh = mesh(new THREE.SphereGeometry(0.2, 8, 6), M.iron, s * 0.55, 1.5, 0, r.userData.g); });
     [-1, 1].forEach(s => mesh(new THREE.ConeGeometry(0.04, 0.18, 5), M.white, s * 0.1, 1.5, 0.27, P.head.parent, false).rotation.x = Math.PI);
-    // topór
+    // axe
     const axe = new THREE.Group(); axe.position.set(0, -0.6, 0.1);
     CYL(0.04, 0.04, 1.3, M.woodD, 0, 0.2, 0, axe, 6);
     BOX(0.08, 0.4, 0.5, M.iron, 0, 0.75, 0.15, axe);
@@ -91,7 +91,7 @@ const BUILDERS = {
     const red = mat(0xa82a1a), dark = mat(0x701810), belly = mat(0xd8a050), wingM = new THREE.MeshLambertMaterial({ color: 0x8a2018, side: THREE.DoubleSide });
     const body = mesh(new THREE.SphereGeometry(1.4, 12, 10), red, 0, 0, 0, g); body.scale.set(1, 0.9, 1.9);
     const bel = mesh(new THREE.SphereGeometry(1.25, 10, 8), belly, 0, -0.35, 0.1, g); bel.scale.set(0.8, 0.7, 1.7);
-    // szyja i głowa
+    // neck and head
     const neck = new THREE.Group(); neck.position.set(0, 0.5, 2.1); g.add(neck);
     const n1 = CYL(0.45, 0.65, 1.8, red, 0, 0.5, 0.5, neck, 8); n1.rotation.x = 0.7;
     const head = new THREE.Group(); head.position.set(0, 1.4, 1.5); neck.add(head);
@@ -108,7 +108,7 @@ const BUILDERS = {
     const t1 = mesh(new THREE.ConeGeometry(0.7, 3.5, 8), red, 0, 0, -1.4, tail); t1.rotation.x = -Math.PI / 2;
     mesh(new THREE.ConeGeometry(0.3, 0.7, 4), dark, 0, 0, -3.4, tail).rotation.x = -Math.PI / 2;
     P.tail = tail;
-    // skrzydła
+    // wings
     function wing(s) {
       const w = new THREE.Group(); w.position.set(s * 1.2, 0.8, 0.3);
       const arm = BOX(4.5, 0.18, 0.18, dark, s * 2.25, 0, 0, w);
@@ -118,7 +118,7 @@ const BUILDERS = {
       g.add(w); return w;
     }
     P.wingL = wing(-1); P.wingR = wing(1);
-    // łapy
+    // legs
     [-1, 1].forEach(s => { const l = CYL(0.2, 0.3, 1.0, dark, s * 0.9, -1.1, 0.7, g, 6); l.rotation.x = 0.3; });
     r.userData.P = P; r.userData.g = g; r.scale.setScalar(1.3);
     return r;
@@ -126,11 +126,11 @@ const BUILDERS = {
 };
 
 const TYPES = {
-  ork:    { name: 'Ork',       hp: 160, speed: 2.4, r: 1.15, cy: 1.7, dmg: 14, cd: 1.4, gold: 14, score: 30, stop: 13 },
-  goblin: { name: 'Goblin',    hp: 40,  speed: 4.0, r: 0.65, cy: 0.9, dmg: 4,  cd: 0.7, gold: 5,  score: 10, stop: 13 },
-  thief:  { name: 'Złodziej',  hp: 60,  speed: 6.2, r: 0.7,  cy: 1.2, dmg: 0,  cd: 1.0, gold: 20, score: 25, stop: 13 },
-  mage:   { name: 'Mag',       hp: 90,  speed: 2.6, r: 0.9,  cy: 1.5, dmg: 12, cd: 3.2, gold: 25, score: 50, ranged: true, stop: 40, isMage: true, spell: 'dark' },
-  dragon: { name: 'Smok',      hp: 520, speed: 0.35, r: 3.2, cy: 0,   dmg: 22, cd: 4.5, gold: 120, score: 300, flying: true, stop: 0, isDragon: true, breathKind: 'fire' },
+  ork:    { hp: 160, speed: 2.4, r: 1.15, cy: 1.7, dmg: 14, cd: 1.4, gold: 14, score: 30, stop: 13 },
+  goblin: { hp: 40,  speed: 4.0, r: 0.65, cy: 0.9, dmg: 4,  cd: 0.7, gold: 5,  score: 10, stop: 13 },
+  thief:  { hp: 60,  speed: 6.2, r: 0.7,  cy: 1.2, dmg: 0,  cd: 1.0, gold: 20, score: 25, stop: 13 },
+  mage:   { hp: 90,  speed: 2.6, r: 0.9,  cy: 1.5, dmg: 12, cd: 3.2, gold: 25, score: 50, ranged: true, stop: 40, isMage: true, spell: 'dark' },
+  dragon: { hp: 520, speed: 0.35, r: 3.2, cy: 0,   dmg: 22, cd: 4.5, gold: 120, score: 300, flying: true, stop: 0, isDragon: true, breathKind: 'fire' },
 };
 
 class Enemy {
@@ -227,7 +227,7 @@ class Enemy {
     }
 
     if (cheb > this.stop) {
-      // ruch w stronę wieży, zwężając tor do osi bramy
+      // move toward the tower, narrowing the path to the gate axis
       const tx = Math.abs(pos.x) > Math.abs(pos.z) ? 0 : pos.x * 0.995, tz = Math.abs(pos.x) > Math.abs(pos.z) ? pos.z * 0.995 : 0;
       const dx = (Math.abs(pos.x) > Math.abs(pos.z) ? -Math.sign(pos.x) : (tx - pos.x) * 0.02), dz = (Math.abs(pos.x) > Math.abs(pos.z) ? (tz - pos.z) * 0.02 : -Math.sign(pos.z));
       const l = Math.hypot(dx, dz);
@@ -244,8 +244,8 @@ class Enemy {
         if (this.type === 'thief') this.steal();
         else {
           const from = pos.clone(); from.y += 2.2 * this.mesh.scale.y;
-          const to = new THREE.Vector3(rnd(-2, 2), TOWER_Y - 1, rnd(-2, 2)); to.x += pos.x * 0.35; to.z += pos.z * 0.35;
-          enemyProjectile(from, to, 24, this.projCol || (this.type === 'ork' ? 0x777777 : 0x8a6a3a), 'tower', this.dmg, 0.28, 0);
+          const def = pickDefender(pos);
+          enemyProjectile(from, defenderPoint(def), 24, this.projCol || (this.type === 'ork' ? 0x777777 : 0x8a6a3a), defenderTag(def), this.dmg, 0.28, 0);
         }
       }
     }

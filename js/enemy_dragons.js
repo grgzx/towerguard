@@ -1,4 +1,4 @@
-// Smoki: 3 rodzaje (ognisty, lodowy, jadowity), skrzydła z kośćmi i błoną, ziejący w stronę celu
+// Dragons: 3 kinds (fire, ice, venom), wings with bones and membrane, breathing at the target
 
 function boneBetween(a, b, rad, m, parent, seg) {
   const d = b.clone().sub(a), len = d.length();
@@ -132,11 +132,13 @@ function dragonUpdate(e, dt, sp) {
   P.tail.rotation.y = Math.sin(e.t * 2) * 0.35;
   const K = BREATH[e.breathKind || 'fire'];
   if (!B && e.state === 'orbit' && e.attackT <= 0) {
-    const toPlayer = Math.random() < 0.5;
-    e.breath = { t: 0, toPlayer, target: toPlayer ? G.player.pos.clone() : new THREE.Vector3(rnd(-3, 3), TOWER_Y + 0.5, rnd(-3, 3)), wind: 1.1, dur: 1.3, acc: 0 };
+    const def = pickDefender(e.mesh.position);
+    e.breath = { t: 0, def, target: defenderPoint(def), wind: 1.1, dur: 1.3, acc: 0 };
     say('dragonBreath', {}, { prio: 1, cool: 9000 });
   } else if (B) {
-    B.t += dt; if (B.toPlayer) B.target.copy(G.player.pos);
+    B.t += dt;
+    if (B.def && !helpers.includes(B.def)) B.def = pickDefender(e.mesh.position);
+    B.target.copy(defenderPoint(B.def));
     P.mouth.getWorldPosition(_mv);
     const k = Math.min(1, B.t / B.wind);
     if (B.t < B.wind) {
@@ -148,7 +150,7 @@ function dragonUpdate(e, dt, sp) {
       while (B.acc > 0.07) {
         B.acc -= 0.07;
         const to = B.target.clone(); to.x += rnd(-1.4, 1.4); to.y += rnd(-0.8, 0.8); to.z += rnd(-1.4, 1.4);
-        enemyProjectile(_mv.clone(), to, 34, Math.random() < 0.5 ? K.col : K.col2, 'tower', e.dmg * 0.1, 0.4, 0, { small: true, onHit: (direct) => { if (direct) applyStatus(K.status[0], K.status[1], K.status[2]); } });
+        enemyProjectile(_mv.clone(), to, 34, Math.random() < 0.5 ? K.col : K.col2, defenderTag(B.def), e.dmg * 0.1, 0.4, 0, { small: true, onHit: (direct) => { if (direct) applyStatus(K.status[0], K.status[1], K.status[2]); } });
       }
     } else {
       P.mouth.scale.setScalar(0.01); e.breath = null; e.attackT = e.cd * (0.8 + Math.random() * 0.5);
@@ -157,6 +159,6 @@ function dragonUpdate(e, dt, sp) {
 }
 
 Object.assign(TYPES, {
-  icedragon:    { name: 'Smok lodowy',  hp: 560, speed: 0.35, r: 3.6, cy: 0, dmg: 20, cd: 5.0, gold: 140, score: 330, flying: true, stop: 0, isDragon: true, breathKind: 'ice' },
-  poisondragon: { name: 'Smok jadowity', hp: 500, speed: 0.35, r: 3.0, cy: 0, dmg: 18, cd: 4.2, gold: 140, score: 330, flying: true, stop: 0, isDragon: true, breathKind: 'poison' },
+  icedragon:    { hp: 560, speed: 0.35, r: 3.6, cy: 0, dmg: 20, cd: 5.0, gold: 140, score: 330, flying: true, stop: 0, isDragon: true, breathKind: 'ice' },
+  poisondragon: { hp: 500, speed: 0.35, r: 3.0, cy: 0, dmg: 18, cd: 4.2, gold: 140, score: 330, flying: true, stop: 0, isDragon: true, breathKind: 'poison' },
 });

@@ -1,4 +1,4 @@
-// Efekty cząsteczkowe, pociski i uzbrojenie gracza
+// Particle effects, projectiles and the player's weapons
 const GRAV = 20;
 
 const fx = {
@@ -55,7 +55,7 @@ function updateBolts(dt) {
 const projectiles = [];
 const enemyShots = [];
 
-// Strzała: środek na środku drzewca, grot wskazuje +Z (zgodnie z lookAt w locie)
+// Arrow: centred on the shaft, the head points along +Z (matches lookAt in flight)
 function arrowMesh(len, col, headCol, thick, hs) {
   hs = hs || 1;
   const g = new THREE.Group();
@@ -67,7 +67,7 @@ function arrowMesh(len, col, headCol, thick, hs) {
   const hl = Math.max(thick * 7, len * 0.1) * hs, hw = thick * 2.8 * hs, z0 = len / 2;
   // tuleja
   const sock = part(new THREE.CylinderGeometry(thick * 1.5, thick * 1.2, hl * 0.22, 8), steel, 0, 0, z0 + hl * 0.11); sock.rotation.x = Math.PI / 2;
-  // płaskie ostrze w kształcie rombu
+  // flat diamond-shaped blade
   const blade = part(new THREE.ConeGeometry(hw, hl, 4), steel, 0, 0, z0 + hl * 0.22 + hl / 2);
   blade.rotation.x = Math.PI / 2; blade.scale.set(1.5, 1, 0.38);
   // zadziory
@@ -83,7 +83,7 @@ function arrowMesh(len, col, headCol, thick, hs) {
     const v = new THREE.Mesh(new THREE.BoxGeometry(thick * 0.3, thick * 3.2, len * 0.17), mat(fl[i]));
     v.position.set(0, thick * 2.8, -len / 2 + len * 0.12); piv.add(v);
   }
-  // zakończenie (nok)
+  // nock
   const nock = part(new THREE.CylinderGeometry(thick * 1.3, thick * 1.1, thick * 2.5, 6), mat(0x222222), 0, 0, -len / 2 - thick * 0.8); nock.rotation.x = Math.PI / 2;
   return g;
 }
@@ -133,7 +133,7 @@ function updateProjectiles(dt) {
     if (p.spin) p.mesh.rotation.x += dt * 6;
 
     let done = false;
-    // trafienie we wrogów (test odcinka)
+    // hit enemies (segment test)
     for (const e of enemies) {
       if (e.dead || p.hit.has(e)) continue;
       const c = e.center, seg = p.pos.clone().sub(prev), len = seg.length() || 1e-6;
@@ -160,7 +160,7 @@ function updateProjectiles(dt) {
   }
 }
 
-// ---- pociski wrogów ----
+// ---- enemy projectiles ----
 function enemyProjectile(from, to, speed, color, target, dmg, size, splash, opts) {
   opts = typeof opts === 'function' ? { onHit: opts } : (opts || {});
   const d = to.clone().sub(from), T = d.length() / speed;
@@ -169,6 +169,18 @@ function enemyProjectile(from, to, speed, color, target, dmg, size, splash, opts
   mesh.position.copy(from); scene.add(mesh);
   enemyShots.push({ mesh, pos: from.clone(), vel, target, dmg, t: 0, life: T + 0.2, color, splash, onHit: opts.onHit, small: opts.small });
 }
+// Enemies shoot at the defender nearest to them: the player (null) or one of the helpers.
+function pickDefender(from) {
+  let best = null, bd = Math.hypot(G.player.pos.x - from.x, G.player.pos.z - from.z);
+  for (const h of helpers) {
+    const d = Math.hypot(h.pos.x - from.x, h.pos.z - from.z);
+    if (d < bd) { bd = d; best = h; }
+  }
+  return best;
+}
+function defenderPoint(h) { return h ? h.pos.clone().add(new THREE.Vector3(0, 1.2, 0)) : G.player.pos.clone(); }
+function defenderTag(h) { return h ? 'helper' : 'player'; }
+
 function updateEnemyShots(dt) {
   for (let i = enemyShots.length - 1; i >= 0; i--) {
     const s = enemyShots[i]; s.t += dt;
@@ -190,7 +202,7 @@ function updateEnemyShots(dt) {
   }
 }
 
-// ---- celowanie ----
+// ---- aiming ----
 const raycaster = new THREE.Raycaster();
 const aim = { point: new THREE.Vector3(), dir: new THREE.Vector3(), enemy: null };
 function computeAim() {
@@ -221,19 +233,19 @@ const MORTAR_POS = new THREE.Vector3(-3.4, TOWER_Y + 1.4, -3.2);
 const MORTAR_MIN = 10;
 
 const WEAPONS = [
-  { key: 1, name: 'Łuk', icon: '🏹', cd: 0.6, mana: 0,
+  { key: 1, icon: '🏹', cd: 0.6, mana: 0,
     fire() {
       const o = muzzle(), tgt = leadTarget(70, 9);
       spawnProjectile({ mesh: arrowMesh(1.1, 0x8a6030, 0x999999, 0.03), pos: o, vel: ballisticVel(o, tgt, 70, 9), grav: 9, dmg: 28, hitR: 0.25, orient: true, trail: null });
       sfx('bow');
     } },
-  { key: 2, name: 'Kusza', icon: '🎯', cd: 1.15, mana: 0,
+  { key: 2, icon: '🎯', cd: 1.15, mana: 0,
     fire() {
       const o = muzzle(), tgt = leadTarget(115, 2);
       spawnProjectile({ mesh: arrowMesh(0.7, 0x5a3b1e, 0xcccccc, 0.045), pos: o, vel: ballisticVel(o, tgt, 115, 2), grav: 2, dmg: 60, hitR: 0.3, orient: true });
       sfx('bow');
     } },
-  { key: 3, name: 'Moździerz', icon: '💣', cd: 2.8, mana: 0,
+  { key: 3, icon: '💣', cd: 2.8, mana: 0,
     fire() {
       let tgt = aim.point.clone(); tgt.y = 0;
       const flat = Math.hypot(tgt.x, tgt.z);
@@ -249,13 +261,13 @@ const WEAPONS = [
       fx.burst(from.clone(), 0x888888, 14, 5, 0.9, 0.4, 0); fx.flash(from.clone(), 0xffcc66, 1.6, 0.25);
       shake(0.25); sfx('boom');
     } },
-  { key: 4, name: 'Kula ognia', icon: '🔥', cd: 0.75, mana: 14,
+  { key: 4, icon: '🔥', cd: 0.75, mana: 14,
     fire() {
       const o = muzzle(), tgt = leadTarget(48, 0);
       spawnProjectile({ mesh: orbMesh(0xff7a1a, 0.4, true), pos: o, vel: ballisticVel(o, tgt, 48, 0), dmg: 48, radius: 4.2, hitR: 0.4, color: 0xff6a10, burn: [4, 10], trail: 0xffa030 });
       sfx('magic');
     } },
-  { key: 5, name: 'Błyskawica', icon: '⚡', cd: 0.9, mana: 18,
+  { key: 5, icon: '⚡', cd: 0.9, mana: 18,
     fire() {
       const o = muzzle(); let cur = aim.enemy; const hit = new Set();
       if (!cur) { let b = 14, bd = Infinity; for (const e of enemies) { if (e.dead) continue; const c = e.center.clone().sub(camera.position); const t = c.dot(aim.dir); if (t < 0) continue; const perp = c.sub(aim.dir.clone().multiplyScalar(t)).length(); if (perp < b * 0.5 + e.r && perp < bd) { bd = perp; cur = e; } } }
@@ -270,19 +282,19 @@ const WEAPONS = [
       }
       shake(0.12); sfx('zap');
     } },
-  { key: 6, name: 'Lód', icon: '❄️', cd: 0.5, mana: 10,
+  { key: 6, icon: '❄️', cd: 0.5, mana: 10,
     fire() {
       const o = muzzle(), tgt = leadTarget(62, 0);
       spawnProjectile({ mesh: orbMesh(0x8fe0ff, 0.3, true), pos: o, vel: ballisticVel(o, tgt, 62, 0), dmg: 24, radius: 3.2, hitR: 0.35, color: 0x9fe8ff, slow: 4.5, trail: 0xd0f4ff });
       sfx('magic');
     } },
-  { key: 7, name: 'Balista', icon: '🗡️', cd: 2.0, mana: 0,
+  { key: 7, icon: '🗡️', cd: 2.0, mana: 0,
     fire() {
       const o = muzzle(), tgt = leadTarget(135, 1);
       spawnProjectile({ mesh: arrowMesh(2.2, 0x6a4020, 0xbbbbbb, 0.07), pos: o, vel: ballisticVel(o, tgt, 135, 1), grav: 1, dmg: 95, hitR: 0.45, pierce: true, orient: true, life: 4 });
       shake(0.15); sfx('bow');
     } },
-  { key: 8, name: 'Meteory', icon: '☄️', cd: 9, mana: 55,
+  { key: 8, icon: '☄️', cd: 9, mana: 55,
     fire() {
       const c = aim.point.clone(); c.y = 0;
       if (Math.hypot(c.x, c.z) < 12) { const l = Math.hypot(c.x, c.z) || 1; c.x *= 12 / l; c.z *= 12 / l; }
@@ -299,7 +311,7 @@ const WEAPONS = [
       say('meteor', {}, { prio: 1, cool: 6000 });
       sfx('magic');
     } },
-  { key: 9, name: 'Uzdrowienie', icon: '✨', cd: 10, mana: 40,
+  { key: 9, icon: '✨', cd: 10, mana: 40,
     fire() {
       G.towerHp = Math.min(G.maxTowerHp, G.towerHp + G.maxTowerHp * 0.3);
       G.player.hp = Math.min(100, G.player.hp + 50);

@@ -1,4 +1,4 @@
-// Język interfejsu i komunikatów: PL / EN
+// Interface and message language: PL / EN
 let LANG = (function () {
   try { const s = localStorage.getItem('td_lang'); if (s === 'pl' || s === 'en') return s; } catch (e) {}
   return 'pl';
@@ -21,7 +21,7 @@ const STR = {
     n1: 'Łuk', n2: 'Kusza', n3: 'Moździerz', n4: 'Kula ognia', n5: 'Błyskawica', n6: 'Lód', n7: 'Balista', n8: 'Meteory', n9: 'Uzdrowienie',
     start: 'Kliknij, aby zacząć obronę', pauseTitle: 'Pauza', resume: 'Wznów', restart: 'Spróbuj ponownie',
     voiceOn: 'Głosy włączone', voiceOff: 'Głosy wyłączone', noGold: 'Za mało złota', noMana: 'Za mało many',
-    bodyTitle: 'Bodycount', bodyNone: 'jeszcze nikogo',
+    bodyTitle: 'Licznik wrogów', bodyNone: 'jeszcze nikogo',
     repaired: 'Wieża naprawiona', towerFull: 'Wieża jest cała – naprawa niepotrzebna', helperFull: 'Na murach nie ma już miejsca dla pomocników', helperDied: w => `Pomocnik poległ: ${w}`, helperBought: w => `Pomocnik zatrudniony: ${w}`, dmgUp: 'Obrażenia +15%', manaUp: 'Więcej many',
     bannerStart: 'Bronisz wieży!',
     overPlayer: 'Obrońca poległ', overTower: 'Wieża padła',

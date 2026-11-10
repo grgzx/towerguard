@@ -1,6 +1,6 @@
-// Świat: średniowieczna wieża, mury, las, droga, niebo
-const TOWER_Y = 14;        // wysokość platformy
-const PLAT = 5;            // połowa boku platformy
+// World: medieval tower, walls, forest, road, sky
+const TOWER_Y = 14;        // platform height
+const PLAT = 5;            // half the platform side
 const EYE = 1.7;
 
 const renderer = new THREE.WebGLRenderer({ canvas: document.getElementById('game'), antialias: true });
@@ -88,7 +88,7 @@ function buildWorld() {
   const ground = mesh(new THREE.PlaneGeometry(900, 900), new THREE.MeshLambertMaterial({ map: grassTexture() }), 0, 0, 0, scene, false);
   ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true;
 
-  // Droga z każdej strony zbiegająca się do wieży
+  // A road from each side converging on the tower
   [0, Math.PI / 2, Math.PI, Math.PI * 1.5].forEach(a => {
     const road = mesh(new THREE.PlaneGeometry(9, 190), M.dirt, 0, 0.05, 0, scene, false);
     road.rotation.order = 'YXZ'; road.rotation.y = a; road.rotation.x = -Math.PI / 2;
@@ -96,7 +96,7 @@ function buildWorld() {
     road.receiveShadow = true;
   });
 
-  // Rzeka z mostem na południowej drodze
+  // A river with a bridge on the south road
   const river = mesh(new THREE.PlaneGeometry(500, 14), M.water, 0, 0.08, 120, scene, false);
   river.rotation.x = -Math.PI / 2;
   BOX(10, 0.5, 16, M.wood, 0, 0.2, 120);
@@ -113,27 +113,27 @@ function buildWorld() {
 function buildTower() {
   const g = world.towerGroup, st = stoneTexture('#888', [4, 6]);
   const stoneM = new THREE.MeshLambertMaterial({ map: st });
-  // trzon wieży
+  // tower shaft
   const body = BOX(PLAT * 2 + 2, TOWER_Y, PLAT * 2 + 2, stoneM, 0, TOWER_Y / 2, 0, g);
   // podstawa
   BOX(PLAT * 2 + 5, 3, PLAT * 2 + 5, M.stoneD, 0, 1.5, 0, g);
-  // balkon-machikuły
+  // machicolation balcony
   BOX(PLAT * 2 + 3, 1.2, PLAT * 2 + 3, M.stoneL, 0, TOWER_Y - 0.6, 0, g);
-  // podłoga
+  // floor
   const floor = BOX(PLAT * 2 + 2.4, 0.4, PLAT * 2 + 2.4, M.woodD, 0, TOWER_Y + 0.2, 0, g);
   // deski
   for (let i = -4; i <= 4; i++) BOX(0.06, 0.02, PLAT * 2 + 2, M.wood, i * 1.2, TOWER_Y + 0.42, 0, g);
-  // blanki (krenelaż)
+  // battlements
   const S = PLAT + 1.1;
   for (let i = -S; i <= S + 0.01; i += 1.4) {
     [[i, -S], [i, S], [-S, i], [S, i]].forEach(([x, z]) => BOX(0.9, 0.4, 0.9, M.stoneL, x, TOWER_Y + 1.3, z, g));
   }
-  // murek pomiędzy blankami
+  // low wall between the merlons
   BOX(PLAT * 2 + 2.4, 0.7, 0.5, M.stoneL, 0, TOWER_Y + 0.75, -S, g);
   BOX(PLAT * 2 + 2.4, 0.7, 0.5, M.stoneL, 0, TOWER_Y + 0.75, S, g);
   BOX(0.5, 0.7, PLAT * 2 + 2.4, M.stoneL, -S, TOWER_Y + 0.75, 0, g);
   BOX(0.5, 0.7, PLAT * 2 + 2.4, M.stoneL, S, TOWER_Y + 0.75, 0, g);
-  // wieżyczki w rogach
+  // corner turrets
   [[-1, -1], [1, -1], [-1, 1], [1, 1]].forEach(([sx, sz]) => {
     const x = sx * (S + 0.2), z = sz * (S + 0.2);
     CYL(1.5, 1.7, TOWER_Y + 3, stoneM, x, (TOWER_Y + 3) / 2 - 0.5, z, g, 14);
@@ -155,7 +155,7 @@ function buildTower() {
   CYL(0.45, 0.4, 0.9, M.wood, 4.2, TOWER_Y + 0.85, 3.0, g, 10);
   BOX(0.9, 0.7, 0.9, M.woodD, -3.8, TOWER_Y + 0.75, 3.8, g);
   BOX(0.8, 0.6, 0.8, M.wood, -3.6, TOWER_Y + 0.7, -3.9, g);
-  // stos kul do moździerza
+  // pile of mortar balls
   for (let i = 0; i < 6; i++) mesh(new THREE.SphereGeometry(0.22, 8, 8), M.iron, 3.2 + (i % 3) * 0.42, TOWER_Y + 0.62 + (i > 2 ? 0.33 : 0), -3.8, g);
   buildMortarProp(g);
 }
@@ -169,7 +169,7 @@ function buildMortarProp(g) {
 }
 
 function buildCastleWalls() {
-  // niski mur zewnętrzny wokół wieży w odległości 26 – z bramą
+  // low outer wall around the tower at distance 26, with a gate
   const st = new THREE.MeshLambertMaterial({ map: stoneTexture('#888', [10, 1]) });
   const R = 26, H = 7;
   const sides = [[0, -R, 0], [0, R, 0], [-R, 0, Math.PI / 2], [R, 0, Math.PI / 2]];
@@ -191,7 +191,7 @@ function buildCastleWalls() {
     CYL(3, 3.3, H + 4, st, sx * R, (H + 4) / 2, sz * R, scene, 16);
     mesh(new THREE.ConeGeometry(3.6, 4.5, 16), M.roof, sx * R, H + 4 + 2.2, sz * R);
   });
-  // budynki wewnątrz dziedzińca
+  // buildings inside the courtyard
   const rnd2 = seeded(11);
   for (let i = 0; i < 16; i++) {
     const a = rnd2() * Math.PI * 2, d = 12 + rnd2() * 8;
@@ -256,7 +256,7 @@ function updateWorld(t, dt) {
 
 buildWorld();
 
-// ---- gruz: cegły sypią się, gdy wieża jest bliska zniszczenia ----
+// ---- rubble: bricks fall when the tower is close to collapse ----
 const RUBBLE_FROM = 0.35;
 const rubble = { list: [], shown: 0, acc: 0, smokeT: 0 };
 

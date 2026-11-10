@@ -1,6 +1,6 @@
-// Ekipa obrońców i wspólne dane do kwestii (parodie "Monty Python i Święty Graal")
-// Wpis w puli = jedna kwestia ['kto', 'tekst'] albo dialog [['kto','tekst'], ['kto','tekst']].
-// Tekst może być funkcją (c) => string; c: n (fala), d (strona świata), g (złoto), p (premia), k (liczba zabitych)
+// The defender crew and shared data for the voice lines (Monty Python and the Holy Grail parodies)
+// A pool entry = one line ['who', 'text'] or a dialogue [['who','text'], ['who','text']].
+// The text may be a function (c) => string; c: n (wave), d (compass direction), g (gold), p (bonus), k (kill count)
 
 const CREW = {
   artur:    { name: 'Król Artur', nameEn: 'King Arthur',          color: '#ffd76a', pitch: 0.55, rate: 0.92, g: 'm', coco: true },
@@ -8,7 +8,7 @@ const CREW = {
   robin:    { name: 'Sir Robin Mężny-Inaczej', nameEn: 'Sir Robin the Brave-ish', color: '#9fd0ff', pitch: 1.50, rate: 1.20, g: 'm' },
   galahad:  { name: 'Sir Galahad Czysty', nameEn: 'Sir Galahad the Pure',  color: '#e8e8ff', pitch: 1.15, rate: 1.00, g: 'm' },
   patsy:    { name: 'Giermek Patsy', nameEn: 'Patsy the Squire',       color: '#d9b982', pitch: 1.70, rate: 1.15, g: 'f', coco: true },
-  czarny:   { name: 'Czarny Rycerz', nameEn: 'The Black Knight',       color: '#b8b8c0', pitch: 0.20, rate: 0.80, g: 'm' },
+  czarny:   { name: 'Czarny Rycerz', nameEn: 'The Black Knight',       color: '#b8b8c0', pitch: 0.20, rate: 0.80, g: 'm', voiceEn: /daniel|reed|eddy/i },
   tim:      { name: 'Tim Zaklinacz', nameEn: 'Tim the Enchanter',       color: '#c58aff', pitch: 0.95, rate: 1.15, g: 'm' },
   maynard:  { name: 'Brat Maynard', nameEn: 'Brother Maynard',        color: '#a8e08a', pitch: 0.65, rate: 0.78, g: 'm' },
   dennis:   { name: 'Wieśniak Dennis', nameEn: 'Dennis the Peasant',     color: '#e8a8a8', pitch: 1.30, rate: 1.20, g: 'f' },
@@ -18,8 +18,6 @@ const CREW = {
   sam:      { name: 'Sam Gamgee', nameEn: 'Samwise', color: '#b5e07a', pitch: 1.05, rate: 1.00, g: 'm' },
   gimli:    { name: 'Gimli', nameEn: 'Gimli', color: '#e0a060', pitch: 0.35, rate: 1.05, g: 'm' },
   rincewind:{ name: 'Rincewind', nameEn: 'Rincewind', color: '#ffb0d0', pitch: 1.40, rate: 1.35, g: 'm' },
-  smierc:   { name: 'ŚMIERĆ', nameEn: 'DEATH', color: '#e8e8e8', pitch: 0.10, rate: 0.70, g: 'm' },
-  geralt:   { name: 'Geralt', nameEn: 'Geralt', color: '#d8d0b0', pitch: 0.40, rate: 0.80, g: 'm' },
   legolas:  { name: 'Legolas', nameEn: 'Legolas', color: '#a0e8d0', pitch: 1.25, rate: 1.05, g: 'm' },
   ork:      { name: 'Ork', nameEn: 'Orc',                 color: '#7bd13a', pitch: 0.10, rate: 0.85, g: 'm', enemy: true },
   goblin:   { name: 'Goblin', nameEn: 'Goblin',              color: '#c6f06a', pitch: 2.00, rate: 1.40, g: 'f', enemy: true },

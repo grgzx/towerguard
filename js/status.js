@@ -1,4 +1,4 @@
-// Statusy gracza: podpalenie, spowolnienie, trucizna, klątwa (kradzież many)
+// Player statuses: burn, slow, poison, curse (mana drain)
 const STATUS = { burn: 0, slow: 0, poison: 0, curse: 0, dps: 0, tick: 0 };
 const STATUS_INFO = {
   burn: { icon: '🔥', color: '#ff6a2a' }, slow: { icon: '❄️', color: '#7fdcff' },

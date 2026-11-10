@@ -1,4 +1,4 @@
-// Magowie (piromanta, mag lodu, burzomag, nekromanta), mroczne elfy, szaman orków i czary wrogów
+// Mages (pyromancer, frost mage, storm mage, necromancer) and enemy spells
 const TICK = {};
 const SPELLS = {};
 
@@ -38,19 +38,16 @@ BUILDERS.necro = e => buildMage({ robe: 0x1c2a1c, robe2: 0x0c140c, orb: 0x7bff3a
 
 function mageCastAt(e, o) {
   const from = e.mesh.position.clone(); from.y += 3.2;
-  const toPlayer = Math.random() < (o.pl === undefined ? 0.4 : o.pl);
-  const target = toPlayer ? G.player.pos.clone() : new THREE.Vector3(rnd(-3, 3), TOWER_Y - 2, rnd(-3, 3));
-  if (!toPlayer) { target.x += e.mesh.position.x * 0.12; target.z += e.mesh.position.z * 0.12; }
-  enemyProjectile(from, target, o.speed || 22, o.color, toPlayer ? 'player' : 'tower', e.dmg * (o.dmgMul || 1), o.size || 0.35, o.splash === undefined ? 2 : o.splash,
+  const def = pickDefender(e.mesh.position);
+  enemyProjectile(from, defenderPoint(def), o.speed || 22, o.color, defenderTag(def), e.dmg * (o.dmgMul || 1), o.size || 0.35, o.splash === undefined ? 2 : o.splash,
     { onHit: (direct) => { if (direct && o.status) applyStatus(o.status[0], o.status[1], o.status[2]); } });
 }
 SPELLS.dark = e => mageCastAt(e, { color: 0xb050ff });
-SPELLS.fire = e => mageCastAt(e, { color: 0xff6a10, size: 0.5, splash: 4, status: ['burn', 4, 3], pl: 0.5 });
-SPELLS.frost = e => mageCastAt(e, { color: 0x9fe8ff, size: 0.4, speed: 26, status: ['slow', 4, 0], pl: 0.55, dmgMul: 0.8 });
-SPELLS.necro = e => mageCastAt(e, { color: 0x7bff3a, status: ['poison', 5, 2], pl: 0.5, dmgMul: 0.7 });
+SPELLS.fire = e => mageCastAt(e, { color: 0xff6a10, size: 0.5, splash: 4, status: ['burn', 4, 3] });
+SPELLS.frost = e => mageCastAt(e, { color: 0x9fe8ff, size: 0.4, speed: 26, status: ['slow', 4, 0], dmgMul: 0.8 });
+SPELLS.necro = e => mageCastAt(e, { color: 0x7bff3a, status: ['poison', 5, 2], dmgMul: 0.7 });
 SPELLS.storm = e => {
-  const toPlayer = Math.random() < 0.65;
-  const c = toPlayer ? G.player.pos.clone() : new THREE.Vector3(rnd(-4, 4), TOWER_Y + 0.4, rnd(-4, 4));
+  const def = pickDefender(e.mesh.position), c = defenderPoint(def);
   c.y = TOWER_Y + 0.45;
   const ring = new THREE.Mesh(new THREE.RingGeometry(1.8, 2.2, 28), new THREE.MeshBasicMaterial({ color: 0xfff07a, transparent: true, opacity: 0.9, side: THREE.DoubleSide, depthWrite: false }));
   ring.rotation.x = -Math.PI / 2; ring.position.copy(c); scene.add(ring);
@@ -62,7 +59,7 @@ SPELLS.storm = e => {
     const top = c.clone(); top.y += 40; lightningBolt(top, c); fx.flash(c.clone(), 0xffffaa, 3, 0.3); fx.burst(c.clone(), 0xfff07a, 20, 8, 0.6, 0.25);
     shake(0.5);
     if (Math.hypot(G.player.pos.x - c.x, G.player.pos.z - c.z) < 2.0) { hurtPlayer(dmg); applyStatus('curse', 3, 0); }
-    else if (!toPlayer) damageTower(dmg * 0.5);
+    else if (def) damageTower(dmg * 0.5);
     hurtHelpersIn(c, 2.0, dmg);
   } });
   fx.ring(c.clone(), 0xfff07a, 2.2, 1.5);
@@ -82,8 +79,8 @@ TICK.necro = (e, dt) => {
 };
 
 Object.assign(TYPES, {
-  pyro:  { name: 'Piromanta',   hp: 100, speed: 2.5, r: 0.9, cy: 1.5, dmg: 14, cd: 3.0, gold: 30, score: 60, ranged: true, stop: 40, isMage: true, spell: 'fire' },
-  frost: { name: 'Mag lodu',    hp: 95,  speed: 2.5, r: 0.9, cy: 1.5, dmg: 12, cd: 2.8, gold: 30, score: 60, ranged: true, stop: 42, isMage: true, spell: 'frost' },
-  storm: { name: 'Burzomag',    hp: 110, speed: 2.4, r: 0.9, cy: 1.5, dmg: 18, cd: 4.2, gold: 35, score: 70, ranged: true, stop: 36, isMage: true, spell: 'storm', noHover: false },
-  necro: { name: 'Nekromanta',  hp: 120, speed: 2.2, r: 0.9, cy: 1.5, dmg: 10, cd: 3.4, gold: 40, score: 80, ranged: true, stop: 44, isMage: true, spell: 'necro' },
+  pyro:  { hp: 100, speed: 2.5, r: 0.9, cy: 1.5, dmg: 14, cd: 3.0, gold: 30, score: 60, ranged: true, stop: 40, isMage: true, spell: 'fire' },
+  frost: { hp: 95,  speed: 2.5, r: 0.9, cy: 1.5, dmg: 12, cd: 2.8, gold: 30, score: 60, ranged: true, stop: 42, isMage: true, spell: 'frost' },
+  storm: { hp: 110, speed: 2.4, r: 0.9, cy: 1.5, dmg: 18, cd: 4.2, gold: 35, score: 70, ranged: true, stop: 36, isMage: true, spell: 'storm', noHover: false },
+  necro: { hp: 120, speed: 2.2, r: 0.9, cy: 1.5, dmg: 10, cd: 3.4, gold: 40, score: 80, ranged: true, stop: 44, isMage: true, spell: 'necro' },
 });

@@ -1,4 +1,4 @@
-// Orkowie na wargach, szaman orków, mroczne elfy (łucznik, czarownica)
+// Warg riders, orc shaman, dark elves (archer, witch)
 
 function buildWarg(rider) {
   const r = new THREE.Group(), g = new THREE.Group(); r.add(g);
@@ -78,16 +78,13 @@ BUILDERS.elfwitch = e => buildElf({ cloth: 0x5a1a4a, cloth2: 0x2a0a28, eye: 0xff
 
 SPELLS.arrow = e => {
   const from = e.mesh.position.clone(); from.y += 2.3;
-  const toPlayer = Math.random() < 0.6;
-  const target = toPlayer ? G.player.pos.clone() : new THREE.Vector3(rnd(-3, 3), TOWER_Y - 1, rnd(-3, 3));
-  if (!toPlayer) { target.x += e.mesh.position.x * 0.1; target.z += e.mesh.position.z * 0.1; }
-  enemyProjectile(from, target, 46, 0x66ddff, toPlayer ? 'player' : 'tower', e.dmg, 0.18, 0, { small: true });
+  const def = pickDefender(e.mesh.position);
+  enemyProjectile(from, defenderPoint(def), 46, 0x66ddff, defenderTag(def), e.dmg, 0.18, 0, { small: true });
 };
 SPELLS.curse = e => {
   const from = e.mesh.position.clone(); from.y += 2.6;
-  const toPlayer = Math.random() < 0.7;
-  const target = toPlayer ? G.player.pos.clone() : new THREE.Vector3(rnd(-3, 3), TOWER_Y - 1, rnd(-3, 3));
-  enemyProjectile(from, target, 24, 0xff4aa0, toPlayer ? 'player' : 'tower', e.dmg, 0.38, 1.5, { onHit: (direct) => { if (direct) applyStatus('curse', 5, 0); } });
+  const def = pickDefender(e.mesh.position);
+  enemyProjectile(from, defenderPoint(def), 24, 0xff4aa0, defenderTag(def), e.dmg, 0.38, 1.5, { onHit: (direct) => { if (direct) applyStatus('curse', 5, 0); } });
 };
 SPELLS.shaman = e => {
   let n = 0;
@@ -99,13 +96,14 @@ SPELLS.shaman = e => {
   if (n) say('shamanBuff', {}, { prio: 1, cool: 15000 });
   else {
     const from = e.mesh.position.clone(); from.y += 3;
-    enemyProjectile(from, new THREE.Vector3(rnd(-3, 3), TOWER_Y - 2, rnd(-3, 3)), 22, 0x7bff3a, 'tower', e.dmg, 0.3, 1);
+    const def = pickDefender(e.mesh.position);
+    enemyProjectile(from, defenderPoint(def), 22, 0x7bff3a, defenderTag(def), e.dmg, 0.3, 1);
   }
 };
 
 Object.assign(TYPES, {
-  warg:      { name: 'Ork na wargu',    hp: 200, speed: 5.4, r: 1.5, cy: 1.8, dmg: 16, cd: 1.3, gold: 24, score: 55, stop: 13 },
-  shaman:    { name: 'Szaman orków',    hp: 130, speed: 2.2, r: 1.1, cy: 1.8, dmg: 10, cd: 5.0, gold: 35, score: 70, ranged: true, stop: 30, noHover: true, spell: 'shaman', stopMin: 26 },
-  elfarcher: { name: 'Mroczny elf',     hp: 70,  speed: 3.4, r: 0.8, cy: 1.6, dmg: 7,  cd: 1.5, gold: 22, score: 45, ranged: true, stop: 38, noHover: true, spell: 'arrow', stopMin: 34 },
-  elfwitch:  { name: 'Mroczna elfka',   hp: 85,  speed: 3.0, r: 0.8, cy: 1.6, dmg: 9,  cd: 3.6, gold: 30, score: 55, ranged: true, stop: 40, noHover: true, spell: 'curse', stopMin: 36 },
+  warg:      { hp: 200, speed: 5.4, r: 1.5, cy: 1.8, dmg: 16, cd: 1.3, gold: 24, score: 55, stop: 13 },
+  shaman:    { hp: 130, speed: 2.2, r: 1.1, cy: 1.8, dmg: 10, cd: 5.0, gold: 35, score: 70, ranged: true, stop: 30, noHover: true, spell: 'shaman', stopMin: 26 },
+  elfarcher: { hp: 70,  speed: 3.4, r: 0.8, cy: 1.6, dmg: 7,  cd: 1.5, gold: 22, score: 45, ranged: true, stop: 38, noHover: true, spell: 'arrow', stopMin: 34 },
+  elfwitch:  { hp: 85,  speed: 3.0, r: 0.8, cy: 1.6, dmg: 9,  cd: 3.6, gold: 30, score: 55, ranged: true, stop: 40, noHover: true, spell: 'curse', stopMin: 36 },
 });

@@ -1,4 +1,4 @@
-// Silnik głosów: kolejka kwestii, osobny głos dla każdej postaci, napisy
+// Voice engine: line queue, a separate voice per character, subtitles
 function dirOf(p) { return Math.abs(p.x) > Math.abs(p.z) ? (p.x > 0 ? 'E' : 'W') : (p.z > 0 ? 'S' : 'N'); }
 
 const VOICE = { on: true, pool: [], assigned: {}, queue: [], cur: null, token: 0, lastAt: {}, lastIdx: {}, holdUntil: 0, u: null, timer: null, subEl: null };
@@ -29,6 +29,7 @@ function pickVoices() {
     const c = CREW[k], list = c.g === 'f' ? (fem.length ? fem : pl) : (male.length ? male : pl);
     if (!list.length) return;
     VOICE.assigned[k] = list[(c.g === 'f' ? fi++ : mi++) % list.length];
+    if (LANG === 'en' && c.voiceEn) { const v = list.find(x => c.voiceEn.test(x.name)); if (v) VOICE.assigned[k] = v; }
   });
 }
 if (hasTTS) { pickVoices(); speechSynthesis.onvoiceschanged = pickVoices; }
@@ -58,7 +59,7 @@ function nextLine() {
   if (VOICE.on && hasTTS) {
     const c = CREW[line.who], u = new SpeechSynthesisUtterance(cleanText(line.text));
     u.lang = LANG === 'en' ? 'en-GB' : 'pl-PL'; const v = VOICE.assigned[line.who]; if (v) { u.voice = v; u.lang = v.lang || u.lang; }
-    if (LANG === 'en') { u.pitch = 0.75 + (Math.min(1.7, Math.max(0.3, c.pitch)) - 0.3) * 0.32; u.rate = Math.min(1.12, Math.max(0.85, c.rate)); }
+    if (LANG === 'en') { u.pitch = 0.92 + (Math.min(1.7, Math.max(0.3, c.pitch)) - 0.3) * 0.14; u.rate = Math.min(1.05, Math.max(0.92, c.rate)); }
     else { u.pitch = c.pitch; u.rate = c.rate; }
     u.volume = 1; VOICE.u = u;
     u.onend = done; u.onerror = done;
@@ -78,11 +79,11 @@ function stopSpeech(clear) {
   VOICE.cur = null; subtitle(null);
 }
 
-// szansa, że kwestia w ogóle padnie (pilne ostrzeżenia zawsze padają)
+// chance that the line is spoken at all (urgent warnings always are)
 const CHANCE = { orkCall: 0.55, goblinCall: 0.5, thiefCall: 0.6, mageCall: 0.6, repair: 0.5, dmgUp: 0.45, manaUp: 0.45, heal: 0.5, noGold: 0.5, noMana: 0.5,
   mortarClose: 0.5, killMilestone: 0.8, mageDead: 0.5, firstKill: 0.8, voiceOn: 1 };
 
-// prio: 0 = pogaduszki (gubione, gdy ktoś mówi), 1 = zwykłe, 2 = pilne (przerywa)
+// prio: 0 = chatter (dropped while someone speaks), 1 = normal, 2 = urgent (interrupts)
 function say(key, ctx, o) {
   o = o || {};
   const pool = LINES[LANG] && LINES[LANG][key]; if (!pool || !pool.length) return false;

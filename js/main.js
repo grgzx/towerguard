@@ -1,4 +1,4 @@
-// Logika gry, sterowanie, fale, HUD, dźwięk
+// Game logic, controls, waves, HUD, sound
 const $ = id => document.getElementById(id);
 const G = {
   running: false, paused: false, over: false, wave: 0, gold: 80, score: 0, kills: 0, bodies: {},
@@ -8,7 +8,7 @@ const G = {
 };
 scene.add(camera);
 
-// ---------- dźwięk ----------
+// ---------- sound ----------
 let AC = null;
 function sfx(kind) {
   if (!AC) return;
@@ -238,7 +238,7 @@ function updateWaves(dt) {
   }
 }
 
-// ---------- pętla ----------
+// ---------- loop ----------
 const labelPool = [];
 function updateLabels() {
   const box = $('labels'); let n = 0;
@@ -253,7 +253,7 @@ function updateLabels() {
   }
   for (let i = n; i < labelPool.length; i++) labelPool[i].style.display = 'none';
 }
-// ---------- minimapa (góra = kierunek, w który patrzysz) ----------
+// ---------- minimap (up = the direction you are facing) ----------
 const MM_COL = { ork: '#7bd13a', goblin: '#c6f06a', thief: '#ffd24a', mage: '#c070ff', dragon: '#ff4a2a', icedragon: '#7fe8ff', poisondragon: '#b6ff2a',
   warg: '#a07a40', shaman: '#3aff8a', elfarcher: '#6a8aff', elfwitch: '#ff4aa0', pyro: '#ff8a1a', frost: '#9fe8ff', storm: '#fff07a', necro: '#9bff3a' };
 const MM_GROUP = { pyro: 'mage', frost: 'mage', storm: 'mage', necro: 'mage', elfwitch: 'elfarcher' };
@@ -289,7 +289,7 @@ function drawMinimap() {
   c.strokeStyle = '#b8b2a0'; c.lineWidth = 4; c.beginPath();
   [[-26, -26], [26, -26], [26, 26], [-26, 26]].forEach(([x, z], i) => { const q = mp(x, z); i ? c.lineTo(q[0], q[1]) : c.moveTo(q[0], q[1]); });
   c.closePath(); c.stroke();
-  // wieża
+  // tower
   c.fillStyle = '#ddd'; c.strokeStyle = '#000'; c.lineWidth = 2;
   c.beginPath(); c.arc(h, h, 11 * k, 0, Math.PI * 2); c.fill(); c.stroke();
   // pole widzenia

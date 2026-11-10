@@ -1,5 +1,5 @@
-// Pomocnicy na wieży: Shift + numer broni = kupno pomocnika strzelającego tą bronią.
-// Staje przy ścianie, do której w chwili zakupu jest najbliżej gracz.
+// Tower helpers: Shift + weapon number hires a helper firing that weapon.
+// The helper stands at the wall nearest to the player at the time of purchase.
 const helpers = [];
 const HELPER_R = 5.2, HELPER_SLOTS = [1.3, -1.3, 2.5, -2.5], HELPER_MAX = 16;
 const WALLS = [[1, 0], [-1, 0], [0, 1], [0, -1]];
