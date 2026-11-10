@@ -22,6 +22,7 @@ Run: open `index.html` in a browser. Live: https://grgzx.github.io/towerguard/ (
 | `js/crew_lines.js` | `CREW` (characters: name, nameEn, pitch, rate, g, optional `voiceEn` regex), `LINES = {pl:{}, en:{}}`, `addLines(lang, obj)`, `WAVE_TITLES(_EN)`, `waveTitle`, `waveCtx`, `ordFem` |
 | `js/lines_pl_a-d.js`, `js/lines_en_a-d.js` | voice lines PL and EN (a: Monty Python events, b: weapons + `chat`/`battle`, c: extra heroes, d: new enemies and statuses) |
 | `js/lines_helpers.js` | `helperHire` and `helperDead` lines (PL/EN) |
+| `js/lines_dialogues.js` | restored dialogues (start, lowTower, gameOver*, necroSummon, chat) that once featured Geralt/Death, rewritten for other characters |
 | `js/voice.js` | engine: `say(key, ctx, {prio, cool, chance})`, queue, subtitles, `pickVoices` (`NOVELTY` excludes macOS effect voices, `GOOD_EN` preferred), `CHANCE`, `toggleVoice` |
 | `js/world.js` | scene, tower, forest, roads, `TOWER_Y=14`, `PLAT=5`, rubble, helpers `mesh/BOX/CYL/mat/M/rnd` |
 | `js/enemies.js` | `BUILDERS`, `TYPES`, the `Enemy` class (orc, goblin, thief, mage; hooks `SPELLS`/`TICK`, flags `isDragon`/`isMage`); `die()` increments `G.bodies` |
@@ -33,7 +34,7 @@ Run: open `index.html` in a browser. Live: https://grgzx.github.io/towerguard/ (
 | `js/weapons.js` | `fx`, projectiles, `enemyProjectile`, `pickDefender` (enemies target the nearest of player/helpers), `WEAPONS` (9), aiming, `leadAt`/`leadTarget` |
 | `js/main.js` | game loop, controls, waves (`planWave`, `spawnEnemy`), HUD, minimap, WebAudio sound, kill counter |
 
-Script order in `index.html`: three → i18n → crew_lines → lines_pl_a-d → lines_en_a-d → lines_helpers → voice → world → enemies → enemy_dragons → enemy_mages → enemy_units → weapons → helpers → status → main.
+Script order in `index.html`: three → i18n → crew_lines → lines_pl_a-d → lines_en_a-d → lines_helpers → lines_dialogues → voice → world → enemies → enemy_dragons → enemy_mages → enemy_units → weapons → helpers → status → main.
 
 Kill counter: `G.bodies[type]` is incremented in `Enemy.die()` (also counts kills by helpers and summons). Panel `#bodies` (top left; title "Licznik wrogów" in PL, "Bodycount" in EN) and the full list `#overBodies` on the game-over screen; enemy names are in `ENEMY_NAMES`.
 

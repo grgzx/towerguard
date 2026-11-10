@@ -6,7 +6,7 @@ let LANG = (function () {
 
 const STR = {
   pl: {
-    docTitle: 'Wieżostraż – Tower Defense 3D',
+    docTitle: 'Wieżostraż - Towerguard',
     wTower: 'Wieża', wLife: 'Życie', wMana: 'Mana', wWave: 'Fala:', wGold: 'Złoto:', wScore: 'Wynik:',
     help: '<b>M</b> głosy wł./wył. &nbsp; <b>L</b> język &nbsp; <b>R</b> napraw wieżę (<span id="cRepair"></span>) &nbsp; <b>T</b> +obrażenia (<span id="cDmg"></span>) &nbsp; <b>Y</b> +mana (<span id="cMana"></span>) &nbsp; <b>Shift+1–9</b> pomocnik',
     legend: '<span style="color:#7bd13a">● Ork</span> <span style="color:#c6f06a">● Goblin</span> <span style="color:#ffd24a">● Złodziej</span> <span style="color:#c070ff">● Mag</span> <span style="color:#ff4a2a">▲ Smok</span> <span style="color:#7fe8ff">▲ Lodowy</span> <span style="color:#b6ff2a">▲ Jadowity</span> <span style="color:#a07a40">● Warg</span> <span style="color:#6a8aff">● Elf</span>',
@@ -34,7 +34,7 @@ const STR = {
     dirs: { N: 'północy', E: 'wschodu', S: 'południa', W: 'zachodu' },
   },
   en: {
-    docTitle: 'Towerguard – Tower Defense 3D',
+    docTitle: 'Wieżostraż - Towerguard',
     wTower: 'Tower', wLife: 'Health', wMana: 'Mana', wWave: 'Wave:', wGold: 'Gold:', wScore: 'Score:',
     help: '<b>M</b> voices on/off &nbsp; <b>L</b> language &nbsp; <b>R</b> repair tower (<span id="cRepair"></span>) &nbsp; <b>T</b> +damage (<span id="cDmg"></span>) &nbsp; <b>Y</b> +mana (<span id="cMana"></span>) &nbsp; <b>Shift+1–9</b> hire helper',
     legend: '<span style="color:#7bd13a">● Orc</span> <span style="color:#c6f06a">● Goblin</span> <span style="color:#ffd24a">● Thief</span> <span style="color:#c070ff">● Mage</span> <span style="color:#ff4a2a">▲ Dragon</span> <span style="color:#7fe8ff">▲ Frost</span> <span style="color:#b6ff2a">▲ Venom</span> <span style="color:#a07a40">● Warg</span> <span style="color:#6a8aff">● Elf</span>',
