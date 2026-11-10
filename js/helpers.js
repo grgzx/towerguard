@@ -15,6 +15,35 @@ const HD = [
   { cost: 300, cd: 14, range: 0, self: true, staff: 0xfff2a0, col: 0xe8e0c0, col2: 0xb8a060, hat: true, sfx: 'heal' },
 ];
 
+const HELPER_HP = 100;
+const _hbG = new THREE.PlaneGeometry(1, 0.13), _hbBg = new THREE.MeshBasicMaterial({ color: 0x000000, depthTest: false, transparent: true, opacity: 0.7 }), _hbFg = new THREE.MeshBasicMaterial({ color: 0x5ad23a, depthTest: false });
+
+function helperBar() {
+  const g = new THREE.Group(), bg = new THREE.Mesh(_hbG, _hbBg), fg = new THREE.Mesh(_hbG, _hbFg);
+  bg.scale.set(1.06, 1.35, 1); bg.renderOrder = 10; fg.renderOrder = 11; fg.position.z = 0.01;
+  g.add(bg); g.add(fg); g.visible = false; g.userData.fg = fg; scene.add(g);
+  return g;
+}
+function helperAt(p) {
+  for (const h of helpers) if (Math.abs(p.x - h.pos.x) < 0.8 && Math.abs(p.z - h.pos.z) < 0.8 && p.y > h.pos.y - 0.2 && p.y < h.pos.y + 2.4) return h;
+  return null;
+}
+function hurtHelper(h, n) {
+  if (h.hp <= 0) return;
+  h.hp -= n; h.hurt = 0.25;
+  fx.burst(h.pos.clone().add(new THREE.Vector3(0, 1.3, 0)), 0xcc2222, 5, 3, 0.5, 0.12);
+  if (h.hp <= 0) killHelper(h);
+}
+function hurtHelpersIn(c, r, n) { for (const h of helpers.slice()) if (Math.hypot(h.pos.x - c.x, h.pos.z - c.z) < r) hurtHelper(h, n); }
+function healHelpers(n) { for (const h of helpers) h.hp = Math.min(HELPER_HP, h.hp + n); }
+function killHelper(h) {
+  const i = helpers.indexOf(h); if (i < 0) return;
+  helpers.splice(i, 1); scene.remove(h.mesh); scene.remove(h.bar);
+  fx.burst(h.pos.clone().add(new THREE.Vector3(0, 1.2, 0)), 0xcc2222, 18, 5, 0.8, 0.18);
+  fx.burst(h.pos.clone().add(new THREE.Vector3(0, 1.2, 0)), 0x888888, 8, 2, 1, 0.4, -1);
+  showMsg(t('helperDied', weaponName(h.kind))); say('helperDead', {}, { prio: 1, cool: 6000 });
+}
+
 function helperCount(k) { let n = 0; for (const h of helpers) if (h.kind === k) n++; return n; }
 function helperCost(k) { return HD[k].cost + 40 * helpers.length; }
 
@@ -61,11 +90,11 @@ function addHelper(k, spot) {
   const m = buildHelper(k);
   const pos = new THREE.Vector3(spot.x, TOWER_Y + 0.4, spot.z);
   m.position.copy(pos); m.rotation.y = spot.yaw; scene.add(m);
-  helpers.push({ kind: k, mesh: m, P: m.userData.P, pos, cd: 1 + Math.random() * 1.5, yaw: spot.yaw, idleYaw: spot.yaw, aimYaw: spot.yaw, idleT: 0, kick: 0, t: Math.random() * 10 });
+  helpers.push({ kind: k, mesh: m, P: m.userData.P, pos, hp: HELPER_HP, hurt: 0, bar: helperBar(), cd: 1 + Math.random() * 1.5, yaw: spot.yaw, idleYaw: spot.yaw, aimYaw: spot.yaw, idleT: 0, kick: 0, t: Math.random() * 10 });
   fx.burst(pos.clone().add(new THREE.Vector3(0, 1.2, 0)), 0xffe08a, 16, 3, 0.7, 0.15, -1);
   fx.ring(pos.clone().setY(TOWER_Y + 0.4), 0xffe08a, 1.6, 0.6);
 }
-function clearHelpers() { helpers.forEach(h => scene.remove(h.mesh)); helpers.length = 0; }
+function clearHelpers() { helpers.forEach(h => { scene.remove(h.mesh); scene.remove(h.bar); }); helpers.length = 0; }
 
 function buyHelper(k) {
   if (!G.running || G.paused || G.over) return;
@@ -137,14 +166,14 @@ const HFIRE = [
   (h) => {
     if (G.towerHp > G.maxTowerHp * 0.85 && G.player.hp > 70) return false;
     G.towerHp = Math.min(G.maxTowerHp, G.towerHp + G.maxTowerHp * 0.12);
-    G.player.hp = Math.min(100, G.player.hp + 20);
+    G.player.hp = Math.min(100, G.player.hp + 20); healHelpers(20);
     for (let i = 0; i < 2; i++) fx.ring(new THREE.Vector3(0, TOWER_Y + 0.5 + i * 0.3, 0), 0xfff2a0, 7 + i * 3, 0.9);
     fx.burst(h.pos.clone().add(new THREE.Vector3(0, 1.5, 0)), 0xfff2a0, 18, 3, 1, 0.18, -2);
   },
 ];
 
 function updateHelpers(dt) {
-  for (const h of helpers) {
+  for (const h of helpers.slice()) {
     const d = HD[h.kind]; h.t += dt; h.cd -= dt; h.idleT -= dt;
     if (h.cd <= 0) {
       const e = d.self ? null : helperTarget(h);
@@ -164,5 +193,9 @@ function updateHelpers(dt) {
     if (d.staff) { P.armR.rotation.x = -0.9 - h.kick * 0.9; P.armL.rotation.x = -0.2; if (P.orb) P.orb.scale.setScalar(1 + Math.sin(h.t * 6) * 0.2 + h.kick * 0.6); }
     else { P.armL.rotation.x = P.armR.rotation.x = -1.25 - h.kick * 0.12; }
     P.head.rotation.y = Math.sin(h.t * 0.8) * 0.2;
+    h.hurt = Math.max(0, h.hurt - dt);
+    h.bar.visible = h.hp < HELPER_HP; h.bar.position.set(h.pos.x, h.pos.y + 2.5, h.pos.z); h.bar.quaternion.copy(camera.quaternion);
+    const k = Math.max(0, h.hp / HELPER_HP), fg = h.bar.userData.fg; fg.scale.set(k, 1, 1); fg.position.x = -(1 - k) * 0.5;
+    h.mesh.position.x = h.pos.x + (h.hurt > 0 ? Math.sin(h.t * 90) * 0.04 : 0);
   }
 }

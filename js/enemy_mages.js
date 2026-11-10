@@ -63,6 +63,7 @@ SPELLS.storm = e => {
     shake(0.5);
     if (Math.hypot(G.player.pos.x - c.x, G.player.pos.z - c.z) < 2.0) { hurtPlayer(dmg); applyStatus('curse', 3, 0); }
     else if (!toPlayer) damageTower(dmg * 0.5);
+    hurtHelpersIn(c, 2.0, dmg);
   } });
   fx.ring(c.clone(), 0xfff07a, 2.2, 1.5);
 };

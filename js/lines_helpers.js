@@ -1,5 +1,14 @@
 // Kwestie przy zatrudnieniu pomocnika na wieży
 addLines('pl', {
+  helperDead: [
+    ['artur', 'Poległ dzielnie. Pochowajcie go. Albo po prostu zepchnijcie z wieży.'],
+    ['robin', 'Widzicie? To dlatego ja zawsze idę na końcu.'],
+    ['czarny', 'To tylko zadrapanie. Ach, nie, jednak nie.'],
+    ['galahad', 'Biedak. Był tak czysty. Przynajmniej teraz jest też lekki.'],
+    ['patsy', 'Ktoś zostawił po nim kokosa.'],
+    ['smierc', 'JEDEN POMOCNIK MNIEJ. WSZYSCY BYLI NA LIŚCIE. CHCIAŁBYM ZJEŚĆ CURRY.'],
+    [['dennis', 'Zabili go! Widzieliście? Widzieliście, jak go uciskają?'], ['artur', 'Uspokój się, Dennis.']],
+  ],
   helperHire: [
     ['artur', 'Witaj, dzielny żołnierzu! Stań tu i trzymaj się swojej ściany.'],
     ['lancelot', 'Nowy rekrut! Przynajmniej ktoś będzie za mnie biegał.'],
@@ -14,6 +23,15 @@ addLines('pl', {
   ],
 });
 addLines('en', {
+  helperDead: [
+    ['artur', 'He fell bravely. Bury him. Or just push him off the tower.'],
+    ['robin', 'You see? This is why I always walk at the back.'],
+    ['czarny', 'Tis but a scratch. Oh. No. Actually, no.'],
+    ['galahad', 'Poor fellow. He was so pure. At least now he is light, too.'],
+    ['patsy', 'He left a coconut behind.'],
+    ['smierc', 'ONE HELPER FEWER. HE WAS ON THE LIST. I COULD MURDER A CURRY.'],
+    [['dennis', 'Look, they killed him! Come and see the violence inherent in the system!'], ['artur', 'Calm down, Dennis.']],
+  ],
   helperHire: [
     ['artur', 'Welcome, brave soldier! Take this wall, and guard it with your life.'],
     ['lancelot', 'A new recruit! Finally, someone to do the running about for me.'],

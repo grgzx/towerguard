@@ -175,13 +175,16 @@ function updateEnemyShots(dt) {
     s.pos.addScaledVector(s.vel, dt); s.mesh.position.copy(s.pos);
     fx.burst(s.pos.clone(), s.color, 1, 0.6, 0.35, 0.18, 0);
     let hit = false, direct = false;
+    let hh = null;
     if (s.pos.distanceTo(G.player.pos) < 1.3) { hurtPlayer(s.dmg); hit = true; direct = true; }
+    else if ((hh = helperAt(s.pos))) { hurtHelper(hh, s.dmg); hit = true; }
     else if (Math.abs(s.pos.x) < PLAT + 2 && Math.abs(s.pos.z) < PLAT + 2 && s.pos.y < TOWER_Y + 0.6 && s.pos.y > 0) { damageTower(s.dmg, s.pos); hit = true; }
     else if (s.t > s.life) hit = true;
     if (hit) {
       if (s.onHit) s.onHit(direct, s.pos);
       if (s.small) fx.burst(s.pos.clone(), s.color, 3, 4, 0.5, 0.2); else { fx.burst(s.pos.clone(), s.color, 14, 6, 0.6, 0.25); fx.flash(s.pos.clone(), s.color, 1.2, 0.3); }
       if (s.splash && s.pos.distanceTo(G.player.pos) < s.splash && s.target !== 'player') hurtPlayer(s.dmg * 0.5);
+      if (s.splash && s.target !== 'player') for (const h of helpers.slice()) if (h !== hh && h.pos.distanceTo(s.pos) < s.splash) hurtHelper(h, s.dmg * 0.5);
       scene.remove(s.mesh); enemyShots.splice(i, 1);
     }
   }
@@ -302,7 +305,7 @@ const WEAPONS = [
       G.player.hp = Math.min(100, G.player.hp + 50);
       for (let i = 0; i < 3; i++) fx.ring(new THREE.Vector3(0, TOWER_Y + 0.5 + i * 0.3, 0), 0xfff2a0, 8 + i * 3, 0.9 + i * 0.2);
       fx.burst(new THREE.Vector3(G.player.pos.x, TOWER_Y + 1, G.player.pos.z), 0xfff2a0, 30, 4, 1.2, 0.2, -2);
-      showMsg(t('healed')); clearStatus(); say('heal', {}, { prio: 1, cool: 4000 }); sfx('heal');
+      healHelpers(50); showMsg(t('healed')); clearStatus(); say('heal', {}, { prio: 1, cool: 4000 }); sfx('heal');
     } },
 ];
 
