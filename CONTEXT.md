@@ -11,6 +11,7 @@ Run: open `index.html` in a browser. Live: https://grgzx.github.io/towerguard/ (
 - Defender chatter must be rare (weapon-switch lines 30% chance, at least 35 s gap).
 - The mortar must not hurt the tower or the player.
 - No PointLights on projectiles or staffs (they overexpose the scene). Only the 4 torches.
+- Torches (`buildTorch` in `world.js`): standing on the platform floor against the wall, offset from the middle of each side (pinwheel layout, 3 units from centre). Pole with iron bands, cup, wrapped head, three layered flame cones, additive glow sprite, rising sparks and a flickering PointLight. Animated through `world.fires` in `updateWorld`.
 - Difficulty stays at the original level (a 10% reduction was reverted).
 
 ## Files
