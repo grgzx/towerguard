@@ -1,7 +1,7 @@
 // Język interfejsu i komunikatów: PL / EN
 let LANG = (function () {
   try { const s = localStorage.getItem('td_lang'); if (s === 'pl' || s === 'en') return s; } catch (e) {}
-  return /^pl/i.test(navigator.language || '') ? 'pl' : 'en';
+  return 'pl';
 })();
 
 const STR = {
