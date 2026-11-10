@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<title>Wieżostraż – Tower Defense 3D</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<canvas id="game"></canvas>
+
+<div id="hud">
+  <div id="topbar">
+    <div class="stat"><span class="lbl" id="lblTower">Wieża</span><div class="bar"><div id="towerHp" class="fill hp"></div></div></div>
+    <div class="stat"><span class="lbl" id="lblLife">Życie</span><div class="bar"><div id="playerHp" class="fill pl"></div></div></div>
+    <div class="stat"><span class="lbl" id="lblMana">Mana</span><div class="bar"><div id="mana" class="fill mn"></div></div></div>
+    <div class="stat txt"><span id="lblWave">Fala:</span> <b id="wave">1</b></div>
+    <div class="stat txt"><span id="lblGold">Złoto:</span> <b id="gold">0</b></div>
+    <div class="stat txt"><span id="lblScore">Wynik:</span> <b id="score">0</b></div>
+  </div>
+  <div id="crosshair"></div>
+  <div id="banner"></div>
+  <div id="msg"></div>
+  <div id="hotbar"></div>
+  <div id="help">
+    <b>M</b> głosy wł./wył. &nbsp; <b>R</b> napraw wieżę (<span id="cRepair"></span>) &nbsp; <b>T</b> +obrażenia (<span id="cDmg"></span>) &nbsp; <b>Y</b> +mana (<span id="cMana"></span>)
+  </div>
+  <div id="labels"></div>
+  <div id="bodies"></div>
+  <div id="mapwrap">
+    <canvas id="minimap" width="440" height="440"></canvas>
+    <div id="legend"><span style="color:#7bd13a">● Ork</span> <span style="color:#c6f06a">● Goblin</span> <span style="color:#ffd24a">● Złodziej</span> <span style="color:#c070ff">● Mag</span> <span style="color:#ff4a2a">▲ Smok</span></div>
+  </div>
+</div>
+
+<div id="menu" class="overlay">
+  <div class="panel">
+    <div class="langrow"><span class="langLbl">Język</span> <button class="langbtn" data-lang="pl">🇵🇱 Polski</button> <button class="langbtn" data-lang="en">🇬🇧 English</button></div>
+    <h1 id="menuTitle">⚔ Wieżostraż ⚔</h1>
+    <p class="sub" id="menuSub">Ostatnia twierdza królestwa. Orkowie, gobliny, złodzieje, smoki i mroczni magowie idą na twoją wieżę.</p>
+    <div class="grid">
+      <div id="g1"><b>W A S D</b><br>chodzenie po wieży</div>
+      <div id="g2"><b>Mysz</b><br>celowanie</div>
+      <div id="g3"><b>LPM</b><br>strzał / czar</div>
+      <div id="g4"><b>1 – 9</b><br>wybór broni i czarów</div>
+      <div id="g5"><b>R / T / Y</b><br>naprawa / ulepszenia</div>
+      <div id="g6"><b>P / Esc</b><br>pauza</div>
+      <div id="g7"><b>M</b><br>głosy obrońców wł./wył.</div>
+    </div>
+    <ol class="weap">
+      <li><b>1</b> <span id="w1">Łuk długi</span></li>
+      <li><b>2</b> <span id="w2">Kusza</span></li>
+      <li><b>3</b> <span id="w3">Moździerz (obszarowy, nie trafia w cele blisko wieży)</span></li>
+      <li><b>4</b> <span id="w4">Kula ognia</span></li>
+      <li><b>5</b> <span id="w5">Błyskawica łańcuchowa</span></li>
+      <li><b>6</b> <span id="w6">Lodowy pocisk (spowalnia)</span></li>
+      <li><b>7</b> <span id="w7">Balista (przebija wrogów)</span></li>
+      <li><b>8</b> <span id="w8">Deszcz meteorów</span></li>
+      <li><b>9</b> <span id="w9">Święte uzdrowienie</span></li>
+    </ol>
+    <button id="start">Kliknij, aby zacząć obronę</button>
+  </div>
+</div>
+
+<div id="pause" class="overlay hidden">
+  <div class="panel"><h1 id="pauseTitle">Pauza</h1>
+    <div class="langrow"><span class="langLbl">Język</span> <button class="langbtn" data-lang="pl">🇵🇱 Polski</button> <button class="langbtn" data-lang="en">🇬🇧 English</button></div><button id="resume">Wznów</button></div>
+</div>
+
+<div id="over" class="overlay hidden">
+  <div class="panel"><h1 id="overTitle">Wieża padła</h1><p id="overText"></p><div id="overBodies"></div><button id="restart">Spróbuj ponownie</button></div>
+</div>
+
+<script src="lib/three.min.js"></script>
+<script src="js/i18n.js"></script>
+<script src="js/crew_lines.js"></script>
+<script src="js/lines_pl_a.js"></script>
+<script src="js/lines_pl_b.js"></script>
+<script src="js/lines_pl_c.js"></script>
+<script src="js/lines_pl_d.js"></script>
+<script src="js/lines_en_a.js"></script>
+<script src="js/lines_en_b.js"></script>
+<script src="js/lines_en_c.js"></script>
+<script src="js/lines_en_d.js"></script>
+<script src="js/lines_helpers.js"></script>
+<script src="js/voice.js"></script>
+<script src="js/world.js"></script>
+<script src="js/enemies.js"></script>
+<script src="js/enemy_dragons.js"></script>
+<script src="js/enemy_mages.js"></script>
+<script src="js/enemy_units.js"></script>
+<script src="js/weapons.js"></script>
+<script src="js/helpers.js"></script>
+<script src="js/status.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
