@@ -23,7 +23,7 @@
   const $t = id => document.getElementById(id);
   const live = () => G.running && !G.paused;
 
-  // ---- joystick (left half) ----
+  // ---- joystick (left half): up/down walk, left/right turn the character ----
   const joy = $t('joy'), knob = $t('joyk');
   let joyId = null, jx0 = 0, jy0 = 0;
   const homeJoy = () => { joy.style.left = '70px'; joy.style.top = 'auto'; joy.style.bottom = '60px'; joy.classList.remove('on'); knob.style.transform = ''; };
@@ -40,9 +40,9 @@
     if (d > JOY_R) { dx *= JOY_R / d; dy *= JOY_R / d; }
     knob.style.transform = `translate(${dx}px,${dy}px)`;
     const mx = dx / JOY_R, my = dy / JOY_R, m = Math.hypot(mx, my);
-    if (m < 0.18) { touchIn.mx = 0; touchIn.my = 0; } else { touchIn.mx = mx; touchIn.my = my; }
+    if (m < 0.18) { touchIn.turn = 0; touchIn.my = 0; } else { touchIn.turn = Math.sign(mx) * Math.pow(Math.abs(mx), 1.4); touchIn.my = my; }
   });
-  const joyEnd = e => { if (e.pointerId !== joyId) return; joyId = null; touchIn.mx = 0; touchIn.my = 0; homeJoy(); };
+  const joyEnd = e => { if (e.pointerId !== joyId) return; joyId = null; touchIn.turn = 0; touchIn.my = 0; homeJoy(); };
   ['pointerup', 'pointercancel'].forEach(n => $t('tzMove').addEventListener(n, joyEnd));
 
   // ---- look drag (right half, and the finger holding the fire button) ----
@@ -120,7 +120,7 @@
 
   // ---- page-level behaviour ----
   window.touchReset = () => {
-    touchIn.mx = touchIn.my = 0; touchIn.fire = false; $t('tFire').classList.remove('down'); holdStop(true); homeJoy(); joyId = null;
+    touchIn.turn = touchIn.my = 0; touchIn.fire = false; $t('tFire').classList.remove('down'); holdStop(true); homeJoy(); joyId = null;
   };
   const guard = e => { if (!e.target.closest || !e.target.closest('.panel, #rotate')) e.preventDefault(); };
   document.addEventListener('touchmove', guard, { passive: false });

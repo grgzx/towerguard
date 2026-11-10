@@ -129,7 +129,8 @@ function buildViewmodel(i) {
 
 // ---------- sterowanie ----------
 const keys = {}; let mouseDown = false;
-const touchIn = { mx: 0, my: 0, fire: false, hold: -1 };
+const touchIn = { turn: 0, my: 0, fire: false, hold: -1 };
+const TURN_SPEED = 2.4;
 function toggleLang() { setLang(LANG === 'pl' ? 'en' : 'pl'); showMsg(t('langSet')); }
 function toggleVoiceMsg() { const on = toggleVoice(); showMsg(t(on ? 'voiceOn' : 'voiceOff')); if (on) say('voiceOn', {}, { prio: 2, cool: 0 }); }
 addEventListener('keydown', e => {
@@ -376,7 +377,7 @@ function loop(now) {
     const P = G.player, sp = 6 * playerSpeedMul();
     let fx_ = 0, fz = 0;
     if (keys.KeyW) fz -= 1; if (keys.KeyS) fz += 1; if (keys.KeyA) fx_ -= 1; if (keys.KeyD) fx_ += 1;
-    fx_ += touchIn.mx; fz += touchIn.my;
+    fz += touchIn.my; P.yaw -= touchIn.turn * TURN_SPEED * dt;
     const l = Math.max(1, Math.hypot(fx_, fz)); fx_ /= l; fz /= l;
     const c = Math.cos(P.yaw), s = Math.sin(P.yaw);
     P.pos.x += (fx_ * c + fz * s) * sp * dt; P.pos.z += (-fx_ * s + fz * c) * sp * dt;

@@ -25,6 +25,21 @@ addLines('pl', {
     [['gimli', 'Mój kuzyn miał takiego psa. Nigdy go potem nie znaleziono.'], ['legolas', 'Biegnie z wdziękiem. Szkoda, że pachnie jak stajnia.']],
     [['lancelot', 'Gad! Ogromny gad! Do broni!'], ['czarny', 'Spokojnie. To tylko draśnięcie. Zwykle mówię to ja.']],
   ],
+  egg_dutchman: [
+    [['robin', 'Statek na niebie! Ze świecącymi żaglami i zieloną mgłą! Jak sądzicie, ma wolne miejsca dla tchórza?'], ['gandalf', 'To zjawa. Piraci, którzy nie dopłynęli do portu. Nie dla ciebie, Robinie.']],
+    [['rincewind', 'Statek duchów płynie po chmurach. Zawsze powtarzałem, że morze nie ma sensu, a teraz widzę, że niebo też nie.'], ['sam', 'Chyba nie chcę wiedzieć, kto jest kapitanem, proszę pana.']],
+    [['dennis', 'Patrzcie, łódź na niebie! Pływa w powietrzu!'], ['artur', 'To nie łódź, Dennisie. To galeon. Taki większy.']],
+  ],
+  egg_rohan: [
+    [['legolas', 'Jeźdźcy na horyzoncie! Zielony sztandar, dwadzieścia koni i ani jednego pomysłu, kto im płaci.'], ['gimli', 'Nikt im nie płaci. Jadą z honoru. Co za marnotrawstwo.']],
+    [['gandalf', 'Spójrzcie na wschód. O świcie piątego dnia przybędzie pomoc. Tym razem to nie ja robię całą robotę.'], ['robin', 'To i tak najlepszy plan. Mój plan to właśnie ten.']],
+    [['artur', 'Zaprawdę! Konnica, która nigdy nie była w Camelocie. Pewnie ma tam zły adres.'], ['lancelot', 'Prawdziwe konie, w pełnym galopie. Zazdroszczę i pytam, kto je karmi.']],
+  ],
+  egg_coconut: [
+    [['patsy', 'Panie! Ktoś idzie po polu i stuka kokosami. Kto jedzie bez konia?'], ['artur', 'Dziwne. Ten w koronie ma bardzo podobny chód do mojego. Ale ja tu stoję.']],
+    [['czarny', 'Dwóch jegomościów galopuje bez koni i stuka kokosami. Brzmi znajomo, ale nie pamiętam skąd.'], ['galahad', 'Ja nie pamiętam, a przecież jestem czysty.']],
+    [['robin', 'Dwóch dzielnych rycerzy dla odmiany bez wierzchowców! Nareszcie ktoś mi dorównuje. Znaczy, ja dorównuję im.'], ['tim', 'Kokosy nie przylatują z południa. Ktoś tu coś ukrywa.']],
+  ],
 });
 addLines('en', {
   egg_delorean: [
@@ -51,5 +66,20 @@ addLines('en', {
     [['patsy', 'Sir! Far off beyond the fields, a lizard the size of a house is running!'], ['artur', 'I do not know what it is, but it only becomes our problem if it turns this way.']],
     [['gimli', 'My cousin had a dog like that. He was never seen again.'], ['legolas', 'It runs with grace. A pity it smells like a stable.']],
     [['lancelot', 'A beast! A giant beast! To arms!'], ['czarny', 'Calm down. It is only a scratch. Usually I am the one who says that.']],
+  ],
+  egg_dutchman: [
+    [['robin', 'A ship in the sky! With glowing sails and green mist! Do you think they have a berth for a coward?'], ['gandalf', 'That is a wraith ship. Sailors who never reached port. Not for you, Robin.']],
+    [['rincewind', 'A ghost ship sailing through the clouds. I always said the sea made no sense, and now I see the sky does not either.'], ['sam', 'I do not think I want to know who the captain is, sir.']],
+    [['dennis', 'Look, a boat in the sky! It floats on air!'], ['artur', 'That is not a boat, Dennis. It is a galleon. The larger kind.']],
+  ],
+  egg_rohan: [
+    [['legolas', 'Riders on the horizon! A green banner, twenty horses, and not a clue who is paying them.'], ['gimli', 'Nobody is paying them. They ride for honour. What a waste.']],
+    [['gandalf', 'Look to the east. At dawn on the fifth day, help arrives. For once I am not doing all the work.'], ['robin', 'It is still the best plan. It is, in fact, mine.']],
+    [['artur', 'Verily! A cavalry that has never visited Camelot. They must have the wrong address.'], ['lancelot', 'The horses are real. And at a gallop. I am jealous, and I wonder who feeds them.']],
+  ],
+  egg_coconut: [
+    [['patsy', 'Sir! Someone is walking across the field clapping coconuts. Who rides without a horse?'], ['artur', 'Strange. The one in the crown walks very much like me. But I am standing right here.']],
+    [['czarny', 'Two gentlemen are galloping without a horse and clapping coconuts. That sounds familiar, but I cannot think where from.'], ['galahad', 'Neither can I, and I am the pure one.']],
+    [['robin', 'Two brave knights, for once without mounts! At last somebody matches me. I mean, I match them.'], ['tim', 'Coconuts do not migrate from the south. Someone is hiding something here.']],
   ],
 });

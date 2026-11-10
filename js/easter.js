@@ -1,5 +1,5 @@
 // Easter eggs: from wave 2 on, at most one passing curiosity per wave. Each builder returns { group, update(dt, age) } and
-// update() returns false when the scene is over. The scenes are in easter2.js (E.T., Starlink, T. rex), the lines in lines_easter.js.
+// update() returns false when the scene is over. The crew's comments are in lines_easter.js.
 const EGG = { pending: null, pendingT: 0, cur: null, bag: [], builders: {} };
 function eggReg(name, fn) { EGG.builders[name] = fn; }
 
@@ -107,6 +107,208 @@ eggReg('witch', () => {
     w.rotation.set(Math.cos(age * 2.2) * 0.12, ch.yaw, Math.sin(age * 1.4) * 0.2, 'YXZ');
     scarf.rotation.y = Math.sin(age * 9) * 0.4; hat.rotation.z = Math.sin(age * 7) * 0.08;
     if (age > cackled) { cackled += 5.5; eggBeep('sawtooth', 0, 0, 0.9, 0.05, [520, 780, 560, 820, 600, 860, 640, 900, 680, 700]); }
+    return u < 1;
+  } };
+});
+
+// ---- E.T. pedals a bicycle through the sky past a big moon, basket and glowing finger included ----
+eggReg('et', () => {
+  const g = new THREE.Group(), b = new THREE.Group(), ch = eggChord(105, 170), DUR = 15, H = 42;
+  const brown = eggMat(0x7a5a3a), iron = eggMat(0x2a2e34), red = eggMat(0xb02a2a);
+  const add = (geo, m, x, y, z, p) => { const o = new THREE.Mesh(geo, m); o.position.set(x, y, z); (p || b).add(o); return o; };
+  const wheels = [-1.4, 1.4].map(z => { const w = new THREE.Mesh(new THREE.TorusGeometry(0.8, 0.07, 6, 16), iron); w.rotation.y = Math.PI / 2; w.position.set(0, 0.8, z); b.add(w); return w; });
+  add(new THREE.BoxGeometry(0.1, 0.1, 2.0), red, 0, 1.5, 0);
+  add(new THREE.BoxGeometry(0.1, 0.8, 0.1), red, 0, 1.2, -0.7);
+  add(new THREE.BoxGeometry(0.7, 0.07, 0.07), iron, 0, 1.9, 1.35);
+  add(new THREE.BoxGeometry(0.4, 0.3, 0.4), eggMat(0xd8c8a0), 0, 2.1, 1.55);
+  add(new THREE.SphereGeometry(0.28, 8, 8), brown, 0, 1.85, -0.9);
+  // E.T.: stubby body, big head with a long neck, long arm with a glowing fingertip
+  const et = new THREE.Group(); et.position.set(0, 2.0, -0.7); b.add(et);
+  add(new THREE.SphereGeometry(0.42, 8, 8), brown, 0, 0.3, 0, et);
+  add(new THREE.CylinderGeometry(0.1, 0.14, 0.7, 6), brown, 0, 0.85, 0.1, et);
+  add(new THREE.SphereGeometry(0.4, 8, 8), brown, 0, 1.35, 0.25, et);
+  [-1, 1].forEach(s => add(new THREE.SphereGeometry(0.07, 6, 6), eggMat(0xfff4d0), s * 0.17, 1.42, 0.6, et));
+  const arm = add(new THREE.CylinderGeometry(0.06, 0.06, 1.1, 6), brown, 0.55, 0.9, 0.5, et); arm.rotation.z = -0.5; arm.rotation.x = -0.9;
+  const tip = eggGlow(0xff6a5a, 1.6, 0.95); tip.position.set(0.78, 1.38, 0.95); et.add(tip);
+  const moon = new THREE.Mesh(new THREE.CircleGeometry(30, 28), new THREE.MeshBasicMaterial({ color: 0xfff6d8, transparent: true, opacity: 0.9, fog: false, depthWrite: false }));
+  const mx = (ch.x0 + ch.x1) / 2, mz = (ch.z0 + ch.z1) / 2, md = Math.hypot(mx, mz) + 55;
+  moon.position.set(mx / Math.hypot(mx, mz) * md, H + 8, mz / Math.hypot(mx, mz) * md); moon.lookAt(0, H + 8, 0); g.add(moon);
+  const halo = eggGlow(0xfff2c0, 90, 0.35); halo.position.copy(moon.position); halo.position.multiplyScalar(0.98); g.add(halo);
+  b.scale.setScalar(3.4); g.add(b);
+  const theme = [392, 440, 523, 659, 784, 988]; let tn = 0;
+  return { group: g, update(dt, age) {
+    const u = age / DUR;
+    b.position.set(ch.x0 + (ch.x1 - ch.x0) * u, H + Math.sin(age * 1.6) * 1.8, ch.z0 + (ch.z1 - ch.z0) * u);
+    b.rotation.set(0, ch.yaw, Math.sin(age * 1.3) * 0.08, 'YXZ');
+    wheels.forEach(w => w.rotation.x = age * 4);
+    tip.material.opacity = 0.6 + 0.35 * Math.sin(age * 6);
+    if (age > tn * 1.2 && tn < theme.length) { eggBeep('sine', theme[tn], theme[tn], 0.5, 0.05); tn++; }
+    return u < 1;
+  } };
+});
+
+// ---- A Starlink train: dozens of tiny lights in a perfect line crossing the sky ----
+eggReg('starlink', () => {
+  const g = new THREE.Group(), ch = eggChord(180, 260), N = 26, DUR = 18, H = 105;
+  const pts = new Float32Array(N * 3);
+  const geo = new THREE.BufferGeometry(); geo.setAttribute('position', new THREE.BufferAttribute(pts, 3));
+  const train = new THREE.Points(geo, new THREE.PointsMaterial({ color: 0xfff6e0, size: 7, map: world.glowTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, fog: false, sizeAttenuation: false }));
+  train.frustumCulled = false; g.add(train);
+  const dx = ch.x1 - ch.x0, dz = ch.z1 - ch.z0, L = Math.hypot(dx, dz), ux = dx / L, uz = dz / L, spacing = 12;
+  return { group: g, update(dt, age) {
+    const u = age / DUR, head = (u * (L + N * spacing)) ;
+    for (let i = 0; i < N; i++) {
+      const s = head - i * spacing;
+      pts[i * 3] = ch.x0 + ux * s; pts[i * 3 + 1] = H + Math.sin(s * 0.004) * 6 - s * 0.01; pts[i * 3 + 2] = ch.z0 + uz * s;
+      if (s < 0 || s > L) pts[i * 3 + 1] = -500;
+    }
+    geo.attributes.position.needsUpdate = true;
+    return u < 1;
+  } };
+});
+
+// ---- A T. rex sprints across the far plain; the ground shakes a little with every step ----
+eggReg('trex', () => {
+  const g = new THREE.Group(), r = new THREE.Group(), ch = eggChord(150, 130), DUR = 11;
+  const skin = eggMat(0x5c7a3a), belly = eggMat(0x9db070), dark = eggMat(0x2c3a20);
+  const add = (geo, m, x, y, z, p) => { const o = new THREE.Mesh(geo, m); o.position.set(x, y, z); o.castShadow = true; (p || r).add(o); return o; };
+  add(new THREE.SphereGeometry(2.2, 10, 8), skin, 0, 5.6, 0).scale.set(1, 1.1, 1.8);
+  add(new THREE.SphereGeometry(1.6, 8, 8), belly, 0, 4.9, 0.7).scale.set(0.9, 0.9, 1.6);
+  const neck = add(new THREE.CylinderGeometry(0.9, 1.5, 3, 8), skin, 0, 7.4, 3.3); neck.rotation.x = 0.7;
+  add(new THREE.BoxGeometry(2.0, 1.6, 3.4), skin, 0, 9.0, 4.9);
+  add(new THREE.BoxGeometry(1.8, 0.6, 3.0), belly, 0, 8.1, 4.9);
+  [-1, 1].forEach(s => add(new THREE.SphereGeometry(0.22, 6, 6), eggMat(0xffe040), s * 1.0, 9.5, 5.4));
+  const tail = add(new THREE.ConeGeometry(1.7, 9, 8), skin, 0, 5.0, -6.5); tail.rotation.x = -Math.PI / 2 - 0.12;
+  [-1, 1].forEach(s => { add(new THREE.CylinderGeometry(0.15, 0.12, 1.6, 5), dark, s * 0.9, 5.0, 3.3).rotation.x = 0.9; });
+  const legs = [-1, 1].map(s => {
+    const l = new THREE.Group(); l.position.set(s * 1.5, 4.4, 0); r.add(l);
+    add(new THREE.CylinderGeometry(0.9, 0.6, 3.2, 7), skin, 0, -1.4, 0, l);
+    const foot = add(new THREE.BoxGeometry(1.2, 0.5, 2.2), dark, 0, -3.1, 0.7, l);
+    return l;
+  });
+  r.scale.setScalar(1.3); r.rotation.y = ch.yaw; g.add(r);
+  const dx = ch.x1 - ch.x0, dz = ch.z1 - ch.z0; let step = 0;
+  return { group: g, update(dt, age) {
+    const u = age / DUR, ph = age * 5.2;
+    r.position.set(ch.x0 + dx * u, Math.abs(Math.sin(ph)) * 0.8, ch.z0 + dz * u);
+    legs[0].rotation.x = Math.sin(ph) * 0.7; legs[1].rotation.x = -Math.sin(ph) * 0.7;
+    r.rotation.x = Math.sin(ph * 2) * 0.03;
+    if (Math.floor(ph / Math.PI) > step) { step = Math.floor(ph / Math.PI); if (G.running && !G.paused) { G.shake = Math.max(G.shake, 0.08); eggBeep('sine', 60, 30, 0.22, 0.18); } }
+    return u < 1;
+  } };
+});
+
+// ---- A ghostly galleon sails through the sky, trailing green mist ----
+eggReg('dutchman', () => {
+  const g = new THREE.Group(), s = new THREE.Group(), ch = eggChord(110, 200), DUR = 17, H = 40;
+  const ghost = (c, o) => new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: o || 0.72, depthWrite: false, side: THREE.DoubleSide });
+  const hull = ghost(0x4a6a58), deck = ghost(0x36503f), sail = ghost(0xb8d8c0, 0.5), dark = ghost(0x20302a, 0.85);
+  const add = (geo, m, x, y, z) => { const o = new THREE.Mesh(geo, m); o.position.set(x, y, z); s.add(o); return o; };
+  add(new THREE.BoxGeometry(2.8, 1.5, 7.5), hull, 0, 0, 0);
+  add(new THREE.BoxGeometry(2.2, 1.2, 2.4), hull, 0, 0.9, -2.6);
+  add(new THREE.BoxGeometry(2.0, 0.9, 2.2), deck, 0, 0.5, 4.3).rotation.x = -0.25;
+  add(new THREE.ConeGeometry(0.9, 2.6, 4), hull, 0, -0.2, 5.4).rotation.x = Math.PI / 2;
+  add(new THREE.CylinderGeometry(0.06, 0.06, 4.2, 5), dark, 0, 3.0, 5.9).rotation.x = 1.1;
+  const sails = [];
+  [[-1.8, 5.2, 1.0], [0.4, 6.3, 1.2], [2.4, 5.0, 0.9]].forEach(([z, h, w]) => {
+    add(new THREE.CylinderGeometry(0.1, 0.12, h, 6), dark, 0, 0.75 + h / 2, z);
+    const a = add(new THREE.PlaneGeometry(2.6 * w, h * 0.55), sail, 0, 0.75 + h * 0.6, z + 0.15); sails.push(a);
+    add(new THREE.PlaneGeometry(2.0 * w, h * 0.3), sail, 0, 0.75 + h * 0.2, z + 0.15);
+  });
+  const flag = add(new THREE.PlaneGeometry(1.4, 0.8), dark, 0, 0.75 + 6.5, 0.4); flag.position.x = 0.2;
+  const mist = [];
+  for (let i = 0; i < 4; i++) { const m = eggGlow(0x7bffb0, 5 + i, 0.3); m.position.set(0, -1.4, -1 + i * 2.5 - 3); s.add(m); mist.push(m); }
+  const aura = eggGlow(0x66ffaa, 18, 0.22); aura.position.y = 2; s.add(aura);
+  s.scale.setScalar(4.2); g.add(s);
+  let moan = 0;
+  return { group: g, update(dt, age) {
+    const u = age / DUR;
+    s.position.set(ch.x0 + (ch.x1 - ch.x0) * u, H + Math.sin(age * 0.9) * 3, ch.z0 + (ch.z1 - ch.z0) * u);
+    s.rotation.set(Math.sin(age * 0.9 + 1) * 0.09, ch.yaw, Math.sin(age * 0.7) * 0.12, 'YXZ');
+    sails.forEach((a, i) => { a.rotation.y = Math.sin(age * 2 + i) * 0.12; a.scale.x = 1 + Math.sin(age * 3 + i) * 0.05; });
+    flag.rotation.y = Math.sin(age * 5) * 0.5;
+    mist.forEach((m, i) => { m.material.opacity = 0.2 + 0.15 * Math.sin(age * 2 + i * 1.3); });
+    if (age > moan) { moan += 6; eggBeep('sine', 0, 0, 2.2, 0.06, [196, 185, 175, 165, 156, 147, 139, 131]); }
+    return u < 1;
+  } };
+});
+
+// ---- Riders of Rohan: a line of horsemen thunders along the far horizon under a green banner; a horn sounds ----
+eggReg('rohan', () => {
+  const g = new THREE.Group(), ch = eggChord(105, 110), DUR = 10, N = 14;
+  const dx = ch.x1 - ch.x0, dz = ch.z1 - ch.z0, L = Math.hypot(dx, dz);
+  const coats = [eggMat(0x8a6a44), eggMat(0xd8d0c0), eggMat(0x4a3220), eggMat(0x6e5a48)];
+  const armor = eggMat(0xaab0b8), cloak = eggMat(0x3e7a3a), spear = eggMat(0x5a4020), white = eggMat(0xf2f2ee);
+  const bodyG = new THREE.BoxGeometry(0.9, 1.0, 2.3), neckG = new THREE.BoxGeometry(0.4, 1.0, 0.5), headG = new THREE.BoxGeometry(0.4, 0.5, 0.9);
+  const legG = new THREE.BoxGeometry(0.2, 1.2, 0.2), riderG = new THREE.BoxGeometry(0.55, 0.9, 0.4), helmG = new THREE.SphereGeometry(0.28, 6, 6), spearG = new THREE.CylinderGeometry(0.03, 0.03, 3.4, 4);
+  const riders = [];
+  for (let i = 0; i < N; i++) {
+    const h = new THREE.Group(), coat = coats[i % coats.length], leader = i === 0;
+    const mk = (geo, m, x, y, z) => { const o = new THREE.Mesh(geo, m); o.position.set(x, y, z); h.add(o); return o; };
+    mk(bodyG, coat, 0, 1.6, 0);
+    mk(neckG, coat, 0, 2.3, 1.1).rotation.x = 0.5;
+    mk(headG, coat, 0, 2.7, 1.55);
+    const legs = [[-0.3, 0.9], [0.3, 0.9], [-0.3, -0.9], [0.3, -0.9]].map(([x, z]) => { const l = new THREE.Group(); l.position.set(x, 1.1, z); h.add(l); const m = new THREE.Mesh(legG, coat); m.position.y = -0.6; l.add(m); return l; });
+    mk(riderG, leader ? cloak : armor, 0, 2.5, 0);
+    mk(helmG, armor, 0, 3.2, 0);
+    mk(spearG, spear, 0.45, 3.0, 0.1).rotation.x = 1.25;
+    if (leader) {
+      mk(new THREE.CylinderGeometry(0.05, 0.05, 4.2, 5), spear, -0.45, 3.6, 0);
+      const flag = mk(new THREE.PlaneGeometry(1.8, 1.2), new THREE.MeshLambertMaterial({ color: 0x2e7a34, side: THREE.DoubleSide }), -0.45, 5.2, -0.9);
+      flag.rotation.y = Math.PI / 2;
+      const emblem = mk(new THREE.PlaneGeometry(0.7, 0.4), new THREE.MeshLambertMaterial({ color: 0xf2f2ee, side: THREE.DoubleSide }), -0.46, 5.2, -0.9); emblem.rotation.y = Math.PI / 2;
+    }
+    h.scale.setScalar(2.8); g.add(h);
+    riders.push({ h, legs, off: leader ? 0 : 7 + (i % 5) * 4.2, side: leader ? 0 : ((i % 2) * 2 - 1) * (2.2 + (i % 3) * 1.6), ph: Math.random() * 6 });
+  }
+  let horn = false, rumble = 0;
+  return { group: g, update(dt, age) {
+    const u = age / DUR, lead = u * (L + 30) - 10;
+    riders.forEach((r, i) => {
+      const s = Math.max(-40, Math.min(L + 40, lead - r.off)), k = s / L, ph = age * 9 + r.ph;
+      r.h.position.set(ch.x0 + dx * k - dz / L * r.side, Math.abs(Math.sin(ph)) * 0.5, ch.z0 + dz * k + dx / L * r.side);
+      r.h.rotation.y = ch.yaw; r.h.visible = s > -35 && s < L + 35;
+      r.legs.forEach((l, j) => { l.rotation.x = Math.sin(ph + (j % 2) * Math.PI + (j > 1 ? 1.2 : 0)) * 0.9; });
+    });
+    if (!horn && age > 0.3) { horn = true; eggBeep('sawtooth', 0, 0, 2.2, 0.07, [196, 196, 196, 262, 262, 262, 330, 330, 392, 392]); }
+    if (age > rumble) { rumble += 0.35; eggBeep('sine', 70, 40, 0.3, 0.12); }
+    return u < 1;
+  } };
+});
+
+// ---- Two figures skip along the plain clapping coconut halves together; no horse in sight ----
+eggReg('coconut', () => {
+  const g = new THREE.Group(), ch = eggChord(75, 95), DUR = 17;
+  const dx = ch.x1 - ch.x0, dz = ch.z1 - ch.z0;
+  const mail = eggMat(0x9096a0), red = eggMat(0x9a2a2a), tunic = eggMat(0x8a6a44), skin = eggMat(0xe0b890), gold = eggMat(0xe6b830), nut = eggMat(0x5a3a1c), dark = eggMat(0x3a2a1a);
+  function person(body, king) {
+    const p = new THREE.Group(), mk = (geo, m, x, y, z, par) => { const o = new THREE.Mesh(geo, m); o.position.set(x, y, z); (par || p).add(o); o.castShadow = true; return o; };
+    mk(new THREE.BoxGeometry(0.9, 1.3, 0.55), body, 0, 1.9, 0);
+    mk(new THREE.SphereGeometry(0.32, 8, 8), skin, 0, 2.85, 0);
+    const legs = [-1, 1].map(s => { const l = new THREE.Group(); l.position.set(s * 0.25, 1.25, 0); p.add(l); mk(new THREE.BoxGeometry(0.3, 1.2, 0.3), dark, 0, -0.6, 0, l); return l; });
+    const arms = [-1, 1].map(s => { const a = new THREE.Group(); a.position.set(s * 0.6, 2.4, 0); p.add(a); mk(new THREE.BoxGeometry(0.22, 0.9, 0.22), body, 0, -0.35, 0.1, a); return a; });
+    if (king) { mk(new THREE.CylinderGeometry(0.3, 0.26, 0.26, 8), gold, 0, 3.2, 0); mk(new THREE.BoxGeometry(0.95, 0.5, 0.58), red, 0, 2.15, 0); }
+    return { p, legs, arms };
+  }
+  const arthur = person(mail, true), patsy = person(tunic, false);
+  patsy.p.scale.setScalar(0.82);
+  const nuts = [];
+  [[arthur, 0], [patsy, 1]].forEach(([f]) => {
+    [-1, 1].forEach(s => { const n = new THREE.Mesh(new THREE.SphereGeometry(0.2, 6, 6), nut); n.position.set(s * 0.1, -0.85, 0.35); f.arms[s < 0 ? 0 : 1].add(n); nuts.push(n); });
+  });
+  const wrap = new THREE.Group(); wrap.rotation.y = ch.yaw; wrap.scale.setScalar(2.4); g.add(wrap);
+  patsy.p.position.z = -2.6; wrap.add(arthur.p); wrap.add(patsy.p);
+  let lastStep = -1;
+  return { group: g, update(dt, age) {
+    const u = age / DUR, ph = age * 6.5;
+    wrap.position.set(ch.x0 + dx * u, 0, ch.z0 + dz * u);
+    [arthur, patsy].forEach((f, i) => {
+      const q = ph + i * 0.9, b = Math.abs(Math.sin(q)) * 0.45;
+      f.p.position.y = b; f.legs[0].rotation.x = Math.sin(q) * 0.7; f.legs[1].rotation.x = -Math.sin(q) * 0.7;
+      f.arms.forEach((a, k) => { a.rotation.x = -1.0 + Math.sin(q * 2 + k * Math.PI) * 0.35; a.rotation.z = (k ? -1 : 1) * 0.25; });
+    });
+    const step = Math.floor(ph / (Math.PI / 2));
+    if (step !== lastStep) { lastStep = step; if (G.running && !G.paused) eggBeep('square', step % 2 ? 950 : 780, step % 2 ? 640 : 520, 0.07, 0.06); }
     return u < 1;
   } };
 });
