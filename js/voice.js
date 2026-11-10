@@ -107,20 +107,6 @@ function say(key, ctx, o) {
   return true;
 }
 
-// Keeps the audio output device awake with an inaudible stream. Without it some browsers (Firefox on desktop)
-// open and close the output stream around every utterance, which can produce a click at the end of each line.
-let _keepAC = null;
-function keepAudioAlive() {
-  if (_keepAC || !hasTTS) return;
-  try {
-    const AC_ = window.AudioContext || window.webkitAudioContext; if (!AC_) return;
-    _keepAC = new AC_();
-    const n = _keepAC.sampleRate, buf = _keepAC.createBuffer(1, n, n), d = buf.getChannelData(0);
-    for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * (1 / 32768);
-    const src = _keepAC.createBufferSource(); src.buffer = buf; src.loop = true; src.connect(_keepAC.destination); src.start(); if (_keepAC.state === 'suspended') _keepAC.resume();
-  } catch (e) { _keepAC = null; }
-}
-
 function toggleVoice() {
   VOICE.on = !VOICE.on;
   if (!VOICE.on) stopSpeech(true);
