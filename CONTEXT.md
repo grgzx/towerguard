@@ -23,6 +23,7 @@ Run: open `index.html` in a browser. Live: https://grgzx.github.io/towerguard/ (
 | `js/lines_pl_a-d.js`, `js/lines_en_a-d.js` | voice lines PL and EN (a: Monty Python events, b: weapons + `chat`/`battle`, c: extra heroes, d: new enemies and statuses) |
 | `js/lines_helpers.js` | `helperHire` and `helperDead` lines (PL/EN) |
 | `js/lines_action.js` | action-movie parodies (Die Hard, Terminator, Matrix, Predator, Top Gun, 300, Mission: Impossible, Bond...) spoken by the existing crew, added to the existing pools |
+| `js/lines_comedy.js` | Beverly Hills Cop, Police Academy, Monkey Island parodies and "swap the prop" fusions (ale instead of martini, coconut badge, rubber chicken with a pulley), spoken by the existing crew |
 | `js/lines_dialogues.js` | restored dialogues (start, lowTower, gameOver*, necroSummon, chat) that once featured Geralt/Death, rewritten for other characters |
 | `js/voice.js` | engine: `say(key, ctx, {prio, cool, chance})`, queue, subtitles, `pickVoices` (`NOVELTY` excludes macOS effect voices, `GOOD_EN` preferred), `CHANCE`, `toggleVoice` |
 | `js/world.js` | scene, tower, forest, roads, `TOWER_Y=14`, `PLAT=5`, rubble, helpers `mesh/BOX/CYL/mat/M/rnd` |
@@ -37,7 +38,7 @@ Run: open `index.html` in a browser. Live: https://grgzx.github.io/towerguard/ (
 | `manifest.webmanifest`, `icon.svg`, `icon-192.png`, `icon-512.png` | PWA manifest (fullscreen, landscape) and icons (PNGs rendered from the SVG) |
 | `js/main.js` | game loop, controls, waves (`planWave`, `spawnEnemy`), HUD, minimap, WebAudio sound, kill counter |
 
-Script order in `index.html`: three → i18n → crew_lines → lines_pl_a-d → lines_en_a-d → lines_helpers → lines_dialogues → lines_action → voice → world → enemies → enemy_dragons → enemy_mages → enemy_units → weapons → helpers → status → main → touch.
+Script order in `index.html`: three → i18n → crew_lines → lines_pl_a-d → lines_en_a-d → lines_helpers → lines_dialogues → lines_action → lines_comedy → voice → world → enemies → enemy_dragons → enemy_mages → enemy_units → weapons → helpers → status → main → touch.
 
 Kill counter: `G.bodies[type]` is incremented in `Enemy.die()` (also counts kills by helpers and summons). Panel `#bodies` (top left; title "Licznik wrogów" in PL, "Bodycount" in EN) and the full list `#overBodies` on the game-over screen; enemy names are in `ENEMY_NAMES`.
 
