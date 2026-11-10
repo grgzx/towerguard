@@ -181,7 +181,7 @@ function startGame() {
   enemies.forEach(e => scene.remove(e.mesh)); enemies.length = 0;
   projectiles.forEach(p => scene.remove(p.mesh)); projectiles.length = 0;
   enemyShots.forEach(p => scene.remove(p.mesh)); enemyShots.length = 0;
-  stopSpeech(true);
+  stopSpeech(true); clearEggs();
   lowEl.style.opacity = 0;
   clearStatus(); clearHelpers();
   Object.assign(G, { weaponSayAt: performance.now(), chatT: 40, warnHp: false, warnTower: false, called: {}, running: true, paused: false, over: false, wave: 0, gold: 80, score: 0, kills: 0, bodies: {}, towerHp: 1000, maxTowerHp: 1000, mana: 100, maxMana: 100, manaRegen: 7,
@@ -232,7 +232,7 @@ function spawnEnemy(type) {
 function updateWaves(dt) {
   if (!G.waveActive) {
     G.breakT -= dt;
-    if (G.breakT <= 0) { G.wave++; G.spawnQ = planWave(G.wave); G.waveActive = true; G.spawnT = 0; banner(t('waveBanner', G.wave, waveTitle(G.wave))); say('waveStart', waveCtx(G.wave), { prio: 1, cool: 0 }); }
+    if (G.breakT <= 0) { G.wave++; eggOnWave(G.wave); G.spawnQ = planWave(G.wave); G.waveActive = true; G.spawnT = 0; banner(t('waveBanner', G.wave, waveTitle(G.wave))); say('waveStart', waveCtx(G.wave), { prio: 1, cool: 0 }); }
     return;
   }
   G.spawnT -= dt;
@@ -395,7 +395,7 @@ function loop(now) {
       const e = enemies[i]; e.update(dt);
       if (e.remove) { scene.remove(e.mesh); enemies.splice(i, 1); }
     }
-    updateHelpers(dt);
+    updateHelpers(dt); updateEggs(dt);
     updateProjectiles(dt); updateEnemyShots(dt); updateBolts(dt);
     updateLabels(); updateHUD();
   }

@@ -26,6 +26,7 @@ Run: open `index.html` in a browser. Live: https://grgzx.github.io/towerguard/ (
 | `js/lines_action.js` | action-movie parodies (Die Hard, Terminator, Matrix, Predator, Top Gun, 300, Mission: Impossible, Bond...) spoken by the existing crew, added to the existing pools |
 | `js/lines_comedy.js` | Beverly Hills Cop, Police Academy, Monkey Island parodies and "swap the prop" fusions (ale instead of martini, coconut badge, rubber chicken with a pulley), spoken by the existing crew |
 | `js/lines_dialogues.js` | restored dialogues (start, lowTower, gameOver*, necroSummon, chat) that once featured Geralt/Death, rewritten for other characters |
+| `js/easter.js`, `js/easter2.js`, `js/lines_easter.js` | easter eggs: from wave 2, at most one scene per wave (`eggOnWave` in `updateWaves` picks one from a shuffled bag, it starts 6-22 s into the wave; `updateEggs` runs only while the game is not paused; `clearEggs` in `startGame`). Scenes are registered with `eggReg(name, builder)`; a builder returns `{group, update(dt, age)}` and `update` returns false when the scene ends. Scenes: `delorean`, `witch`, `et`, `starlink`, `trex`. The crew comments through `say('egg_<name>')`, lines in `lines_easter.js` (PL and EN). To add one: write the builder, add `egg_<name>` lines in both languages. |
 | `js/voice.js` | engine: `say(key, ctx, {prio, cool, chance})`, queue, subtitles, `pickVoices` (`NOVELTY` excludes macOS effect voices, `GOOD_EN` preferred), `CHANCE`, `toggleVoice` |
 | `js/world.js` | scene, tower, forest, roads, `TOWER_Y=14`, `PLAT=5`, rubble, helpers `mesh/BOX/CYL/mat/M/rnd` |
 | `js/enemies.js` | `BUILDERS`, `TYPES`, the `Enemy` class (orc, goblin, thief, mage; hooks `SPELLS`/`TICK`, flags `isDragon`/`isMage`); `die()` increments `G.bodies` |
@@ -39,7 +40,7 @@ Run: open `index.html` in a browser. Live: https://grgzx.github.io/towerguard/ (
 | `manifest.webmanifest`, `icon.svg`, `icon-192.png`, `icon-512.png` | PWA manifest (fullscreen, landscape) and icons (PNGs rendered from the SVG) |
 | `js/main.js` | game loop, controls, waves (`planWave`, `spawnEnemy`), HUD, minimap, WebAudio sound, kill counter |
 
-Script order in `index.html`: three → i18n → crew_lines → lines_pl_a-d → lines_en_a-d → lines_helpers → lines_dialogues → lines_action → lines_comedy → voice → world → enemies → enemy_dragons → enemy_mages → enemy_units → weapons → helpers → status → main → touch.
+Script order in `index.html`: three → i18n → crew_lines → lines_pl_a-d → lines_en_a-d → lines_helpers → lines_dialogues → lines_action → lines_comedy → lines_easter → voice → world → easter → easter2 → enemies → enemy_dragons → enemy_mages → enemy_units → weapons → helpers → status → main → touch.
 
 Kill counter: `G.bodies[type]` is incremented in `Enemy.die()` (also counts kills by helpers and summons). Panel `#bodies` (top left; title "Licznik wrogów" in PL, "Bodycount" in EN) and the full list `#overBodies` on the game-over screen; enemy names are in `ENEMY_NAMES`.
 
