@@ -54,8 +54,8 @@ function updateEggs(dt) {
 
 // ---- Doc's time machine: speeds along a far road leaving two lines of fire, then vanishes in a flash ----
 eggReg('delorean', () => {
-  const g = new THREE.Group(), car = new THREE.Group(), ch = eggChord(105, 190), DUR = 5.5, H = 9;
-  const steel = eggMat(0xc6cad2), dark = eggMat(0x1c2026), glass = eggMat(0x2c3644);
+  const g = new THREE.Group(), car = new THREE.Group(), ch = eggChord(105, 190), DUR = 5.5, H = 24;
+  const steel = eggMat(0xaab0ba, { emissive: 0x2c3036 }), dark = eggMat(0x1c2026), glass = eggMat(0x3a4a60, { emissive: 0x1a2432 });
   const part = (w, h, d, m, x, y, z) => { const b = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), m); b.position.set(x, y, z); car.add(b); return b; };
   part(2.0, 0.55, 4.4, steel, 0, 0.75, 0);
   part(1.85, 0.5, 2.0, glass, 0, 1.25, -0.25);
@@ -71,13 +71,13 @@ eggReg('delorean', () => {
   });
   car.scale.setScalar(3.4); car.rotation.y = ch.yaw; g.add(car);
   const fireM = new THREE.MeshBasicMaterial({ color: 0xff7a18, blending: THREE.AdditiveBlending, transparent: true, opacity: 0.9, depthWrite: false });
-  const trailG = new THREE.Group(); trailG.position.set(ch.x0, 0.15, ch.z0); trailG.rotation.y = ch.yaw; g.add(trailG);
+  const trailG = new THREE.Group(); trailG.position.set(ch.x0, H + 0.1, ch.z0); trailG.rotation.y = ch.yaw; g.add(trailG);
   const trails = [-1.1, 1.1].map(x => { const p = new THREE.Mesh(new THREE.PlaneGeometry(1.1, 1), fireM); p.rotation.x = -Math.PI / 2; p.position.x = x; trailG.add(p); return p; });
   const flash = eggGlow(0xcfe8ff, 6, 0); g.add(flash);
   const len = Math.hypot(ch.x1 - ch.x0, ch.z1 - ch.z0); let gone = false;
   return { group: g, update(dt, age) {
     const u = Math.min(1, age / DUR), p = Math.pow(u, 1.7) * len, k = p / len;
-    car.position.set(ch.x0 + (ch.x1 - ch.x0) * k, H + Math.sin(age * 5) * 0.2, ch.z0 + (ch.z1 - ch.z0) * k);
+    car.position.set(ch.x0 + (ch.x1 - ch.x0) * k, H + 0.5 + Math.sin(age * 5) * 0.2, ch.z0 + (ch.z1 - ch.z0) * k);
     trails.forEach(t => { t.scale.y = Math.max(0.01, p); t.position.z = p / 2; });
     if (u >= 1 && !gone) { gone = true; car.visible = false; flash.position.copy(car.position); sfx('zap'); sfx('boom'); }
     if (gone) { const a = age - DUR; flash.material.opacity = Math.max(0, 1 - a * 2.2); flash.scale.setScalar(6 + a * 40); fireM.opacity = Math.max(0, 0.9 - a * 0.22); return a < 4.2; }
@@ -111,37 +111,76 @@ eggReg('witch', () => {
   } };
 });
 
-// ---- E.T. pedals a bicycle through the sky past a big moon, basket and glowing finger included ----
+// ---- E.T. rides in the basket of a bicycle flying across the moon; his heart and fingertip glow ----
 eggReg('et', () => {
   const g = new THREE.Group(), b = new THREE.Group(), ch = eggChord(105, 170), DUR = 15, H = 42;
-  const brown = eggMat(0x7a5a3a), iron = eggMat(0x2a2e34), red = eggMat(0xb02a2a);
+  const iron = eggMat(0x2a2e34), red = eggMat(0xb02a2a), wicker = eggMat(0xb88a4a, { side: THREE.DoubleSide });
+  const hoodie = eggMat(0x9a2a2a), jeans = eggMat(0x2e3c5c), tan = eggMat(0xe0b890);
+  const skin = eggMat(0x8b7258), belly = eggMat(0xa89270), dk = eggMat(0x65503c), eyeM = eggMat(0x4a3a18);
+  const black = new THREE.MeshBasicMaterial({ color: 0x080604 }), white = new THREE.MeshBasicMaterial({ color: 0xffffff });
   const add = (geo, m, x, y, z, p) => { const o = new THREE.Mesh(geo, m); o.position.set(x, y, z); (p || b).add(o); return o; };
+  const sph = (r) => new THREE.SphereGeometry(r, 10, 8);
+  // bicycle
   const wheels = [-1.4, 1.4].map(z => { const w = new THREE.Mesh(new THREE.TorusGeometry(0.8, 0.07, 6, 16), iron); w.rotation.y = Math.PI / 2; w.position.set(0, 0.8, z); b.add(w); return w; });
-  add(new THREE.BoxGeometry(0.1, 0.1, 2.0), red, 0, 1.5, 0);
-  add(new THREE.BoxGeometry(0.1, 0.8, 0.1), red, 0, 1.2, -0.7);
-  add(new THREE.BoxGeometry(0.7, 0.07, 0.07), iron, 0, 1.9, 1.35);
-  add(new THREE.BoxGeometry(0.4, 0.3, 0.4), eggMat(0xd8c8a0), 0, 2.1, 1.55);
-  add(new THREE.SphereGeometry(0.28, 8, 8), brown, 0, 1.85, -0.9);
-  // E.T.: stubby body, big head with a long neck, long arm with a glowing fingertip
-  const et = new THREE.Group(); et.position.set(0, 2.0, -0.7); b.add(et);
-  add(new THREE.SphereGeometry(0.42, 8, 8), brown, 0, 0.3, 0, et);
-  add(new THREE.CylinderGeometry(0.1, 0.14, 0.7, 6), brown, 0, 0.85, 0.1, et);
-  add(new THREE.SphereGeometry(0.4, 8, 8), brown, 0, 1.35, 0.25, et);
-  [-1, 1].forEach(s => add(new THREE.SphereGeometry(0.07, 6, 6), eggMat(0xfff4d0), s * 0.17, 1.42, 0.6, et));
-  const arm = add(new THREE.CylinderGeometry(0.06, 0.06, 1.1, 6), brown, 0.55, 0.9, 0.5, et); arm.rotation.z = -0.5; arm.rotation.x = -0.9;
-  const tip = eggGlow(0xff6a5a, 1.6, 0.95); tip.position.set(0.78, 1.38, 0.95); et.add(tip);
+  add(new THREE.BoxGeometry(0.09, 0.09, 2.1), red, 0, 1.55, 0.15);
+  add(new THREE.BoxGeometry(0.09, 1.0, 0.09), red, 0, 1.15, -0.85);
+  add(new THREE.BoxGeometry(0.09, 1.1, 0.09), red, 0, 1.15, 1.3).rotation.x = -0.2;
+  add(new THREE.BoxGeometry(0.9, 0.07, 0.07), iron, 0, 1.9, 1.25);
+  add(new THREE.BoxGeometry(0.28, 0.09, 0.5), iron, 0, 1.75, -0.95);
+  add(new THREE.CylinderGeometry(0.62, 0.48, 0.55, 12, 1, true), wicker, 0, 2.1, 1.7);
+  add(new THREE.CircleGeometry(0.48, 12), wicker, 0, 1.83, 1.7).rotation.x = -Math.PI / 2;
+  add(new THREE.TorusGeometry(0.62, 0.04, 5, 14), wicker, 0, 2.375, 1.7).rotation.x = Math.PI / 2;
+  // the boy pedalling
+  const pedals = [0, 1].map(() => add(new THREE.BoxGeometry(0.35, 0.07, 0.22), iron, 0, 0.8, -0.2));
+  const legs = [-1, 1].map(s => { const l = new THREE.Group(); l.position.set(s * 0.22, 2.0, -0.95); b.add(l); add(new THREE.BoxGeometry(0.2, 1, 0.22), jeans, 0, -0.5, 0, l); return l; });
+  add(new THREE.BoxGeometry(0.8, 1.2, 0.5), hoodie, 0, 2.7, -1.1).rotation.x = 0.35;
+  add(sph(0.33), tan, 0, 3.55, -0.75); add(sph(0.38), hoodie, 0, 3.55, -0.95).scale.set(1, 1, 0.9);
+  [-1, 1].forEach(s => { const a = new THREE.Group(); a.position.set(s * 0.5, 3.15, -0.9); a.rotation.x = 0.527; b.add(a); add(new THREE.BoxGeometry(0.18, 0.18, 2.49), hoodie, 0, 0, 1.245, a); });
+  // E.T. sitting in the basket
+  const et = new THREE.Group(); et.position.set(0, 1.9, 1.7); et.scale.setScalar(0.8); b.add(et);
+  [-1, 1].forEach(s => { add(new THREE.CylinderGeometry(0.13, 0.15, 0.4, 6), skin, s * 0.22, 0.25, 0.15, et); add(new THREE.BoxGeometry(0.26, 0.1, 0.4), dk, s * 0.22, 0.05, 0.3, et); });
+  add(sph(0.5), skin, 0, 0.8, 0, et).scale.set(1, 1.05, 0.9);
+  add(sph(0.4), belly, 0, 0.7, 0.28, et).scale.set(0.9, 1, 0.6);
+  const heart = eggGlow(0xff4a30, 1.1, 0.7); heart.position.set(0, 0.95, 0.5); et.add(heart);
+  add(new THREE.CylinderGeometry(0.15, 0.23, 0.75, 8), skin, 0, 1.45, 0.1, et);
+  add(sph(0.52), skin, 0, 2.0, 0.2, et).scale.set(1.2, 1.0, 1.0);
+  add(sph(0.4), skin, 0, 2.3, 0.12, et).scale.set(1.2, 0.8, 0.9);
+  add(sph(0.3), skin, 0, 1.83, 0.45, et).scale.set(1.1, 0.8, 0.7);
+  [-1, 1].forEach(s => {
+    add(sph(0.18), eyeM, s * 0.3, 2.0, 0.56, et).scale.set(1, 1.15, 0.5);
+    add(sph(0.1), black, s * 0.3, 2.0, 0.63, et);
+    add(sph(0.035), white, s * 0.27, 2.06, 0.7, et);
+    add(new THREE.BoxGeometry(0.4, 0.06, 0.08), dk, s * 0.3, 2.22, 0.55, et).rotation.z = -s * 0.2;
+    add(sph(0.05), dk, s * 0.06, 1.77, 0.72, et);
+  });
+  add(new THREE.BoxGeometry(0.22, 0.03, 0.04), black, 0, 1.64, 0.7, et);
+  const armR = new THREE.Group(); armR.position.set(0.5, 1.1, 0.15); armR.rotation.set(1.15, 0, -0.35); et.add(armR);
+  add(new THREE.CylinderGeometry(0.06, 0.08, 1.1, 6), skin, 0, 0.55, 0, armR);
+  add(new THREE.CylinderGeometry(0.035, 0.045, 0.4, 5), skin, 0, 1.3, 0, armR);
+  const tip = eggGlow(0xff5a3a, 1.5, 0.95); tip.position.set(0, 1.52, 0); armR.add(tip);
+  const armL = new THREE.Group(); armL.position.set(-0.5, 1.1, 0.15); armL.rotation.set(2.6, 0, 0.35); et.add(armL);
+  add(new THREE.CylinderGeometry(0.06, 0.08, 1.0, 6), skin, 0, 0.5, 0, armL);
+  // the moon sits exactly behind the middle of the flight path
   const moon = new THREE.Mesh(new THREE.CircleGeometry(30, 28), new THREE.MeshBasicMaterial({ color: 0xfff6d8, transparent: true, opacity: 0.9, fog: false, depthWrite: false }));
-  const mx = (ch.x0 + ch.x1) / 2, mz = (ch.z0 + ch.z1) / 2, md = Math.hypot(mx, mz) + 55;
-  moon.position.set(mx / Math.hypot(mx, mz) * md, H + 8, mz / Math.hypot(mx, mz) * md); moon.lookAt(0, H + 8, 0); g.add(moon);
-  const halo = eggGlow(0xfff2c0, 90, 0.35); halo.position.copy(moon.position); halo.position.multiplyScalar(0.98); g.add(halo);
+  const mx = (ch.x0 + ch.x1) / 2, mz = (ch.z0 + ch.z1) / 2, dist = Math.hypot(mx, mz), md = dist + 55, my = TOWER_Y + (H - TOWER_Y) * md / dist;
+  moon.position.set(mx / dist * md, my, mz / dist * md); moon.lookAt(0, my, 0); g.add(moon);
+  const halo = eggGlow(0xfff2c0, 90, 0.35); halo.position.copy(moon.position).multiplyScalar(0.98); g.add(halo);
   b.scale.setScalar(3.4); g.add(b);
   const theme = [392, 440, 523, 659, 784, 988]; let tn = 0;
   return { group: g, update(dt, age) {
-    const u = age / DUR;
+    const u = age / DUR, ph = age * 4;
     b.position.set(ch.x0 + (ch.x1 - ch.x0) * u, H + Math.sin(age * 1.6) * 1.8, ch.z0 + (ch.z1 - ch.z0) * u);
     b.rotation.set(0, ch.yaw, Math.sin(age * 1.3) * 0.08, 'YXZ');
     wheels.forEach(w => w.rotation.x = age * 4);
-    tip.material.opacity = 0.6 + 0.35 * Math.sin(age * 6);
+    pedals.forEach((p, i) => {
+      const a = ph + i * Math.PI, py = 0.8 + 0.38 * Math.cos(a), pz = -0.2 + 0.38 * Math.sin(a);
+      p.position.set((i ? -1 : 1) * 0.3, py, pz);
+      const l = legs[i], dy = py - 2.0, dz = pz + 0.95;
+      l.rotation.x = Math.atan2(-dz, -dy); l.scale.y = Math.hypot(dy, dz);
+    });
+    et.rotation.z = Math.sin(age * 1.9) * 0.05;
+    heart.material.opacity = 0.5 + 0.4 * Math.sin(age * 3.4); heart.scale.setScalar(1.0 + 0.2 * Math.sin(age * 3.4));
+    tip.material.opacity = 0.65 + 0.3 * Math.sin(age * 6); tip.scale.setScalar(1.4 + 0.3 * Math.sin(age * 6));
     if (age > tn * 1.2 && tn < theme.length) { eggBeep('sine', theme[tn], theme[tn], 0.5, 0.05); tn++; }
     return u < 1;
   } };
@@ -198,36 +237,73 @@ eggReg('trex', () => {
   } };
 });
 
-// ---- A ghostly galleon sails through the sky, trailing green mist ----
+function skullTexture() {
+  const c = document.createElement('canvas'); c.width = 128; c.height = 80; const x = c.getContext('2d');
+  x.fillStyle = '#10161a'; x.fillRect(0, 0, 128, 80);
+  x.strokeStyle = '#c9e8d4'; x.lineWidth = 6; x.lineCap = 'round';
+  x.beginPath(); x.moveTo(30, 62); x.lineTo(98, 22); x.moveTo(98, 62); x.lineTo(30, 22); x.stroke();
+  x.fillStyle = '#e8f4ec'; x.beginPath(); x.arc(64, 38, 17, 0, 7); x.fill(); x.fillRect(55, 48, 18, 14);
+  x.fillStyle = '#10161a'; x.beginPath(); x.arc(57, 37, 4.5, 0, 7); x.arc(71, 37, 4.5, 0, 7); x.fill();
+  return new THREE.CanvasTexture(c);
+}
+function tatteredSail(w, h) {
+  const sh = new THREE.Shape(), n = 7;
+  sh.moveTo(-w * 0.5, 0.2 * h); sh.lineTo(-w * 0.42, h); sh.lineTo(w * 0.42, h); sh.lineTo(w * 0.5, 0.2 * h);
+  for (let i = 1; i < n; i++) sh.lineTo(w * 0.5 - w * i / n, ((i * 37) % 5) / 5 * 0.3 * h + (i % 2 ? 0 : 0.02 * h));
+  const hole = new THREE.Path(); hole.moveTo(-w * 0.1, h * 0.45); hole.lineTo(w * 0.12, h * 0.4); hole.lineTo(w * 0.02, h * 0.68); sh.holes.push(hole);
+  return new THREE.ShapeGeometry(sh);
+}
+
+// ---- A ghostly galleon sails through the sky: tattered braced sails, glowing gun ports, a skull flag, green mist and drips ----
 eggReg('dutchman', () => {
-  const g = new THREE.Group(), s = new THREE.Group(), ch = eggChord(110, 200), DUR = 17, H = 40;
-  const ghost = (c, o) => new THREE.MeshBasicMaterial({ color: c, transparent: true, opacity: o || 0.72, depthWrite: false, side: THREE.DoubleSide });
-  const hull = ghost(0x4a6a58), deck = ghost(0x36503f), sail = ghost(0xb8d8c0, 0.5), dark = ghost(0x20302a, 0.85);
-  const add = (geo, m, x, y, z) => { const o = new THREE.Mesh(geo, m); o.position.set(x, y, z); s.add(o); return o; };
-  add(new THREE.BoxGeometry(2.8, 1.5, 7.5), hull, 0, 0, 0);
-  add(new THREE.BoxGeometry(2.2, 1.2, 2.4), hull, 0, 0.9, -2.6);
-  add(new THREE.BoxGeometry(2.0, 0.9, 2.2), deck, 0, 0.5, 4.3).rotation.x = -0.25;
-  add(new THREE.ConeGeometry(0.9, 2.6, 4), hull, 0, -0.2, 5.4).rotation.x = Math.PI / 2;
-  add(new THREE.CylinderGeometry(0.06, 0.06, 4.2, 5), dark, 0, 3.0, 5.9).rotation.x = 1.1;
-  const sails = [];
-  [[-1.8, 5.2, 1.0], [0.4, 6.3, 1.2], [2.4, 5.0, 0.9]].forEach(([z, h, w]) => {
-    add(new THREE.CylinderGeometry(0.1, 0.12, h, 6), dark, 0, 0.75 + h / 2, z);
-    const a = add(new THREE.PlaneGeometry(2.6 * w, h * 0.55), sail, 0, 0.75 + h * 0.6, z + 0.15); sails.push(a);
-    add(new THREE.PlaneGeometry(2.0 * w, h * 0.3), sail, 0, 0.75 + h * 0.2, z + 0.15);
+  const g = new THREE.Group(), s = new THREE.Group(), ch = eggChord(175, 230), DUR = 19, H = 42;
+  const gm = (c, o, em) => new THREE.MeshLambertMaterial({ color: c, emissive: em, transparent: true, opacity: o });
+  const hullM = gm(0x4b6e5c, 0.9, 0x10301f), darkM = gm(0x22342c, 0.92, 0x081810);
+  const sailM = new THREE.MeshBasicMaterial({ color: 0xbfe0c8, transparent: true, opacity: 0.6, side: THREE.DoubleSide, depthWrite: false });
+  const glowM = new THREE.MeshBasicMaterial({ color: 0x9bffc4, transparent: true, opacity: 0.9 });
+  const add = (geo, m, x, y, z, p) => { const o = new THREE.Mesh(geo, m); o.position.set(x, y, z); (p || s).add(o); return o; };
+  // hull: a side profile (z along the ship, y up) extruded across the beam
+  const pr = new THREE.Shape();
+  pr.moveTo(-4.1, 0.2); pr.quadraticCurveTo(-3.9, -0.9, -2.8, -1.0); pr.lineTo(2.6, -0.9); pr.quadraticCurveTo(4.6, -0.5, 5.2, 0.9);
+  pr.lineTo(5.5, 1.2); pr.lineTo(3.4, 0.85); pr.lineTo(-1.2, 0.85); pr.lineTo(-1.2, 1.9); pr.lineTo(-4.4, 2.1); pr.lineTo(-4.1, 0.2);
+  const hg = new THREE.ExtrudeGeometry(pr, { depth: 2.6, bevelEnabled: false, curveSegments: 8 }); hg.rotateY(-Math.PI / 2); hg.translate(1.3, 0, 0);
+  s.add(new THREE.Mesh(hg, hullM));
+  [-1, 1].forEach(sd => [-0.6, 0.5, 1.6, 2.7, 3.7].forEach(z => add(new THREE.BoxGeometry(0.06, 0.34, 0.4), glowM, sd * 1.31, 0.1, z)));
+  [-0.7, 0, 0.7].forEach(x => add(new THREE.BoxGeometry(0.5, 0.4, 0.06), glowM, x, 1.35, -4.3));
+  add(new THREE.CylinderGeometry(0.08, 0.1, 3.4, 6), darkM, 0, 1.7, 7.0).rotation.x = 1.27;
+  // masts, yards and braced, tattered sails
+  const sails = [], D = 0.55;
+  [[2.4, 6.2, [[1.4, 2.6, 2.4], [4.0, 2.0, 1.8]]], [0.2, 6.9, [[1.5, 3.0, 2.8], [4.5, 2.3, 2.0]]], [-2.1, 5.7, [[1.6, 2.2, 2.0], [3.9, 1.6, 1.4]]]].forEach(([z, top, list]) => {
+    add(new THREE.CylinderGeometry(0.09, 0.14, top - 0.8, 6), darkM, 0, (top + 0.8) / 2, z);
+    list.forEach(([y0, w, h]) => {
+      const sail = add(tatteredSail(w, h), sailM, 0, y0, z + 0.1); sail.rotation.y = D; sails.push(sail);
+      const yard = add(new THREE.CylinderGeometry(0.05, 0.05, w * 0.95, 5), darkM, 0, y0 + h, z + 0.1); yard.rotation.z = Math.PI / 2; yard.rotation.y = D;
+    });
   });
-  const flag = add(new THREE.PlaneGeometry(1.4, 0.8), dark, 0, 0.75 + 6.5, 0.4); flag.position.x = 0.2;
+  const flag = add(new THREE.PlaneGeometry(1.7, 1.06), new THREE.MeshBasicMaterial({ map: skullTexture(), side: THREE.DoubleSide, transparent: true, opacity: 0.95 }), 0, 7.0, -0.8);
+  flag.rotation.y = Math.PI / 2;
+  [[-1, 1], [1, 1], [-1, -1], [1, -1]].slice(0, 2).forEach(([x]) => { const l = eggGlow(0x8dffb8, 2.2, 0.75); l.position.set(x * 1.0, 2.6, -4.0); s.add(l); });
+  const aura = eggGlow(0x66ffaa, 20, 0.2); aura.position.y = 2; s.add(aura);
   const mist = [];
-  for (let i = 0; i < 4; i++) { const m = eggGlow(0x7bffb0, 5 + i, 0.3); m.position.set(0, -1.4, -1 + i * 2.5 - 3); s.add(m); mist.push(m); }
-  const aura = eggGlow(0x66ffaa, 18, 0.22); aura.position.y = 2; s.add(aura);
-  s.scale.setScalar(4.2); g.add(s);
+  for (let i = 0; i < 6; i++) { const m = eggGlow(0x7bffb0, 6 + i * 1.3, 0.3); m.position.set(0, -0.2 + (i % 2) * 0.8, -5.5 - i * 2.4); s.add(m); mist.push(m); }
+  const weeds = [];
+  for (let i = 0; i < 8; i++) { const w = add(new THREE.ConeGeometry(0.1, 1.5 + (i % 3) * 0.5, 5), darkM, ((i % 3) - 1) * 0.7, -1.8, -3 + i * 1.0); w.rotation.x = Math.PI; weeds.push(w); }
+  const N = 16, pos = new Float32Array(N * 3), sd = []; for (let i = 0; i < N; i++) sd.push({ x: (Math.random() - 0.5) * 2.4, z: -3.5 + Math.random() * 8, ph: Math.random(), sp: 0.25 + Math.random() * 0.3 });
+  const dg = new THREE.BufferGeometry(); dg.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  const drips = new THREE.Points(dg, new THREE.PointsMaterial({ color: 0x8dffc0, size: 0.8, map: world.glowTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0.8 }));
+  drips.frustumCulled = false; s.add(drips);
+  s.scale.setScalar(5.4); g.add(s);
   let moan = 0;
   return { group: g, update(dt, age) {
     const u = age / DUR;
     s.position.set(ch.x0 + (ch.x1 - ch.x0) * u, H + Math.sin(age * 0.9) * 3, ch.z0 + (ch.z1 - ch.z0) * u);
-    s.rotation.set(Math.sin(age * 0.9 + 1) * 0.09, ch.yaw, Math.sin(age * 0.7) * 0.12, 'YXZ');
-    sails.forEach((a, i) => { a.rotation.y = Math.sin(age * 2 + i) * 0.12; a.scale.x = 1 + Math.sin(age * 3 + i) * 0.05; });
-    flag.rotation.y = Math.sin(age * 5) * 0.5;
-    mist.forEach((m, i) => { m.material.opacity = 0.2 + 0.15 * Math.sin(age * 2 + i * 1.3); });
+    s.rotation.set(Math.sin(age * 0.9 + 1) * 0.07, ch.yaw, Math.sin(age * 0.7) * 0.1, 'YXZ');
+    sails.forEach((a, i) => { a.rotation.y = D + Math.sin(age * 1.8 + i) * 0.1; a.scale.y = 1 + Math.sin(age * 2.6 + i * 1.7) * 0.04; });
+    flag.rotation.x = Math.sin(age * 5) * 0.25;
+    mist.forEach((m, i) => { m.material.opacity = 0.14 + 0.1 * Math.sin(age * 2 + i * 1.3) + (i < 2 ? 0.1 : 0); });
+    weeds.forEach((w, i) => { w.rotation.z = Math.sin(age * 2.2 + i) * 0.25; });
+    for (let i = 0; i < N; i++) { const d = sd[i], k = (age * d.sp + d.ph) % 1; pos[i * 3] = d.x; pos[i * 3 + 1] = -1.1 - k * 7; pos[i * 3 + 2] = d.z; }
+    dg.attributes.position.needsUpdate = true;
     if (age > moan) { moan += 6; eggBeep('sine', 0, 0, 2.2, 0.06, [196, 185, 175, 165, 156, 147, 139, 131]); }
     return u < 1;
   } };
