@@ -129,6 +129,9 @@ function buildViewmodel(i) {
 
 // ---------- sterowanie ----------
 const keys = {}; let mouseDown = false;
+const touchIn = { mx: 0, my: 0, fire: false, hold: -1 };
+function toggleLang() { setLang(LANG === 'pl' ? 'en' : 'pl'); showMsg(t('langSet')); }
+function toggleVoiceMsg() { const on = toggleVoice(); showMsg(t(on ? 'voiceOn' : 'voiceOff')); if (on) say('voiceOn', {}, { prio: 2, cool: 0 }); }
 addEventListener('keydown', e => {
   keys[e.code] = true;
   if (!G.running) return;
@@ -137,8 +140,8 @@ addEventListener('keydown', e => {
   if (dm && e.shiftKey) { buyHelper(+dm[1] - 1); return; }
   const n = parseInt(e.key);
   if (n >= 1 && n <= 9) selectWeapon(n - 1);
-  if (e.code === 'KeyL') { setLang(LANG === 'pl' ? 'en' : 'pl'); showMsg(t('langSet')); }
-  if (e.code === 'KeyM') { const on = toggleVoice(); showMsg(t(on ? 'voiceOn' : 'voiceOff')); if (on) say('voiceOn', {}, { prio: 2, cool: 0 }); }
+  if (e.code === 'KeyL') toggleLang();
+  if (e.code === 'KeyM') toggleVoiceMsg();
   if (e.code === 'KeyR') buy('repair'); if (e.code === 'KeyT') buy('dmg'); if (e.code === 'KeyY') buy('mana');
 });
 addEventListener('keyup', e => keys[e.code] = false);
@@ -169,7 +172,8 @@ function buy(w) {
 
 function setPause(p) {
   G.paused = p; $('pause').classList.toggle('hidden', !p);
-  if (!p) renderer.domElement.requestPointerLock();
+  if (!p && !IS_TOUCH) renderer.domElement.requestPointerLock();
+  if (p && window.touchReset) touchReset();
 }
 function startGame() {
   if (!AC) try { AC = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) {}
@@ -184,7 +188,7 @@ function startGame() {
   Object.assign(G.player, { hp: 100, yaw: 0, pitch: 0 }); G.player.pos.set(0, TOWER_Y + 0.4 + EYE, 3);
   _bodyKey = ''; buildHotbar(); selectWeapon(0);
   ['menu', 'over', 'pause'].forEach(i => $(i).classList.add('hidden'));
-  renderer.domElement.requestPointerLock();
+  if (IS_TOUCH) { if (window.touchEnter) touchEnter(); if (window.touchReset) touchReset(); } else renderer.domElement.requestPointerLock();
   banner(t('bannerStart'));
   say('start', {}, { prio: 2, cool: 0 });
 }
@@ -347,7 +351,7 @@ function updateHUD() {
   WEAPONS.forEach((w, i) => {
     const s = $('slot' + i); s.querySelector('.cd').style.height = Math.max(0, G.cds[i] / w.cd) * 100 + '%';
     s.classList.toggle('no', w.mana > G.mana);
-    const hc = s.querySelector('.hc'), shift = keys.ShiftLeft || keys.ShiftRight, n = helperCount(i);
+    const hc = s.querySelector('.hc'), shift = IS_TOUCH ? touchIn.hold === i : (keys.ShiftLeft || keys.ShiftRight), n = helperCount(i);
     const txt = shift ? (helpers.length >= HELPER_MAX ? '—' : '👤+' + helperCost(i) + '💰') : (n ? '👤' + n : '');
     if (hc._t !== txt) { hc.textContent = txt; hc._t = txt; }
     hc.classList.toggle('shop', !!shift);
@@ -371,7 +375,8 @@ function loop(now) {
     const P = G.player, sp = 6 * playerSpeedMul();
     let fx_ = 0, fz = 0;
     if (keys.KeyW) fz -= 1; if (keys.KeyS) fz += 1; if (keys.KeyA) fx_ -= 1; if (keys.KeyD) fx_ += 1;
-    const l = Math.hypot(fx_, fz) || 1; fx_ /= l; fz /= l;
+    fx_ += touchIn.mx; fz += touchIn.my;
+    const l = Math.max(1, Math.hypot(fx_, fz)); fx_ /= l; fz /= l;
     const c = Math.cos(P.yaw), s = Math.sin(P.yaw);
     P.pos.x += (fx_ * c + fz * s) * sp * dt; P.pos.z += (-fx_ * s + fz * c) * sp * dt;
     const lim = PLAT + 1.0; P.pos.x = Math.max(-lim, Math.min(lim, P.pos.x)); P.pos.z = Math.max(-lim, Math.min(lim, P.pos.z));
@@ -379,7 +384,7 @@ function loop(now) {
 
     G.mana = Math.min(G.maxMana, G.mana + G.manaRegen * dt);
     for (let i = 0; i < G.cds.length; i++) G.cds[i] = Math.max(0, G.cds[i] - dt);
-    if (mouseDown) tryFire();
+    if (mouseDown || touchIn.fire) tryFire();
 
     for (let i = G.timers.length - 1; i >= 0; i--) { G.timers[i].t -= dt; if (G.timers[i].t <= 0) { G.timers[i].fn(); G.timers.splice(i, 1); } }
     updateWaves(dt);

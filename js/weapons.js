@@ -205,6 +205,8 @@ function updateEnemyShots(dt) {
 // ---- aiming ----
 const raycaster = new THREE.Raycaster();
 const aim = { point: new THREE.Vector3(), dir: new THREE.Vector3(), enemy: null };
+let AIM_ASSIST = IS_TOUCH && (function () { try { return localStorage.getItem('td_assist') !== '0'; } catch (e) { return true; } })();
+const ASSIST_CONE = 0.11;
 function computeAim() {
   camera.getWorldDirection(aim.dir);
   const o = camera.position;
@@ -215,6 +217,18 @@ function computeAim() {
     if (t < 0) continue;
     const perp = c.sub(aim.dir.clone().multiplyScalar(t)).length();
     if (perp < e.r * 1.1 && t < best) { best = t; aim.enemy = e; }
+  }
+  if (!aim.enemy && AIM_ASSIST) {
+    // aim assist: snap to the enemy whose edge is closest to the crosshair, within a cone
+    let bs = Infinity;
+    for (const e of enemies) {
+      if (e.dead) continue;
+      const c = e.center.clone().sub(o), t = c.dot(aim.dir);
+      if (t < 2 || t > 160) continue;
+      const perp = c.sub(aim.dir.clone().multiplyScalar(t)).length(), off = (perp - e.r) / t;
+      if (off < ASSIST_CONE && off < bs) { bs = off; aim.enemy = e; }
+    }
+    if (aim.enemy) { aim.point.copy(aim.enemy.center); return; }
   }
   if (aim.enemy) aim.point.copy(o).addScaledVector(aim.dir, best);
   else if (aim.dir.y < -0.01) { const t = -o.y / aim.dir.y; aim.point.copy(o).addScaledVector(aim.dir, Math.min(t, 300)); }

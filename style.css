@@ -84,3 +84,81 @@ button:hover { filter: brightness(1.12); }
 #overBodies { margin: 12px auto 14px; max-width: 280px; text-align: left; font-size: 16px; line-height: 1.6; color: #e8d8b0; }
 #overBodies h4 { font-size: 18px; text-align: center; margin-bottom: 6px; }
 #overBodies b { color: #ffd76a; }
+
+/* ---------- touch / phone layout ---------- */
+.touchonly { display: none; }
+#touch, #rotate { display: none; }
+#hud { z-index: 8; }
+.slot .hold { position: absolute; left: 0; bottom: 0; width: 100%; height: 0; background: rgba(255,215,106,.55); pointer-events: none; z-index: 1; border-radius: 0 0 4px 4px; }
+.slot.holding { border-color: #ffd76a; box-shadow: 0 0 14px #ffc94acc; }
+
+body.touch { touch-action: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; overscroll-behavior: none; position: fixed; inset: 0; }
+body.touch .touchonly { display: inline-block; }
+body.touch #touch { display: block; position: fixed; inset: 0; z-index: 7; touch-action: none; }
+body.touch .tz { position: absolute; top: 0; bottom: 0; touch-action: none; }
+body.touch #tzMove { left: 0; width: 45%; }
+body.touch #tzLook { right: 0; width: 55%; }
+body.touch #joy { position: absolute; width: 110px; height: 110px; border-radius: 50%; border: 2px solid rgba(255,215,106,.35); background: rgba(40,28,18,.25); pointer-events: none; opacity: .5; }
+body.touch #joy.on { opacity: 1; background: rgba(40,28,18,.4); }
+body.touch #joyk { position: absolute; left: 30px; top: 30px; width: 50px; height: 50px; border-radius: 50%; background: rgba(255,215,106,.55); border: 2px solid #ffd76a; }
+body.touch .tbtn { position: absolute; display: flex; align-items: center; justify-content: center; border-radius: 50%; background: rgba(40,28,18,.72);
+  border: 2px solid #8a6a3a; color: #fff; touch-action: none; user-select: none; -webkit-user-select: none; }
+body.touch .tbtn.sm { width: 36px; height: 36px; font-size: 18px; position: relative; flex: none; }
+body.touch #tFire { right: calc(26px + env(safe-area-inset-right)); bottom: calc(24px + env(safe-area-inset-bottom)); width: 96px; height: 96px; font-size: 44px; border-color: #ffd76a; background: rgba(120,60,20,.6); }
+body.touch #tFire.down { background: rgba(220,110,30,.8); transform: scale(.94); }
+body.touch #tTop { position: absolute; top: calc(4px + env(safe-area-inset-top)); right: calc(6px + env(safe-area-inset-right)); display: flex; gap: 6px; }
+body.touch #tBuy { position: absolute; top: calc(152px + env(safe-area-inset-top)); right: calc(6px + env(safe-area-inset-right)); display: flex; gap: 4px; }
+body.touch #tBuy .tbtn { font-size: 15px; }
+body.touch #tBuy .tc { position: absolute; left: 50%; bottom: -13px; transform: translateX(-50%); font-size: 10px; color: #ffd76a; text-shadow: 0 0 3px #000; white-space: nowrap; }
+body.touch #tBuy i { font-style: normal; }
+
+body.touch #topbar { top: calc(4px + env(safe-area-inset-top)); left: calc(6px + env(safe-area-inset-left)); right: calc(140px + env(safe-area-inset-right)); gap: 10px; padding: 3px 8px; border-width: 1px; }
+body.touch .bar { width: 64px; height: 10px; }
+body.touch .lbl { font-size: 10px; letter-spacing: 0; }
+body.touch .stat { gap: 4px; }
+body.touch .stat.txt { font-size: 13px; }
+body.touch #crosshair { transform: scale(.8); }
+body.touch #msg { top: 44px; font-size: 14px; }
+body.touch #banner { font-size: 30px; top: 22%; }
+body.touch #help, body.touch #legend { display: none; }
+body.touch #hotbar { bottom: calc(20px + env(safe-area-inset-bottom)); gap: 4px; }
+body.touch .slot { width: 46px; height: 46px; padding-top: 2px; border-width: 2px; touch-action: none; pointer-events: auto; }
+body.touch .slot.sel { transform: translateY(-6px); }
+body.touch .slot .ic { font-size: 22px; line-height: 30px; }
+body.touch .slot .k { font-size: 9px; left: 3px; top: 1px; }
+body.touch .slot .nm { display: none; }
+body.touch .slot .cost { font-size: 9px; right: 3px; top: 1px; }
+body.touch .slot .hc { font-size: 10px; bottom: -14px; }
+body.touch #mapwrap { top: calc(44px + env(safe-area-inset-top)); right: calc(6px + env(safe-area-inset-right)); width: 100px; }
+body.touch #minimap { width: 100px; height: 100px; border-width: 2px; }
+body.touch #bodies { top: calc(36px + env(safe-area-inset-top)); left: calc(6px + env(safe-area-inset-left)); min-width: 0; max-width: 190px; padding: 2px 6px; font-size: 11px; line-height: 1.3; pointer-events: auto; overflow: hidden; max-height: 22px; }
+body.touch #bodies.open { max-height: 70vh; overflow: auto; background: rgba(40,28,18,.92); }
+body.touch #bodies h4 { font-size: 11px; white-space: nowrap; }
+body.touch #sub { bottom: calc(76px + env(safe-area-inset-bottom)); max-width: 56vw; font-size: 13px; padding: 4px 10px; }
+body.touch #status { top: 40px; }
+body.touch .panel { max-height: 100vh; max-height: 100dvh; overflow-y: auto; touch-action: pan-y; padding: 12px 22px; max-width: 94vw; }
+body.touch .panel h1 { font-size: 26px; margin-bottom: 4px; }
+body.touch .sub { font-size: 13px; margin-bottom: 8px; }
+body.touch .grid { gap: 6px; margin-bottom: 8px; }
+body.touch .grid div { font-size: 12px; padding: 5px; }
+body.touch .weap { display: none; }
+body.touch .langrow { margin-bottom: 6px; }
+body.touch button { font-size: 17px; padding: 8px 22px; }
+body.touch #assistBtn { font-size: 13px; padding: 4px 12px; margin: 0 8px 8px 0; background: #2a1d10; color: #e8d8b0; border-color: #6e5430; }
+body.touch #overBodies { margin: 6px auto 8px; font-size: 13px; line-height: 1.4; }
+
+/* portrait phones: ask the player to rotate */
+@media (orientation: portrait) {
+  body.touch #rotate { display: flex; position: fixed; inset: 0; z-index: 100; align-items: center; justify-content: center; overflow-y: auto; padding: 16px;
+    background: radial-gradient(rgba(30,18,8,.96), #000); text-align: center; touch-action: pan-y; }
+  body.touch #rotate .rotbox { width: 100%; max-width: 420px; }
+  body.touch .rotphone { font-size: 64px; display: inline-block; animation: rotphone 2.4s ease-in-out infinite; }
+  body.touch #rotate h2 { color: #ffd76a; font-size: 26px; margin: 6px 0 8px; }
+  body.touch #rotate p { color: #d8c294; margin-bottom: 12px; line-height: 1.4; }
+  body.touch .rotcols > div { text-align: left; background: rgba(0,0,0,.35); border-radius: 6px; padding: 10px 14px; margin-bottom: 10px; font-size: 14px; line-height: 1.45; }
+  body.touch .rotcols b { color: #ffd76a; font-size: 16px; }
+  body.touch .rotcols ol { margin: 4px 0 4px 20px; }
+  body.touch .rotcols small { color: #a89870; }
+  body.ios #rotAndroid, body.android #rotIos { display: none; }
+}
+@keyframes rotphone { 0%, 20% { transform: rotate(0); } 60%, 100% { transform: rotate(-90deg); } }

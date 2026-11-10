@@ -3,7 +3,15 @@
 <head>
 <meta charset="utf-8">
 <title>Wieżostraż - Towerguard</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Wieżostraż">
+<meta name="theme-color" content="#1a120a">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -58,6 +66,7 @@
       <li><b>8</b> <span id="w8">Deszcz meteorów</span></li>
       <li><b>9</b> <span id="w9">Święte uzdrowienie</span></li>
     </ol>
+    <button id="assistBtn" class="touchonly"></button>
     <button id="start">Kliknij, aby zacząć obronę</button>
   </div>
 </div>
@@ -66,6 +75,8 @@
   <div class="panel"><h1 id="pauseTitle">Pauza</h1>
     <div class="langrow"><span class="langLbl">Język</span> <button class="langbtn" data-lang="pl">🇵🇱 Polski</button> <button class="langbtn" data-lang="en">🇬🇧 English</button></div><button id="resume">Wznów</button></div>
 </div>
+
+<div id="rotate"><div class="rotbox"><div class="rotphone">📱</div><h2 id="rotTitle"></h2><p id="rotLead"></p><div class="rotcols"><div id="rotAndroid"></div><div id="rotIos"></div></div></div></div>
 
 <div id="over" class="overlay hidden">
   <div class="panel"><h1 id="overTitle">Wieża padła</h1><p id="overText"></p><div id="overBodies"></div><button id="restart">Spróbuj ponownie</button></div>
@@ -94,5 +105,6 @@
 <script src="js/helpers.js"></script>
 <script src="js/status.js"></script>
 <script src="js/main.js"></script>
+<script src="js/touch.js"></script>
 </body>
 </html>

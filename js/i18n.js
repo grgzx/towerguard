@@ -1,4 +1,5 @@
 // Interface and message language: PL / EN
+const IS_TOUCH = typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches;
 let LANG = (function () {
   try { const s = localStorage.getItem('td_lang'); if (s === 'pl' || s === 'en') return s; } catch (e) {}
   return 'pl';
@@ -32,6 +33,16 @@ const STR = {
     escaped: g => `Złodziej uciekł z ${g} złota!`, stolen: g => `Złodziej ukradł ${g} złota! Zastrzel go!`,
     mortarClose: 'Moździerz: cel za blisko wieży – pocisk poleciał dalej', healed: 'Wieża i obrońca uleczeni',
     dirs: { N: 'północy', E: 'wschodu', S: 'południa', W: 'zachodu' },
+    assistOn: 'Pomoc w celowaniu: WŁ.', assistOff: 'Pomoc w celowaniu: WYŁ.',
+    touch_start: 'Dotknij, aby zacząć obronę',
+    touch_g1: '<b>Lewy kciuk</b><br>chodzenie po wieży', touch_g2: '<b>Prawy kciuk</b><br>przeciągnij, by się rozglądać (pomoc w celowaniu włączona)',
+    touch_g3: '<b>Duży przycisk</b><br>strzał / czar (przytrzymaj = ogień ciągły)', touch_g4: '<b>Ikony na dole</b><br>dotknij: wybór broni<br><b>przytrzymaj</b>: kup pomocnika',
+    touch_g5: '<b>🔧 ⚔ 🔮</b><br>naprawa / ulepszenia', touch_g6: '<b>⏸</b><br>pauza', touch_g7: '<b>🔊 🌐</b><br>głosy wł./wył. i język',
+    touch_waveClear: (n, p) => `Fala ${n} odparta! Premia ${p} złota. Czas na 🔧 ⚔ 🔮.`,
+    touch_warnHp: 'Jesteś ciężko ranny! Użyj uzdrowienia (✨)', touch_warnTower: 'Wieża chwieje się w posadach! Naprawiaj mury (🔧)!',
+    rotTitle: 'Obróć telefon poziomo', rotLead: 'Wieżostraż gra się tylko w poziomie. Gra zostanie wstrzymana, dopóki nie obrócisz telefonu.',
+    rotAndroid: '<b>Android</b><ol><li>Przesuń palcem w dół od góry ekranu i włącz „Autoobracanie” (Auto-rotate).</li><li>Obróć telefon bokiem.</li><li>Po dotknięciu „Dotknij, aby zacząć” gra spróbuje przejść na pełny ekran i zablokować widok poziomy.</li></ol>',
+    rotIos: '<b>iPhone</b><ol><li>Otwórz Centrum sterowania: przesuń palcem w dół od prawego górnego rogu ekranu (w iPhone’ach z przyciskiem Home: w górę od dołu).</li><li>Wyłącz „Blokadę orientacji pionowej” (ikona kłódki ze strzałką).</li><li>Obróć telefon bokiem.</li></ol><small>Pełny ekran bez paska Safari: Udostępnij → „Dodaj do ekranu początkowego”, potem uruchom grę z ikony.</small>',
   },
   en: {
     docTitle: 'Wieżostraż - Towerguard',
@@ -60,11 +71,24 @@ const STR = {
     escaped: g => `The thief escaped with ${g} gold!`, stolen: g => `A thief stole ${g} gold! Shoot him!`,
     mortarClose: 'Mortar: target too close to the tower – the shell flew past', healed: 'Tower and defender healed',
     dirs: { N: 'north', E: 'east', S: 'south', W: 'west' },
+    assistOn: 'Aim assist: ON', assistOff: 'Aim assist: OFF',
+    touch_start: 'Tap to begin the defence',
+    touch_g1: '<b>Left thumb</b><br>walk on the tower', touch_g2: '<b>Right thumb</b><br>drag to look around (aim assist is on)',
+    touch_g3: '<b>Big button</b><br>shoot / cast (hold = keep firing)', touch_g4: '<b>Icons at the bottom</b><br>tap: pick weapon<br><b>hold</b>: hire a helper',
+    touch_g5: '<b>🔧 ⚔ 🔮</b><br>repair / upgrades', touch_g6: '<b>⏸</b><br>pause', touch_g7: '<b>🔊 🌐</b><br>voices on/off and language',
+    touch_waveClear: (n, p) => `Wave ${n} repelled! Bonus ${p} gold. Time for 🔧 ⚔ 🔮.`,
+    touch_warnHp: 'You are badly wounded! Cast healing (✨)', touch_warnTower: 'The tower is crumbling! Repair the walls (🔧)!',
+    rotTitle: 'Turn your phone sideways', rotLead: 'Towerguard is played in landscape only. The game stays paused until you rotate your phone.',
+    rotAndroid: '<b>Android</b><ol><li>Swipe down from the top of the screen and turn on “Auto-rotate”.</li><li>Turn the phone on its side.</li><li>After you tap “Tap to begin”, the game will try to go fullscreen and lock landscape.</li></ol>',
+    rotIos: '<b>iPhone</b><ol><li>Open Control Center: swipe down from the top-right corner (on iPhones with a Home button: swipe up from the bottom).</li><li>Turn off “Portrait Orientation Lock” (the padlock with an arrow).</li><li>Turn the phone on its side.</li></ol><small>Fullscreen without the Safari bar: Share → “Add to Home Screen”, then launch the game from the icon.</small>',
   },
 };
 
 function t(key, ...a) {
-  let v = (STR[LANG] && STR[LANG][key]); if (v === undefined) v = STR.pl[key];
+  let v;
+  if (IS_TOUCH) { v = STR[LANG] && STR[LANG]['touch_' + key]; if (v === undefined) v = STR.pl['touch_' + key]; }
+  if (v === undefined) v = (STR[LANG] && STR[LANG][key]);
+  if (v === undefined) v = STR.pl[key];
   return typeof v === 'function' ? v(...a) : v;
 }
 const ENEMY_NAMES = {
@@ -81,6 +105,7 @@ const I18N_MAP = [
   ['#lblTower', 'wTower'], ['#lblLife', 'wLife'], ['#lblMana', 'wMana'], ['#lblWave', 'wWave'], ['#lblGold', 'wGold'], ['#lblScore', 'wScore'],
   ['#help', 'help'], ['#legend', 'legend'], ['#menuTitle', 'menuTitle'], ['#menuSub', 'menuSub'],
   ['#start', 'start'], ['#pauseTitle', 'pauseTitle'], ['#resume', 'resume'], ['#restart', 'restart'],
+  ['#rotTitle', 'rotTitle'], ['#rotLead', 'rotLead'], ['#rotAndroid', 'rotAndroid'], ['#rotIos', 'rotIos'],
 ];
 for (let i = 1; i <= 7; i++) I18N_MAP.push(['#g' + i, 'g' + i]);
 for (let i = 1; i <= 9; i++) I18N_MAP.push(['#w' + i, 'w' + i]);
@@ -88,6 +113,7 @@ for (let i = 1; i <= 9; i++) I18N_MAP.push(['#w' + i, 'w' + i]);
 function applyLang() {
   document.documentElement.lang = LANG; document.title = t('docTitle');
   for (const [sel, key] of I18N_MAP) { const el = document.querySelector(sel); if (el) el.innerHTML = t(key); }
+  if (window.updAssist) updAssist();
   document.querySelectorAll('.langLbl').forEach(e => e.textContent = t('lang'));
   document.querySelectorAll('.langbtn').forEach(b => b.classList.toggle('on', b.dataset.lang === LANG));
   document.querySelectorAll('#hotbar .nm').forEach((e, i) => e.textContent = weaponName(i));

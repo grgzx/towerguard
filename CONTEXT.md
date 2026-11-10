@@ -32,14 +32,24 @@ Run: open `index.html` in a browser. Live: https://grgzx.github.io/towerguard/ (
 | `js/helpers.js` | helpers: Shift+1–9 hires a shooter firing that weapon (`buyHelper`, `HD` = cost/cooldown/range, `HFIRE` = a shot with each of the 9 weapons, `updateHelpers`). Placed at the wall nearest to the player, 4 slots per wall, max 16, cost +40 per helper. Each has 100 HP (`HELPER_HP`, bar above the head when hurt), can be hurt (`hurtHelper`), healed (key 9, healer helper) and killed (`killHelper`) |
 | `js/status.js` | player statuses: burn, slow, poison, curse (`applyStatus`, `updateStatus`, `playerSpeedMul`) |
 | `js/weapons.js` | `fx`, projectiles, `enemyProjectile`, `pickDefender` (enemies target the nearest of player/helpers), `WEAPONS` (9), aiming, `leadAt`/`leadTarget` |
+| `js/touch.js` | phone/tablet controls, active only when `IS_TOUCH` (`matchMedia('(pointer: coarse)')`, defined in `i18n.js`): floating joystick (left 45%), look-drag (right), fire button (hold = auto fire), tappable hotbar (tap = select, hold 650 ms = hire helper with a filling indicator), pause/voice/language and R/T/Y buttons, bodycount panel tap-to-expand, touchmove/gesture blocking, pause on background or portrait, Wake Lock, fullscreen + landscape lock in `touchEnter()` (called from `startGame`) |
+| `manifest.webmanifest`, `icon.svg`, `icon-192.png`, `icon-512.png` | PWA manifest (fullscreen, landscape) and icons (PNGs rendered from the SVG) |
 | `js/main.js` | game loop, controls, waves (`planWave`, `spawnEnemy`), HUD, minimap, WebAudio sound, kill counter |
 
-Script order in `index.html`: three → i18n → crew_lines → lines_pl_a-d → lines_en_a-d → lines_helpers → lines_dialogues → voice → world → enemies → enemy_dragons → enemy_mages → enemy_units → weapons → helpers → status → main.
+Script order in `index.html`: three → i18n → crew_lines → lines_pl_a-d → lines_en_a-d → lines_helpers → lines_dialogues → voice → world → enemies → enemy_dragons → enemy_mages → enemy_units → weapons → helpers → status → main → touch.
 
 Kill counter: `G.bodies[type]` is incremented in `Enemy.die()` (also counts kills by helpers and summons). Panel `#bodies` (top left; title "Licznik wrogów" in PL, "Bodycount" in EN) and the full list `#overBodies` on the game-over screen; enemy names are in `ENEMY_NAMES`.
 
 ## Controls
 WASD move, mouse aim, LMB fire, 1–9 weapon/spell, Shift+1–9 hire a helper, R/T/Y repair/damage/mana, P pause, **M** voices on/off, **L** language (also in pause and the menu).
+
+## Mobile (touch)
+- `touch.js` writes into `touchIn` (`mx`, `my`, `fire`, `hold`) which `main.js` reads in `loop`; no pointer lock on touch (`setPause`/`startGame` skip it).
+- `t(key)` first looks for `touch_<key>` when `IS_TOUCH` (menu hints, start text, wave/warn messages). Portrait shows `#rotate` with Android and iPhone instructions (`rotAndroid`, `rotIos`).
+- Aim assist (`AIM_ASSIST` in `weapons.js`, default ON on touch, toggle `#assistBtn` in the menu, saved as `td_assist`): when no enemy is under the crosshair, `computeAim` snaps to the enemy nearest to it within `ASSIST_CONE`.
+- Graphics are deliberately NOT reduced on phones yet (antialias, shadows, pixelRatio ≤ 2). Measure fps on a real device first.
+- iPhone Safari has no Fullscreen API: the user must use Share → Add to Home Screen (manifest + apple meta tags are present).
+- Testing: headless Chrome does not report `pointer: coarse`; override `window.matchMedia` before the scripts load and dispatch `PointerEvent`s on `#tzMove`, `#tzLook`, `#tFire`, `#slotN`.
 
 ## Mechanics in short
 - Waves: `planWave(n)`, 9 s break, bonus `40 + 10n` gold. From wave 2 wargs and mages, from 3 elf archers and elemental mages, from 4 witches and shamans, dragons on odd waves from 3 (venom from 7).
