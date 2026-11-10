@@ -58,6 +58,8 @@ WASD move, mouse aim, LMB fire, 1–9 weapon/spell, Shift+1–9 hire a helper, R
 - Enemies shoot at whichever defender (player or helper) is nearest to them. Enemy shots hit a helper that they fly into.
 - Red vignette at player HP < 40; bricks and smoke when the tower is < 35% HP.
 - Language: `say()` reads from `LINES[LANG]`; TTS voices are chosen by `pickVoices()`.
+- Pause: `setPause(true)` calls `stopSpeech(true)`, and `say()` returns false while `G.paused` (except `voiceOn`), so no line is heard during a pause.
+- `keepAudioAlive()` (called from `startGame`) plays an inaudible looping noise through its own `AudioContext` so the output device stays open. This is an unverified workaround for the click Firefox desktop makes after each utterance; if it does not help, try removing it or lengthening the 220 ms gap between lines.
 
 ## Open items (unverified)
 1. Dragon breath and the storm ring were only tested logically, not watched in play.

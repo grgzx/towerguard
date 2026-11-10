@@ -172,6 +172,7 @@ function buy(w) {
 
 function setPause(p) {
   G.paused = p; $('pause').classList.toggle('hidden', !p);
+  if (p) stopSpeech(true);
   if (!p && !IS_TOUCH) renderer.domElement.requestPointerLock();
   if (p && window.touchReset) touchReset();
 }
@@ -180,7 +181,7 @@ function startGame() {
   enemies.forEach(e => scene.remove(e.mesh)); enemies.length = 0;
   projectiles.forEach(p => scene.remove(p.mesh)); projectiles.length = 0;
   enemyShots.forEach(p => scene.remove(p.mesh)); enemyShots.length = 0;
-  stopSpeech(true);
+  stopSpeech(true); keepAudioAlive();
   lowEl.style.opacity = 0;
   clearStatus(); clearHelpers();
   Object.assign(G, { weaponSayAt: performance.now(), chatT: 40, warnHp: false, warnTower: false, called: {}, running: true, paused: false, over: false, wave: 0, gold: 80, score: 0, kills: 0, bodies: {}, towerHp: 1000, maxTowerHp: 1000, mana: 100, maxMana: 100, manaRegen: 7,

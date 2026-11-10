@@ -64,7 +64,7 @@ function nextLine() {
     u.volume = 1; VOICE.u = u;
     u.onend = done; u.onerror = done;
     VOICE.timer = setTimeout(done, fallbackMs * 2.2 + 3000);
-    const go = () => { if (VOICE.token !== tok) return; try { speechSynthesis.resume(); } catch (e) {} speechSynthesis.speak(u); };
+    const go = () => { if (VOICE.token !== tok || G.paused) return; try { if (speechSynthesis.paused) speechSynthesis.resume(); } catch (e) {} speechSynthesis.speak(u); };
     const wait = VOICE.holdUntil - performance.now();
     if (wait > 0) setTimeout(go, wait); else go();
   } else {
@@ -86,6 +86,7 @@ const CHANCE = { orkCall: 0.55, goblinCall: 0.5, thiefCall: 0.6, mageCall: 0.6, 
 // prio: 0 = chatter (dropped while someone speaks), 1 = normal, 2 = urgent (interrupts)
 function say(key, ctx, o) {
   o = o || {};
+  if (typeof G !== 'undefined' && G.paused && key !== 'voiceOn') return false;
   const pool = LINES[LANG] && LINES[LANG][key]; if (!pool || !pool.length) return false;
   const prio = o.prio === undefined ? 1 : o.prio, cool = o.cool === undefined ? 4000 : o.cool, now = performance.now();
   if (VOICE.lastAt[key] && now - VOICE.lastAt[key] < cool) return false;
@@ -104,6 +105,20 @@ function say(key, ctx, o) {
   VOICE.queue.push(...lines);
   if (!VOICE.cur) nextLine();
   return true;
+}
+
+// Keeps the audio output device awake with an inaudible stream. Without it some browsers (Firefox on desktop)
+// open and close the output stream around every utterance, which can produce a click at the end of each line.
+let _keepAC = null;
+function keepAudioAlive() {
+  if (_keepAC || !hasTTS) return;
+  try {
+    const AC_ = window.AudioContext || window.webkitAudioContext; if (!AC_) return;
+    _keepAC = new AC_();
+    const n = _keepAC.sampleRate, buf = _keepAC.createBuffer(1, n, n), d = buf.getChannelData(0);
+    for (let i = 0; i < n; i++) d[i] = (Math.random() * 2 - 1) * (1 / 32768);
+    const src = _keepAC.createBufferSource(); src.buffer = buf; src.loop = true; src.connect(_keepAC.destination); src.start(); if (_keepAC.state === 'suspended') _keepAC.resume();
+  } catch (e) { _keepAC = null; }
 }
 
 function toggleVoice() {
