@@ -1,4 +1,4 @@
-// Lines for hiring a helper and for a helper's death
+// Lines for summoning a defender and for a defender's death
 addLines('pl', {
   helperDead: [
     ['artur', 'Poległ dzielnie. Odeślijcie go do domu. Albo po prostu zepchnijcie z wieży.'],
