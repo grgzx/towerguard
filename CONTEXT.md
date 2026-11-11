@@ -76,3 +76,8 @@ Headless Chrome: `"/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
 - A WebGL screenshot comes out black unless the canvas is copied to an `<img>` (`renderer.domElement.toDataURL()`) from a `setTimeout`/`setInterval`. The PNG appears with a delay, so retry the first read. Set the camera right before rendering (the loop overwrites it).
 - Replace `speechSynthesis` with a stub to check what would be said.
 - Delete `test.js`, `test.html` and screenshots afterwards.
+
+## Versioning and releases
+- SemVer, pre-1.0: `0.MINOR.PATCH`. The version is the `VERSION` constant at the top of `js/i18n.js` (shown in the menu as `#ver`).
+- `CHANGELOG.md` holds the version history, newest first. Every user-visible change goes into a new entry.
+- Release: bump `VERSION`, add the changelog entry, commit, `git tag vX.Y.Z`, `git push && git push --tags`.

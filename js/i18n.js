@@ -1,4 +1,5 @@
 // Interface and message language: PL / EN
+const VERSION = '0.8.0'; // keep in sync with CHANGELOG.md
 const IS_TOUCH = typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches;
 let LANG = (function () {
   try { const s = localStorage.getItem('td_lang'); if (s === 'pl' || s === 'en') return s; } catch (e) {}
@@ -114,6 +115,7 @@ function applyLang() {
   document.documentElement.lang = LANG; document.title = t('docTitle');
   for (const [sel, key] of I18N_MAP) { const el = document.querySelector(sel); if (el) el.innerHTML = t(key); }
   if (window.updAssist) updAssist();
+  const ver = document.getElementById('ver'); if (ver) ver.textContent = 'v' + VERSION;
   document.querySelectorAll('.langLbl').forEach(e => e.textContent = t('lang'));
   document.querySelectorAll('.langbtn').forEach(b => b.classList.toggle('on', b.dataset.lang === LANG));
   document.querySelectorAll('#hotbar .nm').forEach((e, i) => e.textContent = weaponName(i));
