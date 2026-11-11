@@ -12,7 +12,7 @@ addLines('pl', {
   ],
   start: [
     ['robin', 'Nazywam się Robin Mężny-Inaczej i jestem potężnym piratem. Znaczy rycerzem. Znaczy, idę po zapasy.'],
-    ['artur', 'Nazywam się Artur. Król Artur. Zamiast martini poproszę wiadro piwa, zamiast pistoletu miecz, a zamiast licencji na zabijanie koronę.'],
+    ['artur', 'Nazywam się Artur. Król Artur. Zamiast martini poproszę wiadro piwa, zamiast pistoletu miecz, a zamiast licencji na dreszcze koronę.'],
     ['lancelot', 'Rekruci! Zasady akademii obrońców wieży są trzy: nie dać się zjeść, nie dać się zjeść i nie dać się zjeść.'],
   ],
   waveStart: [
@@ -25,7 +25,7 @@ addLines('pl', {
   ],
   noGold: [
     ['patsy', 'Skarbiec pusty, panie. Zostały kokosy i gumowy kurczak z bloczkiem w środku. Ten kurczak jeszcze się przyda.'],
-    ['vizzini', 'Brak złota? Mogę sprzedać wam bardzo dobry miecz. Jeden poprzedni właściciel. Zmarł, ale nie z mojej winy.'],
+    ['vizzini', 'Brak złota? Mogę sprzedać wam bardzo dobry miecz. Jeden poprzedni właściciel. Wyprowadził się, ale nie z mojej winy.'],
   ],
   repair: [
     ['gimli', 'Mur gotowy. Gdyby ktoś pytał: piwo piłem wyłącznie na budowie. Czyli cały czas.'],
@@ -75,7 +75,7 @@ addLines('en', {
   ],
   start: [
     ['robin', 'My name is Robin the Brave-ish and I am a mighty pirate. I mean a knight. I mean, I am going to fetch supplies.'],
-    ['artur', 'The name is Arthur. King Arthur. A pail of ale instead of a martini, a sword instead of a pistol, and a crown instead of a licence to kill.'],
+    ['artur', 'The name is Arthur. King Arthur. A pail of ale instead of a martini, a sword instead of a pistol, and a crown instead of a licence to thrill.'],
     ['lancelot', 'Recruits! The rules of the Tower Defence Academy are three: do not get eaten, do not get eaten, and do not get eaten.'],
   ],
   waveStart: [
@@ -88,7 +88,7 @@ addLines('en', {
   ],
   noGold: [
     ['patsy', 'The treasury is empty, sire. We have coconuts and a rubber chicken with a pulley in the middle. That chicken will come in handy.'],
-    ['vizzini', 'No gold? I can sell you an excellent sword. One previous owner. He died, but not of anything I did.'],
+    ['vizzini', 'No gold? I can sell you an excellent sword. One previous owner. He moved out, but not because of anything I did.'],
   ],
   repair: [
     ['gimli', 'The wall is ready. If anyone asks, I only drank on the building site. Which is all the time.'],

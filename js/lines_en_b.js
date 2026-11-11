@@ -28,7 +28,7 @@ addLines('en', {
   ],
   weapon6: [
     ["robin", "Ice! Cold as Camelot in winter. But I'd rather not go there. It is a silly place."],
-    ["sam", "Ice! Mr Frodo, don't touch it, you'll catch your death."],
+    ["sam", "Ice! Mr Frodo, don't touch it, you'll catch a cold."],
     ["gimli", "Ice! It's warmer in the mines. And no elves."],
   ],
   weapon7: [
@@ -70,7 +70,7 @@ addLines('en', {
     [["vizzini", "You must admit, this tower has range."], ["inigo", "Range, yes. An elevator, no."], ["vizzini", "Then carry me. I'm very important."]],
     [["gandalf", "Do you know the difference between a wizard and an enchanter?"], ["tim", "Height?"], ["gandalf", "Beard. Mine is longer."]],
     [["sam", "If only Mr Frodo were here, he'd say something wise."], ["robin", "What about me?"], ["sam", "You already spoke, Sir Robin. Constantly."]],
-    [["rincewind", "I hope everyone has a plan."], ["artur", "We have a plan. Shoot, fight and don't die."], ["rincewind", "That's only three points. I have nine, all involving running."]],
+    [["rincewind", "I hope everyone has a plan."], ["artur", "We have a plan. Shoot, fight and stay put."], ["rincewind", "That's only three points. I have nine, all involving running."]],
     [["dennis", "Strange women lying in ponds distributing swords is no basis for a system of government!"], ["artur", "Be quiet!"], ["dennis", "Help, help, he's repressing me again!"]],
     [["gimli", "Twelve!"], ["legolas", "Fourteen."], ["gimli", "Are you counting the ones I hit?"], ["legolas", "Only the ones that stayed down."]],
     [["maynard", "I asked the Lord about life, the universe and everything. He said forty-two."], ["robin", "Forty-two orcs or forty-two questions?"], ["maynard", "Both. Don't panic."]],

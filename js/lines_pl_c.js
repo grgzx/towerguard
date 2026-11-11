@@ -57,15 +57,15 @@ addLines('pl', {
   ],
   dragonDead: [
     ['gandalf', 'Smok padł. Nie wszystko złoto, co się świeci, ale jego skarbiec tak.'],
-    ['gimli', 'Smok martwy! Teraz złoto jest nasze. Całe. Co do monety.'],
-    ['rincewind', 'Smok nie żyje! Ja nic nie zrobiłem. Chciałem tylko stać w pobliżu wyjścia.'],
+    ['gimli', 'Smok pokonany! Teraz złoto jest nasze. Całe. Co do monety.'],
+    ['rincewind', 'Smok wyłączony z lotów! Ja nic nie zrobiłem. Chciałem tylko stać w pobliżu wyjścia.'],
   ],
   mageDead: [
     ['gandalf', 'Mag padł. Nigdy nie lekceważ tych, którzy dużo czytają.'],
-    ['rincewind', 'Mag zginął. Spokojnie, to nie jest zaraźliwe. Chyba.'],
+    ['rincewind', 'Maga już nie ma. Spokojnie, to nie jest zaraźliwe. Chyba.'],
   ],
   thiefDead: [
-    ['inigo', 'Złodziej martwy. Przynajmniej będzie co opowiadać przy kolacji.'],
+    ['inigo', 'Złodziej unieszkodliwiony. Przynajmniej będzie co opowiadać przy kolacji.'],
     ['sam', 'Złoto odzyskane! Dobrze, że nie wziął mojego garnka.'],
   ],
   stolen: [
@@ -89,7 +89,7 @@ addLines('pl', {
     ['gandalf', 'Mur gotowy. Jest mocniejszy niż poprzedni. A poprzedni był mocniejszy, niż się wydawało.'],
   ],
   dmgUp: [
-    ['inigo', 'Moja klinga jest ostrzejsza. Tym razem zabiję tego, kogo trzeba.'],
+    ['inigo', 'Moja klinga jest ostrzejsza. Tym razem pokonam tego, kogo trzeba.'],
     ['gimli', 'Topór naostrzony! Teraz możecie bać się go dwa razy bardziej!'],
   ],
   manaUp: [
@@ -104,8 +104,8 @@ addLines('pl', {
     ['inigo', 'Masz krew na ubraniu. Jestem pewien, że to nie moja. Chyba.'],
   ],
   critHp: [
-    ['sam', 'Panie, nie umieraj! Zrobiłem ci zupę!'],
-    ['gandalf', 'Nie umrzesz dziś. Dziś umrze za to ktoś inny. Mam plan.'],
+    ['sam', 'Panie, nie odchodź! Zrobiłem ci zupę!'],
+    ['gandalf', 'Dziś nie odejdziesz. Dziś za to ktoś inny pójdzie na emeryturę. Mam plan.'],
   ],
   lowTower: [
     [['gimli', 'Wieża się sypie! Ja jej nie budowałem, ale to i tak obraza!'], ['gandalf', 'Naprawiajcie mur. Nie ma czasu na łzy.']],

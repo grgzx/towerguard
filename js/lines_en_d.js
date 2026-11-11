@@ -16,7 +16,7 @@ addLines('en', {
   elfarcherCall: [
     ['legolas', c => `Dark elf from the ${c.d}. He has a bow and terrible taste. I am offended on behalf of all elves.`],
     ['gimli', c => `Elf archer from the ${c.d}! Pretty, proud and probably smells of lavender. Wait until I get my axe on him!`],
-    ['robin', c => `Elf archer from the ${c.d}! His hair is better than mine! Kill him at once.`],
+    ['robin', c => `Elf archer from the ${c.d}! His hair is better than mine! See him off at once.`],
     ['inigo', c => `Dark elf from the ${c.d}. An archer. I prefer enemies who stand close enough to introduce themselves.`],
   ],
   elfwitchCall: [
@@ -61,7 +61,7 @@ addLines('en', {
   elfDead: [
     ['gimli', "The elf is down! Write it in the chronicles. Under the name Gimli!"],
     ['legolas', "The dark elf has fallen. He was less handsome than me even before that."],
-    ['robin', "The elf is dead! Never mind that he looked rather nice. Good work."],
+    ['robin', "The elf is out of the game! Never mind that he looked rather nice. Good work."],
   ],
   necroSummon: [
     ['maynard', "The necromancer raised goblins! Sire, we have new neighbours, and they are not friendly!"],

@@ -62,8 +62,8 @@ addLines('en', {
   ],
   firstKill: [
     ['legolas', "One. Gimli, are you still here?"],
-    ['gimli', "That is one! Legolas, you are already behind! Wait, did you kill it?"],
-    ['rincewind', "Someone died! Not me! A good start to the day!"],
+    ['gimli', "That is one! Legolas, you are already behind! Wait, did you send that one off?"],
+    ['rincewind', "Someone is out! Not me! A good start to the day!"],
   ],
   killMilestone: [
     ['gimli', c => `${c.k} enemies! Legolas, you have no chance!`],
@@ -73,20 +73,20 @@ addLines('en', {
     ['legolas', c => `${c.k}. Gimli, my count is higher than yours. Mine is also the true count.`],
   ],
   dragonDead: [
-    ['gandalf', "The dragon is dead. All that glitters is not gold, but this time it very much was."],
-    ['gimli', "The dragon is dead! Now the gold is ours. All of it. Every last coin."],
-    ['rincewind', "The dragon is dead! I did not do anything. I only wanted to be nearby."],
+    ['gandalf', "The dragon is beaten. All that glitters is not gold, but this time it very much was."],
+    ['gimli', "The dragon has been seen off! Now the gold is ours. All of it. Every last coin."],
+    ['rincewind', "The dragon is gone! I did not do anything. I only wanted to be nearby."],
     ['legolas', "The dragon has fallen. Gimli, please tell me you are not hugging the treasure."],
   ],
   mageDead: [
-    ['gandalf', "The mage is dead. Never underestimate those who read a lot."],
+    ['gandalf', "The mage is out of the picture. Never underestimate those who read a lot."],
     ['rincewind', "The mage is gone. Do not worry, it is not catching. I think."],
-    ['vizzini', "A mage dead? Inconceivable! He should have drunk from the other goblet."],
+    ['vizzini', "A mage defeated? Inconceivable! He should have drunk from the other goblet."],
   ],
   thiefDead: [
-    ['inigo', "Thief dead. Good. I have been waiting all day to stab something."],
+    ['inigo', "Thief caught. Good. I have been waiting all day to duel something."],
     ['sam', "The gold is back! Good thing he did not take the stove."],
-    ['vizzini', "The thief is dead! Naturally I knew it from the start. Never go against a Sicilian when death is on the line!"],
+    ['vizzini', "The thief is caught! Naturally I knew it from the start. Never go against a Sicilian when the gold is on the line!"],
   ],
   stolen: [
     ['vizzini', c => `He stole ${c.g} gold?! Inconceivable! And I admired him so!`],
@@ -135,9 +135,9 @@ addLines('en', {
     ['gandalf', "You are hurt. Do not worry, I have been through worse. Mostly in Moria."],
   ],
   critHp: [
-    ['sam', "Master, do not die! I made you soup!"],
-    ['gandalf', "You will not die today. Someone else will. I have a plan."],
-    ['rincewind', "You are dying! Do you mind if I run away from this one? It is a bit personal."],
+    ['sam', "Master, do not leave me! I made you soup!"],
+    ['gandalf', "You will not fall today. Someone else will retire early. I have a plan."],
+    ['rincewind', "You are fading! Do you mind if I run away from this one? It is a bit personal."],
   ],
   lowTower: [
     [['gimli', "The tower is collapsing! I did not build it, but it is still an insult!"], ['gandalf', "Repair the wall. There is no time for tears."]],

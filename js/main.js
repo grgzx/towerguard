@@ -325,10 +325,10 @@ function drawMinimap() {
 
 function bodyHTML(full) {
   const list = Object.entries(G.bodies).sort((a, b) => b[1] - a[1]);
-  if (!list.length) return full ? '' : `<b>☠ ${t('bodyTitle')}: 0</b>`;
+  if (!list.length) return full ? '' : `<b>⚔ ${t('bodyTitle')}: 0</b>`;
   const rows = (full ? list : list.slice(0, 8)).map(([k, n]) => `<div><i style="background:${MM_COL[k] || '#ccc'}"></i><span>${enemyName(k)}</span><b>${n}</b></div>`).join('');
   const more = !full && list.length > 8 ? `<div class="more">+${list.length - 8}…</div>` : '';
-  return `<h4>☠ ${t('bodyTitle')}: ${G.kills}</h4>${rows}${more}`;
+  return `<h4>⚔ ${t('bodyTitle')}: ${G.kills}</h4>${rows}${more}`;
 }
 let _bodyKey = '';
 function updateBodies() {

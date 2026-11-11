@@ -4,7 +4,7 @@ addLines('pl', {
   waveStart: [
     ['lancelot', c => `Fala ${c.o}. Jipi-ka-jej, panowie!`],
     ['gimli', c => `Fala ${c.o}. Przyszedłem tu kopać orków i żuć gumę. A gumy mi zabrakło.`],
-    ['robin', c => `Fala ${c.o}. Wspaniały dzień na śmierć! Ty pierwszy, nalegam.`],
+    ['robin', c => `Fala ${c.o}. Wspaniały dzień na bohaterstwo! Ty pierwszy, nalegam.`],
     ['dennis', c => `Fala ${c.o}. Wrócę. Chyba że najpierw mnie uciskają.`],
     ['tim', c => `Fala ${c.o}. Nie ma łyżki. Nie ma też muru. Planu też nie ma.`],
   ],
@@ -59,7 +59,7 @@ addLines('pl', {
     [['gandalf', 'Dla mnie piwo. Wstrząśnięte, nie mieszane.'], ['gimli', 'Wstrząśnięte piwo? To herezja!'], ['gandalf', 'Ale elegancka.']],
     [['dennis', 'Wrócę.'], ['artur', 'Dokąd idziesz?'], ['dennis', 'Nigdzie. Zawsze chciałem to powiedzieć.']],
     [['tim', 'Nie ma łyżki.'], ['patsy', 'Jest, panie. Mam ją tu, do owsianki.'], ['tim', 'Zepsułeś mi scenę.']],
-    [['gimli', 'Jeśli krwawi, możemy to zabić.'], ['lancelot', 'A jeśli nie krwawi?'], ['gimli', 'To uderzymy mocniej.']],
+    [['gimli', 'Jeśli krwawi, możemy to pokonać.'], ['lancelot', 'A jeśli nie krwawi?'], ['gimli', 'To uderzymy mocniej.']],
     [['lancelot', 'Czuję potrzebę prędkości!'], ['robin', 'Uciekać? Mogę nauczyć. Jestem bardzo szybki.']],
   ],
 });
@@ -67,7 +67,7 @@ addLines('en', {
   waveStart: [
     ['lancelot', c => `Wave ${c.o}. Yippee-ki-yay, gentlemen!`],
     ['gimli', c => `Wave ${c.o}. I came here to kick orcs and chew bubblegum. And I am all out of bubblegum.`],
-    ['robin', c => `Wave ${c.o}. A lovely day to die! You first, I insist.`],
+    ['robin', c => `Wave ${c.o}. A lovely day to be a hero! You first, I insist.`],
     ['dennis', c => `Wave ${c.o}. I'll be back. Unless the system oppresses me first.`],
     ['tim', c => `Wave ${c.o}. There is no spoon. Also no wall. Also no plan.`],
   ],
@@ -77,7 +77,7 @@ addLines('en', {
   ],
   killMilestone: [
     ['lancelot', c => `${c.k} down! Are you not entertained? Is this not why you came here?`],
-    ['robin', c => `${c.k} kills. Houston, we have a problem: nobody told the orcs they are losing.`],
+    ['robin', c => `${c.k} on the tally. Houston, we have a problem: nobody told the orcs they are losing.`],
   ],
   firstKill: [
     ['galahad', 'One down. Hasta la vista, enemy. That is what they say in the pure circles.'],
@@ -122,7 +122,7 @@ addLines('en', {
     [['gandalf', 'A pint for me. Shaken, not stirred.'], ['gimli', 'Shaken ale? That is heresy!'], ['gandalf', 'An elegant heresy.']],
     [['dennis', "I'll be back."], ['artur', 'Where are you going?'], ['dennis', 'Nowhere. I just always wanted to say it.']],
     [['tim', 'There is no spoon.'], ['patsy', 'There is, sire. I have it here for the porridge.'], ['tim', 'You ruined my scene.']],
-    [['gimli', 'If it bleeds, we can kill it.'], ['lancelot', 'And if it does not bleed?'], ['gimli', 'Then we hit it harder.']],
+    [['gimli', 'If it bleeds, we can beat it.'], ['lancelot', 'And if it does not bleed?'], ['gimli', 'Then we hit it harder.']],
     [['lancelot', 'I feel the need, the need for speed!'], ['robin', 'Running away? I can teach you. I am very fast.']],
   ],
 });

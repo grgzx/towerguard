@@ -2,8 +2,8 @@
 addLines('pl', {
   start: [
     [['inigo', 'Wieża. Wrogowie. Marna płaca. Dobra, wchodzę w to.'], ['artur', 'Zapłacimy w chwale.'], ['inigo', 'Chwała. Wspaniale. Zjem ją na kolację.']],
-    [['maynard', 'Dzień dobry. Jestem mnichem. Nie przyszedłem was grzebać. Jeszcze.'], ['robin', 'Aaaa!']],
-    [['gimli', 'Zamordowałbym teraz pieczonego dzika.'], ['rincewind', 'To nie brzmi pocieszająco dla ludzi, z którymi masz walczyć ramię w ramię.']],
+    [['maynard', 'Dzień dobry. Jestem mnichem. Nie przyszedłem was zamykać w klasztorze. Jeszcze.'], ['robin', 'Aaaa!']],
+    [['gimli', 'Oddałbym teraz wszystko za pieczonego dzika.'], ['rincewind', 'Mam nadzieję, że to „wszystko” nie obejmuje mnie.']],
   ],
   lowTower: [
     [['vizzini', 'Wieża upada. Przewidziałem to. Mniej więcej.'], ['robin', 'Aaaa!']],
@@ -17,7 +17,7 @@ addLines('pl', {
   gameOverPlayer: [
     [['maynard', 'Obrońca poległ. Odmówmy krótką modlitwę.'], ['czarny', 'To tylko draśnięcie.']],
     [['artur', 'Obrońca poległ. Przepraszamy za kłopot. Zapraszamy ponownie.'], ['dennis', 'Pomocy, pomocy, uciskają go!']],
-    [['gandalf', 'Obrońca padł. Ale pamiętajcie: śmierć to tylko kolejna przygoda.'], ['sam', 'Przepraszam, ale wolałbym iść tą ścieżką trochę później.']],
+    [['gandalf', 'Obrońca padł. Ale pamiętajcie: koniec to tylko początek kolejnej przygody.'], ['sam', 'Przepraszam, ale wolałbym iść tą ścieżką trochę później.']],
     [['sam', 'Obrońca padł. Panie, nie spodziewałem się tego.'], ['robin', 'Ja tak. Dlatego stałem z tyłu.']],
     [['tim', 'I to by było na tyle. Ostrzegałem was przed czarami.'], ['rincewind', 'Przepraszam, to nie było zbyt pocieszające.']],
   ],
@@ -25,7 +25,7 @@ addLines('pl', {
     [['rincewind', 'Zmarli wracają! Czy ktoś widział wyjście?'], ['lancelot', 'Tam, po lewej! Ja już biegnę.']],
   ],
   chat: [
-    [['tim', 'Witam. Szukam duszy orka. Do zaklęcia. Czysto naukowo.'], ['dennis', 'Jeszcze nie jestem martwy!'], ['tim', 'Wiem. Jesteś u mnie na liście jako „później”.']],
+    [['tim', 'Witam. Szukam duszy orka. Do zaklęcia. Czysto naukowo.'], ['dennis', 'Jeszcze nie jestem na emeryturze!'], ['tim', 'Wiem. Jesteś u mnie na liście jako „później”.']],
     [['galahad', 'Czy ktoś zagra ze mną w szachy?'], ['czarny', 'Mam tylko jedną rękę.'], ['galahad', 'To wystarczy. I tak wygram. Mam czyste serce.']],
     [['gimli', 'Hm.'], ['lancelot', 'Co: hm?'], ['gimli', 'Hm.'], ['lancelot', 'No dobra, ja też tak potrafię. Hm.']],
     [['vizzini', 'Stawka jest za niska jak na smoka.'], ['artur', 'Zapłacimy w złocie.'], ['vizzini', 'Złoto jest miłe, ale życie milsze. Cena właśnie wzrosła.']],
@@ -36,8 +36,8 @@ addLines('pl', {
 addLines('en', {
   start: [
     [['inigo', 'A tower. Enemies. Terrible pay. Fine, I am in.'], ['artur', 'We shall pay you in glory.'], ['inigo', 'Glory. Wonderful. I will eat it for dinner.']],
-    [['maynard', 'Good morning. I am a monk. I have not come to bury you. Yet.'], ['robin', 'Aaaa!']],
-    [['gimli', 'I could murder a roast boar.'], ['rincewind', 'That is not a comforting thing to say to the people you are about to fight next to.']],
+    [['maynard', 'Good morning. I am a monk. I have not come to lock you in a monastery. Yet.'], ['robin', 'Aaaa!']],
+    [['gimli', 'I would give anything for a roast boar.'], ['rincewind', 'I hope "anything" does not include me.']],
   ],
   lowTower: [
     [['vizzini', 'The tower is falling. I predicted this. Mostly.'], ['robin', 'Aaaa!']],
@@ -51,7 +51,7 @@ addLines('en', {
   gameOverPlayer: [
     [['maynard', 'The defender has fallen. Let us say a short prayer.'], ['czarny', "'Tis but a scratch."]],
     [['artur', 'The defender has fallen. Sorry for the trouble. Please come again.'], ['dennis', "Help, help, I'm being repressed!"]],
-    [['gandalf', 'The defender is down. But remember: death is just another path.'], ['sam', 'Begging your pardon, but I would rather take that path a bit later.']],
+    [['gandalf', 'The defender is down. But remember: the end is just another path.'], ['sam', 'Begging your pardon, but I would rather take that path a bit later.']],
     [['sam', 'The defender has fallen. Master, I did not expect this.'], ['robin', 'I did. That is why I stood at the back.']],
     [['tim', 'And that is all, folks. I did warn you about the spells.'], ['rincewind', 'Excuse me, that was not very comforting.']],
   ],
@@ -59,7 +59,7 @@ addLines('en', {
     [['rincewind', 'The dead are coming back! Has anyone seen an exit?'], ['lancelot', 'There, on the left! I am already running.']],
   ],
   chat: [
-    [['tim', "Greetings. I am looking for an orc's soul. For a spell. Purely for science."], ['dennis', "I'm not dead yet!"], ['tim', "I know. You are down on my list as 'later'."]],
+    [['tim', "Greetings. I am looking for an orc's soul. For a spell. Purely for science."], ['dennis', "I'm not retired yet!"], ['tim', "I know. You are down on my list as 'later'."]],
     [['galahad', 'Would anyone like a game of chess?'], ['czarny', "I've only got one arm."], ['galahad', 'That will do. I will still win. I am pure of heart.']],
     [['gimli', 'Hmm.'], ['lancelot', 'What: hmm?'], ['gimli', 'Hmm.'], ['lancelot', 'Fine, I can do that too. Hmm.']],
     [['vizzini', 'The pay is far too low for a dragon.'], ['artur', 'We will pay in gold.'], ['vizzini', 'Gold is nice. Living is nicer. The price just went up.']],

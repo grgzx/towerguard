@@ -63,7 +63,7 @@ addLines('pl', {
     [['vizzini', 'Jedno trzeba przyznać: ta wieża ma zasięg.'], ['inigo', 'Zasięg ma, ale nie ma windy.'], ['vizzini', 'To dlatego, że nie mamy plecaków rakietowych!']],
     [['gandalf', 'Wiecie, czym się różni czarodziej od magika?'], ['tim', 'Wzrostem?'], ['gandalf', 'Brodą. Moja jest dłuższa.']],
     [['sam', 'Gdyby tylko Frodo tu był, powiedziałby coś mądrego.'], ['robin', 'A ja niby co?'], ['sam', 'Pan już mówił, panie Robinie. Cały czas.']],
-    [['rincewind', 'Mam nadzieję, że wszyscy mają plan.'], ['artur', 'Mamy plan. Strzelamy, walczymy i nie umieramy.'], ['rincewind', 'Ja mam dziewięć punktów. Wszystkie o ucieczce.']],
+    [['rincewind', 'Mam nadzieję, że wszyscy mają plan.'], ['artur', 'Mamy plan. Strzelamy, walczymy i trzymamy się razem.'], ['rincewind', 'Ja mam dziewięć punktów. Wszystkie o ucieczce.']],
   ],
 
   battle: [

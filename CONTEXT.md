@@ -43,7 +43,7 @@ Run: open `index.html` in a browser. Live: https://grgzx.github.io/towerguard/ (
 
 Script order in `index.html`: three → i18n → crew_lines → lines_pl_a-d → lines_en_a-d → lines_helpers → lines_dialogues → lines_action → lines_comedy → voice → world → ambient → enemies → enemy_dragons → enemy_mages → enemy_units → weapons → helpers → status → main → touch.
 
-Kill counter: `G.bodies[type]` is incremented in `Enemy.die()` (also counts kills by helpers and summons). Panel `#bodies` (top left; title "Licznik wrogów" in PL, "Bodycount" in EN) and the full list `#overBodies` on the game-over screen; enemy names are in `ENEMY_NAMES`.
+Kill counter: `G.bodies[type]` is incremented in `Enemy.die()` (also counts kills by helpers and summons). Panel `#bodies` (top left; title "Licznik wrogów" in PL, "Enemy tally" in EN) and the full list `#overBodies` on the game-over screen; enemy names are in `ENEMY_NAMES`.
 
 ## Controls
 WASD move, mouse aim, LMB fire, 1–9 weapon/spell, Shift+1–9 hire a helper, R/T/Y repair/damage/mana, P pause, **M** voices on/off, **L** language (also in pause and the menu).

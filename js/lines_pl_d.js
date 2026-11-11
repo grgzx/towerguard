@@ -16,7 +16,7 @@ addLines('pl', {
   elfarcherCall: [
     ['legolas', c => `Mroczny elf od ${c.d}. Ma łuk. Ma też fatalny gust. Jestem obrażony w imieniu wszystkich elfów.`],
     ['gimli', c => `Elf łucznik od ${c.d}! Piękny, dumny i pewnie pachnie lawendą. Poczekajcie, aż go trafię!`],
-    ['robin', c => `Elf łucznik od ${c.d}! Ma lepsze włosy niż ja! Zabijmy go natychmiast.`],
+    ['robin', c => `Elf łucznik od ${c.d}! Ma lepsze włosy niż ja! Wyeliminujmy go natychmiast.`],
     ['inigo', c => `Mroczny elf od ${c.d}. Nazywam się Inigo Montoya. Nie lubię elfów, które strzelają z daleka.`],
   ],
   elfwitchCall: [
@@ -60,8 +60,8 @@ addLines('pl', {
   ],
   elfDead: [
     ['gimli', "Elf padł! Zapiszcie to w kronikach. A potem zapomnijcie o całej reszcie!"],
-    ['legolas', "Mroczny elf poległ. Wciąż był brzydszy ode mnie. Nawet martwy."],
-    ['robin', "Elf nie żyje! Mimo że ładnie wyglądał, to dobra robota."],
+    ['legolas', "Mroczny elf poległ. Wciąż był brzydszy ode mnie. Nawet leżąc."],
+    ['robin', "Elf wyeliminowany! Mimo że ładnie wyglądał, to dobra robota."],
   ],
   necroSummon: [
     ['maynard', "Nekromanta wskrzesił gobliny! Panie, mamy problem z nowymi sąsiadami!"],
