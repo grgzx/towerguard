@@ -24,6 +24,7 @@ Run: open `index.html` in a browser. Live: https://grgzx.github.io/towerguard/ (
 | `js/crew_lines.js` | `CREW` (characters: name, nameEn, pitch, rate, g, optional `voiceEn` regex), `LINES = {pl:{}, en:{}}`, `addLines(lang, obj)`, `WAVE_TITLES(_EN)`, `waveTitle`, `waveCtx`, `ordFem` |
 | `js/lines_pl_a-d.js`, `js/lines_en_a-d.js` | voice lines PL and EN (a: Monty Python events, b: weapons + `chat`/`battle`, c: extra heroes, d: new enemies and statuses) |
 | `js/lines_helpers.js` | `helperHire` and `helperDead` lines (PL/EN) |
+| `js/lines_tips.js` | tutorial tips for waves 1–2 (`tipAim`, `tipDefender`, `tipDefenderB`, `tipShop`, `tipMana`), text depends on `IS_TOUCH`; scheduled by `waveTips()` / `TIP_PLAN` in `main.js` (wait for a quiet moment, retry every 2 s) |
 | `js/lines_action.js` | action-movie parodies (Die Hard, Terminator, Matrix, Predator, Top Gun, 300, Mission: Impossible, Bond...) spoken by the existing crew, added to the existing pools |
 | `js/lines_comedy.js` | Beverly Hills Cop, Police Academy, Monkey Island parodies and "swap the prop" fusions (ale instead of martini, coconut badge, rubber chicken with a pulley), spoken by the existing crew |
 | `js/lines_dialogues.js` | restored dialogues (start, lowTower, gameOver*, necroSummon, chat) that once featured Geralt/Death, rewritten for other characters |
@@ -41,12 +42,12 @@ Run: open `index.html` in a browser. Live: https://grgzx.github.io/towerguard/ (
 | `manifest.webmanifest`, `icon.svg`, `icon-192.png`, `icon-512.png` | PWA manifest (fullscreen, landscape) and icons (PNGs rendered from the SVG) |
 | `js/main.js` | game loop, controls, waves (`planWave`, `spawnEnemy`), HUD, minimap, WebAudio sound, kill counter |
 
-Script order in `index.html`: three → i18n → crew_lines → lines_pl_a-d → lines_en_a-d → lines_helpers → lines_dialogues → lines_action → lines_comedy → voice → world → ambient → enemies → enemy_dragons → enemy_mages → enemy_units → weapons → helpers → status → main → touch.
+Script order in `index.html`: three → i18n → crew_lines → lines_pl_a-d → lines_en_a-d → lines_helpers → lines_dialogues → lines_action → lines_comedy → lines_tips → voice → world → ambient → enemies → enemy_dragons → enemy_mages → enemy_units → weapons → helpers → status → main → touch.
 
 Kill counter: `G.bodies[type]` is incremented in `Enemy.die()` (also counts kills by helpers and summons). Panel `#bodies` (top left; title "Licznik wrogów" in PL, "Enemy tally" in EN) and the full list `#overBodies` on the game-over screen; enemy names are in `ENEMY_NAMES`.
 
 ## Controls
-WASD move, mouse aim, LMB fire, 1–9 weapon/spell, Shift+1–9 hire a helper, R/T/Y repair/max life/max mana, P pause, **M** voices on/off, **L** language (also in pause and the menu).
+WASD move, mouse aim, LMB fire, 1–9 weapon/spell, Shift+1–9 summon a defender, R/T/Y repair/max life/max mana, P pause, **M** voices on/off, **L** language (also in pause and the menu).
 
 ## Mobile (touch)
 - `touch.js` writes into `touchIn` (`turn`, `my`, `fire`, `hold`; the left stick walks forward/back and turns the character left/right) which `main.js` reads in `loop`; no pointer lock on touch (`setPause`/`startGame` skip it).

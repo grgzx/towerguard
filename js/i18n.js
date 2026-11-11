@@ -1,5 +1,5 @@
 // Interface and message language: PL / EN
-const VERSION = '0.8.0'; // keep in sync with CHANGELOG.md
+const VERSION = '0.9.0'; // keep in sync with CHANGELOG.md
 const IS_TOUCH = typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches;
 let LANG = (function () {
   try { const s = localStorage.getItem('td_lang'); if (s === 'pl' || s === 'en') return s; } catch (e) {}
@@ -10,13 +10,13 @@ const STR = {
   pl: {
     docTitle: 'Wieżostraż - Towerguard',
     wTower: 'Wieża', wLife: 'Życie', wMana: 'Mana', wWave: 'Fala:', wGold: 'Złoto:', wScore: 'Wynik:',
-    help: '<b>M</b> głosy wł./wył. &nbsp; <b>L</b> język &nbsp; <b>R</b> napraw wieżę (<span id="cRepair"></span>) &nbsp; <b>T</b> +życie (<span id="cHp"></span>) &nbsp; <b>Y</b> +mana (<span id="cMana"></span>) &nbsp; <b>Shift+1–9</b> pomocnik',
+    help: '<b>M</b> głosy wł./wył. &nbsp; <b>L</b> język &nbsp; <b>R</b> napraw wieżę (<span id="cRepair"></span>) &nbsp; <b>T</b> +życie (<span id="cHp"></span>) &nbsp; <b>Y</b> +mana (<span id="cMana"></span>) &nbsp; <b>Shift+1–9</b> obrońca',
     legend: '<span style="color:#7bd13a">● Ork</span> <span style="color:#c6f06a">● Goblin</span> <span style="color:#ffd24a">● Złodziej</span> <span style="color:#c070ff">● Mag</span> <span style="color:#ff4a2a">▲ Smok</span> <span style="color:#7fe8ff">▲ Lodowy</span> <span style="color:#b6ff2a">▲ Jadowity</span> <span style="color:#a07a40">● Warg</span> <span style="color:#6a8aff">● Elf</span>',
     menuTitle: '⚔ Wieżostraż ⚔',
     menuSub: 'Ostatnia twierdza królestwa. Orkowie, gobliny, złodzieje, smoki i mroczni magowie idą na twoją wieżę.',
     lang: 'Język', langSet: 'Język: polski',
     g1: '<b>W A S D</b><br>chodzenie po wieży', g2: '<b>Mysz</b><br>celowanie', g3: '<b>LPM</b><br>strzał / czar',
-    g4: '<b>1 – 9</b><br>wybór broni i czarów', g5: '<b>R / T / Y</b><br>naprawa / ulepszenia<br><b>Shift + 1–9</b> pomocnik z bronią', g6: '<b>P / Esc</b><br>pauza',
+    g4: '<b>1 – 9</b><br>wybór broni i czarów', g5: '<b>R / T / Y</b><br>naprawa / ulepszenia<br><b>Shift + 1–9</b> obrońca z bronią', g6: '<b>P / Esc</b><br>pauza',
     g7: '<b>M</b><br>głosy obrońców wł./wył.',
     w1: 'Łuk długi', w2: 'Kusza', w3: 'Moździerz (obszarowy, nie trafia w cele blisko wieży)', w4: 'Kula ognia', w5: 'Błyskawica łańcuchowa',
     w6: 'Lodowy pocisk (spowalnia)', w7: 'Balista (przebija wrogów)', w8: 'Deszcz meteorów', w9: 'Święte uzdrowienie',
@@ -24,7 +24,7 @@ const STR = {
     start: 'Kliknij, aby zacząć obronę', pauseTitle: 'Pauza', resume: 'Wznów', restart: 'Spróbuj ponownie',
     voiceOn: 'Głosy włączone', voiceOff: 'Głosy wyłączone', noGold: 'Za mało złota', noMana: 'Za mało many',
     bodyTitle: 'Licznik wrogów', bodyNone: 'jeszcze nikogo',
-    repaired: 'Wieża naprawiona', towerFull: 'Wieża jest cała – naprawa niepotrzebna', helperFull: 'Na murach nie ma już miejsca dla pomocników', helperDied: w => `Pomocnik poległ: ${w}`, helperBought: w => `Pomocnik zatrudniony: ${w}`, hpUp: 'Więcej życia', manaUp: 'Więcej many',
+    repaired: 'Wieża naprawiona', towerFull: 'Wieża jest cała – naprawa niepotrzebna', helperFull: 'Na murach nie ma już miejsca dla obrońców', helperDied: w => `Obrońca poległ: ${w}`, helperBought: w => `Obrońca przywołany: ${w}`, hpUp: 'Więcej życia', manaUp: 'Więcej many',
     bannerStart: 'Bronisz wieży!',
     overPlayer: 'Obrońca poległ', overTower: 'Wieża padła',
     overText: (w, k, s) => `Dotarłeś do fali ${w}. Pokonani wrogowie: ${k}. Wynik: ${s}.`,
@@ -37,7 +37,7 @@ const STR = {
     assistOn: 'Pomoc w celowaniu: WŁ.', assistOff: 'Pomoc w celowaniu: WYŁ.',
     touch_start: 'Dotknij, aby zacząć obronę',
     touch_g1: '<b>Lewy kciuk</b><br>góra/dół: chód, lewo/prawo: obrót', touch_g2: '<b>Prawy kciuk</b><br>przeciągnij, by się rozglądać (pomoc w celowaniu włączona)',
-    touch_g3: '<b>Duży przycisk</b><br>strzał / czar (przytrzymaj = ogień ciągły)', touch_g4: '<b>Ikony na dole</b><br>dotknij: wybór broni<br><b>przytrzymaj</b>: kup pomocnika',
+    touch_g3: '<b>Duży przycisk</b><br>strzał / czar (przytrzymaj = ogień ciągły)', touch_g4: '<b>Ikony na dole</b><br>dotknij: wybór broni<br><b>przytrzymaj</b>: przywołaj obrońcę',
     touch_g5: '<b>🔧 ⚔ 🔮</b><br>naprawa / ulepszenia', touch_g6: '<b>⏸</b><br>pauza', touch_g7: '<b>🔊 🌐</b><br>głosy wł./wył. i język',
     touch_waveClear: (n, p) => `Fala ${n} odparta! Premia ${p} złota. Czas na 🔧 ⚔ 🔮.`,
     touch_warnHp: 'Jesteś ciężko ranny! Użyj uzdrowienia (✨)', touch_warnTower: 'Wieża chwieje się w posadach! Naprawiaj mury (🔧)!',
@@ -48,13 +48,13 @@ const STR = {
   en: {
     docTitle: 'Wieżostraż - Towerguard',
     wTower: 'Tower', wLife: 'Health', wMana: 'Mana', wWave: 'Wave:', wGold: 'Gold:', wScore: 'Score:',
-    help: '<b>M</b> voices on/off &nbsp; <b>L</b> language &nbsp; <b>R</b> repair tower (<span id="cRepair"></span>) &nbsp; <b>T</b> +life (<span id="cHp"></span>) &nbsp; <b>Y</b> +mana (<span id="cMana"></span>) &nbsp; <b>Shift+1–9</b> hire helper',
+    help: '<b>M</b> voices on/off &nbsp; <b>L</b> language &nbsp; <b>R</b> repair tower (<span id="cRepair"></span>) &nbsp; <b>T</b> +life (<span id="cHp"></span>) &nbsp; <b>Y</b> +mana (<span id="cMana"></span>) &nbsp; <b>Shift+1–9</b> summon defender',
     legend: '<span style="color:#7bd13a">● Orc</span> <span style="color:#c6f06a">● Goblin</span> <span style="color:#ffd24a">● Thief</span> <span style="color:#c070ff">● Mage</span> <span style="color:#ff4a2a">▲ Dragon</span> <span style="color:#7fe8ff">▲ Frost</span> <span style="color:#b6ff2a">▲ Venom</span> <span style="color:#a07a40">● Warg</span> <span style="color:#6a8aff">● Elf</span>',
     menuTitle: '⚔ Towerguard ⚔',
     menuSub: 'The last fortress of the realm. Orcs, goblins, thieves, dragons and dark mages march on your tower.',
     lang: 'Language', langSet: 'Language: English',
     g1: '<b>W A S D</b><br>walk on the tower', g2: '<b>Mouse</b><br>aim', g3: '<b>LMB</b><br>shoot / cast',
-    g4: '<b>1 – 9</b><br>pick weapon or spell', g5: '<b>R / T / Y</b><br>repair / upgrades<br><b>Shift + 1–9</b> hire a helper', g6: '<b>P / Esc</b><br>pause',
+    g4: '<b>1 – 9</b><br>pick weapon or spell', g5: '<b>R / T / Y</b><br>repair / upgrades<br><b>Shift + 1–9</b> summon a defender', g6: '<b>P / Esc</b><br>pause',
     g7: '<b>M</b><br>defender voices on/off',
     w1: 'Longbow', w2: 'Crossbow', w3: 'Mortar (area damage, cannot hit targets close to the tower)', w4: 'Fireball', w5: 'Chain lightning',
     w6: 'Frost bolt (slows)', w7: 'Ballista (pierces enemies)', w8: 'Meteor shower', w9: 'Holy healing',
@@ -62,7 +62,7 @@ const STR = {
     start: 'Click to begin the defence', pauseTitle: 'Paused', resume: 'Resume', restart: 'Try again',
     voiceOn: 'Voices on', voiceOff: 'Voices off', noGold: 'Not enough gold', noMana: 'Not enough mana',
     bodyTitle: 'Enemy tally', bodyNone: 'nobody yet',
-    repaired: 'Tower repaired', towerFull: 'The tower is undamaged – no repair needed', helperFull: 'No more room on the walls for helpers', helperDied: w => `Helper fell: ${w}`, helperBought: w => `Helper hired: ${w}`, hpUp: 'More life', manaUp: 'More mana',
+    repaired: 'Tower repaired', towerFull: 'The tower is undamaged – no repair needed', helperFull: 'No more room on the walls for defenders', helperDied: w => `Defender fell: ${w}`, helperBought: w => `Defender summoned: ${w}`, hpUp: 'More life', manaUp: 'More mana',
     bannerStart: 'Defend the tower!',
     overPlayer: 'The defender has fallen', overTower: 'The tower has fallen',
     overText: (w, k, s) => `You reached wave ${w}. Enemies defeated: ${k}. Score: ${s}.`,
@@ -75,7 +75,7 @@ const STR = {
     assistOn: 'Aim assist: ON', assistOff: 'Aim assist: OFF',
     touch_start: 'Tap to begin the defence',
     touch_g1: '<b>Left thumb</b><br>up/down: walk, left/right: turn', touch_g2: '<b>Right thumb</b><br>drag to look around (aim assist is on)',
-    touch_g3: '<b>Big button</b><br>shoot / cast (hold = keep firing)', touch_g4: '<b>Icons at the bottom</b><br>tap: pick weapon<br><b>hold</b>: hire a helper',
+    touch_g3: '<b>Big button</b><br>shoot / cast (hold = keep firing)', touch_g4: '<b>Icons at the bottom</b><br>tap: pick weapon<br><b>hold</b>: summon a defender',
     touch_g5: '<b>🔧 ⚔ 🔮</b><br>repair / upgrades', touch_g6: '<b>⏸</b><br>pause', touch_g7: '<b>🔊 🌐</b><br>voices on/off and language',
     touch_waveClear: (n, p) => `Wave ${n} repelled! Bonus ${p} gold. Time for 🔧 ⚔ 🔮.`,
     touch_warnHp: 'You are badly wounded! Cast healing (✨)', touch_warnTower: 'The tower is crumbling! Repair the walls (🔧)!',

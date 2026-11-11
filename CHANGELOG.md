@@ -5,6 +5,10 @@ The game is still pre-1.0, so every `0.MINOR` bump is a feature release and `PAT
 The current version is the `VERSION` constant in `js/i18n.js` (shown in the main menu); it must match the top entry here
 and the git tag `vX.Y.Z`.
 
+## 0.9.0 – 2026-11-11
+- Tutorial tips in waves 1 and 2, spoken by the crew: aiming, weapons, how to summon defenders (separate wording for desktop and phone), the shop and the healing spell.
+- "Helpers" renamed to "defenders" in all player-facing texts (PL: "obrońcy", "przywołać obrońcę").
+
 ## 0.8.0 – 2026-11-11
 - Upgrade "+damage" replaced by "+life" (key `T`, ❤️ on phones): +20 maximum life per level. The life bar, low-life warning and healing follow the new maximum.
 - Version number shown in the menu; this changelog added.

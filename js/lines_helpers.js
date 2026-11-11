@@ -11,7 +11,7 @@ addLines('pl', {
   helperHire: [
     ['artur', 'Witaj, dzielny żołnierzu! Stań tu i trzymaj się swojej ściany.'],
     ['lancelot', 'Nowy rekrut! Przynajmniej ktoś będzie za mnie biegał.'],
-    ['robin', 'Pomocnik? Świetnie. Będzie miał kogo puścić przodem, kiedy zrobi się gorąco.'],
+    ['robin', 'Obrońca? Świetnie. Będzie miał kogo puścić przodem, kiedy zrobi się gorąco.'],
     ['galahad', 'Witaj, nieznajomy. Mam nadzieję, że jesteś czysty. Na ciele i duchu.'],
     ['czarny', 'Przyjmujemy nowych? To tylko zadrapanie. Wszyscy mają zadrapania.'],
     ['patsy', 'Dobrze, że ktoś jeszcze będzie dźwigał kokosy.'],
@@ -32,7 +32,7 @@ addLines('en', {
   helperHire: [
     ['artur', 'Welcome, brave soldier! Take this wall, and guard it with your life.'],
     ['lancelot', 'A new recruit! Finally, someone to do the running about for me.'],
-    ['robin', 'A helper? Splendid. Somebody to send ahead when things get hot.'],
+    ['robin', 'A defender? Splendid. Somebody to send ahead when things get hot.'],
     ['galahad', 'Welcome, stranger. I trust you are pure of heart. And of boot.'],
     ['czarny', 'New hires? Tis but a scratch, they said. They always say that.'],
     ['patsy', 'Good. Somebody else can carry the coconuts.'],

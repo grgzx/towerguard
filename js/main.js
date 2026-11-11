@@ -171,6 +171,19 @@ function buy(w) {
   sfx('heal');
 }
 
+const TIP_PLAN = { 1: [['tipAim', 12], ['tipDefender', 32]], 2: [['tipDefenderB', 12], ['tipShop', 30], ['tipMana', 50]] };
+// Tips wait for a quiet moment (nobody speaking, empty queue) and retry every 2 s, up to 30 times.
+function waveTips(n) {
+  for (const [key, delay] of TIP_PLAN[n] || []) {
+    const attempt = (wait, left) => G.timers.push({ t: wait, fn: () => {
+      if (G.over || G.wave !== n) return;
+      if (!VOICE.cur && !VOICE.queue.length && say(key, {}, { prio: 1, cool: 0 })) return;
+      if (left > 0) attempt(2, left - 1);
+    } });
+    attempt(delay, 30);
+  }
+}
+
 function setPause(p) {
   G.paused = p; $('pause').classList.toggle('hidden', !p);
   if (p) stopSpeech(true);
@@ -233,7 +246,7 @@ function spawnEnemy(type) {
 function updateWaves(dt) {
   if (!G.waveActive) {
     G.breakT -= dt;
-    if (G.breakT <= 0) { G.wave++; ambOnWave(G.wave); G.spawnQ = planWave(G.wave); G.waveActive = true; G.spawnT = 0; banner(t('waveBanner', G.wave, waveTitle(G.wave))); say('waveStart', waveCtx(G.wave), { prio: 1, cool: 0 }); }
+    if (G.breakT <= 0) { G.wave++; ambOnWave(G.wave); G.spawnQ = planWave(G.wave); G.waveActive = true; G.spawnT = 0; banner(t('waveBanner', G.wave, waveTitle(G.wave))); say('waveStart', waveCtx(G.wave), { prio: 1, cool: 0 }); waveTips(G.wave); }
     return;
   }
   G.spawnT -= dt;

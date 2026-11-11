@@ -33,7 +33,7 @@ addLines('pl', {
     ['dennis', 'Czuję się świetnie! Gdzie jest to potłuczone szkło? Chcę po nim chodzić boso!'],
   ],
   helperDead: [
-    ['lancelot', 'Goose! Nieee! To znaczy: pomocniku. Nie poznałem twojego imienia.'],
+    ['lancelot', 'Goose! Nieee! To znaczy: obrońco. Nie poznałem twojego imienia.'],
   ],
   lowTower: [
     ['robin', 'Koniec gry, człowieku! Koniec gry! Wieża się wali!'],
@@ -96,7 +96,7 @@ addLines('en', {
     ['dennis', 'I feel great! Where is the broken glass? I want to walk on it barefoot!'],
   ],
   helperDead: [
-    ['lancelot', 'Goose! Noooo! I mean, helper. I never learned your name.'],
+    ['lancelot', 'Goose! Noooo! I mean, defender. I never learned your name.'],
   ],
   lowTower: [
     ['robin', 'Game over, man! Game over! The tower is going down!'],
