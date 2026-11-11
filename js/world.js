@@ -14,7 +14,7 @@ const SKY = 0x9ec3e6;
 scene.background = new THREE.Color(SKY);
 scene.fog = new THREE.Fog(SKY, 70, 260);
 
-const camera = new THREE.PerspectiveCamera(72, innerWidth / innerHeight, 0.1, 500);
+const camera = new THREE.PerspectiveCamera(72, innerWidth / innerHeight, 0.1, 700);
 camera.rotation.order = 'YXZ';
 addEventListener('resize', () => {
   renderer.setSize(innerWidth, innerHeight);
@@ -253,11 +253,104 @@ function buildForest() {
   }
 }
 
+// ---- Distant mountains: heightfield meshes with flat faces, coloured by height and slope (forest, rock, snow) ----
+let mtnSeed = 1;
+function mtnNoise(x, z) {
+  const hv = (a, b) => { const n = Math.sin(a * 127.1 + b * 311.7 + mtnSeed * 74.7) * 43758.5453; return n - Math.floor(n); };
+  const ix = Math.floor(x), iz = Math.floor(z), fx = x - ix, fz = z - iz, u = fx * fx * (3 - 2 * fx), v = fz * fz * (3 - 2 * fz);
+  return (hv(ix, iz) * (1 - u) + hv(ix + 1, iz) * u) * (1 - v) + (hv(ix, iz + 1) * (1 - u) + hv(ix + 1, iz + 1) * u) * v;
+}
+function mtnFbm(x, z) { return mtnNoise(x, z) * 0.55 + mtnNoise(x * 2.1, z * 2.1) * 0.3 + mtnNoise(x * 4.3, z * 4.3) * 0.15; }
+const mtnCone = (x, z, R, p) => Math.pow(Math.max(0, 1 - Math.hypot(x, z) / R), p);
+const mtnStep = (a, b, x) => { const t = Math.min(1, Math.max(0, (x - a) / (b - a))); return t * t * (3 - 2 * t); };
+
+// Each shape returns a height in 0..1 for local coordinates; +z is the side that faces the tower
+const MTN_SHAPES = {
+  matterhorn: (x, z) => {
+    const a = (x + z) * 0.7071, b = (x - z) * 0.7071, t = Math.max(0, 1 - Math.max(Math.abs(a), Math.abs(b)) / 80);
+    return Math.pow(t, 1.55) * (1 + 0.5 * Math.pow(t, 3)) * (0.9 + 0.2 * mtnFbm(x / 14, z / 14)) * 0.72;
+  },
+  rysy: (x, z) => {
+    const pk = (c, a, w) => a * Math.pow(Math.max(0, 1 - Math.abs(x - c) / w), 1.2);
+    const along = Math.max(pk(-24, 1, 70), pk(28, 0.93, 62), pk(-96, 0.52, 48), pk(100, 0.46, 52)) * (0.92 + 0.16 * mtnNoise(x / 9, 3));
+    const cross = Math.pow(Math.max(0, 1 - Math.abs(z + 6 * Math.sin(x / 30)) / 42), 1.1);
+    return along * cross * (0.9 + 0.2 * mtnFbm(x / 9, z / 9));
+  },
+  everest: (x, z) => {
+    const th = Math.atan2(z, x), R = 118 * (0.7 + 0.3 * Math.abs(Math.cos(1.5 * th + 0.4)));
+    const main = Math.pow(Math.max(0, 1 - Math.hypot(x, z) / R), 1.2);
+    const lhotse = 0.78 * mtnCone(x + 78, z - 18, 66, 1.3), nuptse = 0.55 * mtnCone(x - 100, z + 28, 56, 1.3);
+    return Math.max(main, lhotse, nuptse) * (0.92 + 0.16 * mtnFbm(x / 11, z / 11));
+  },
+  elcap: (x, z) => {
+    const edge = 26 + 9 * Math.exp(-Math.pow((x + 14) / 15, 2)) + 3 * Math.sin(x / 7);
+    const front = 1 - mtnStep(edge - 1, edge + 4, z), side = 1 - mtnStep(48, 56, Math.abs(x));
+    const back = 1 - 0.7 * mtnStep(0, 1, (edge - 12 - z) / 70);
+    return front * side * back * (0.97 + 0.04 * mtnNoise(x / 6, z / 6));
+  },
+  halfdome: (x, z) => {
+    const e = Math.pow(x / 62, 2) + Math.pow(z / 55, 2), cut = 1 - mtnStep(-1.5, 2.5, z + 0.25 * x);
+    return cut * Math.pow(Math.max(0, 1 - e), 0.55) * (0.97 + 0.04 * mtnNoise(x / 6, z / 6));
+  },
+  giewont: (x, z) => {
+    const P = [[-120, 0], [-85, 0.3], [-60, 0.62], [-48, 0.74], [-38, 0.66], [-22, 0.82], [-8, 0.74], [8, 1.0], [24, 0.8], [40, 0.84], [58, 0.62], [85, 0.3], [120, 0]];
+    let ridge = 0;
+    for (let i = 1; i < P.length; i++) if (x <= P[i][0]) { ridge = P[i - 1][1] + (P[i][1] - P[i - 1][1]) * (x - P[i - 1][0]) / (P[i][0] - P[i - 1][0]); break; }
+    const across = z > 0 ? Math.pow(Math.max(0, 1 - z / 30), 0.7) : Math.pow(Math.max(0, 1 - -z / 55), 1.2);
+    return ridge * across * (0.9 + 0.2 * mtnFbm(x / 9, z / 9));
+  },
+  hill: (x, z, o) => {
+    const k = o.k || 1, base = mtnCone(x, z / k, o.R, 1.25);
+    return base * (0.75 + 0.5 * mtnFbm(x / 16 + o.R, z / 16));
+  },
+};
+
+function mtnBuild(shape, o) {
+  mtnSeed = o.seed || 1;
+  const sx = o.w / o.cell | 0, sz = o.d / o.cell | 0, f = MTN_SHAPES[shape];
+  let g = new THREE.PlaneGeometry(o.w, o.d, sx, sz); g.rotateX(-Math.PI / 2);
+  const p = g.attributes.position;
+  for (let i = 0; i < p.count; i++) p.setY(i, f(p.getX(i), p.getZ(i), o) * o.H);
+  g = g.toNonIndexed(); g.computeVertexNormals();
+  const pos = g.attributes.position, nor = g.attributes.normal, col = new Float32Array(pos.count * 3), c = new THREE.Color(), sky = new THREE.Color(SKY);
+  for (let i = 0; i < pos.count; i++) {
+    const y = pos.getY(i), rel = y / o.H, ny = nor.getY(i), n = mtnNoise(pos.getX(i) / 7 + 9, pos.getZ(i) / 7);
+    if (rel < (o.tree || 0.2) + n * 0.08 && ny > 0.55) c.setHex(n > 0.5 ? 0x4c6a40 : 0x3f5c38);
+    else if (o.snow < 1 && rel > o.snow + (n - 0.5) * 0.08 && ny > 0.22) c.setHex(0xf2f5fb);
+    else { c.setHex(o.rock); c.multiplyScalar(0.82 + 0.3 * n); if (o.streaks) c.multiplyScalar(0.82 + 0.3 * mtnNoise(pos.getX(i) / 3, 5.5)); }
+    c.multiplyScalar(0.8 + 0.3 * Math.max(0, ny)).lerp(sky, o.haze == null ? 0.3 : o.haze);
+    col[i * 3] = c.r; col[i * 3 + 1] = c.g; col[i * 3 + 2] = c.b;
+  }
+  g.setAttribute('color', new THREE.BufferAttribute(col, 3));
+  const m = new THREE.Mesh(g, new THREE.MeshLambertMaterial({ vertexColors: true, fog: false }));
+  if (o.cross) {
+    let top = 0; for (let i = 1; i < pos.count; i++) if (pos.getY(i) > pos.getY(top)) top = i;
+    const cm = new THREE.MeshLambertMaterial({ color: 0xeeeeee, fog: false }), cx = pos.getX(top), cy = pos.getY(top), cz = pos.getZ(top);
+    const v = new THREE.Mesh(new THREE.BoxGeometry(1.3, 13, 1.3), cm), h = new THREE.Mesh(new THREE.BoxGeometry(7, 1.3, 1.3), cm);
+    v.position.set(cx, cy + 5.5, cz); h.position.set(cx, cy + 9, cz); m.add(v, h);
+  }
+  return m;
+}
+function mtnPlace(m, ang, dist) {
+  const x = Math.cos(ang) * dist, z = Math.sin(ang) * dist;
+  m.position.set(x, -1, z); m.rotation.y = Math.atan2(-x, -z); scene.add(m); return m;
+}
+
 function buildHills() {
-  const r = seeded(5);
-  for (let i = 0; i < 22; i++) {
-    const a = i / 22 * Math.PI * 2 + r() * .2, d = 280 + r() * 40, s = 40 + r() * 50;
-    const h = mesh(new THREE.ConeGeometry(s, s * (0.8 + r() * .6), 6), mat(i % 3 ? 0x5a6a52 : 0x7a7a80), Math.cos(a) * d, s * .3, Math.sin(a) * d, scene, false);
+  const big = [
+    ['elcap', 0.35, 285, { w: 150, d: 150, cell: 3, H: 100, snow: 1, rock: 0xb8ae9e, tree: 0.07, seed: 14, streaks: true }],
+    ['halfdome', 1.35, 290, { w: 150, d: 150, cell: 3, H: 90, snow: 1, rock: 0xb4aa9c, tree: 0.1, seed: 15, streaks: true }],
+    ['everest', 2.45, 330, { w: 290, d: 260, cell: 5, H: 215, snow: 0.38, rock: 0x6d6a6a, tree: 0.08, seed: 12, haze: 0.38 }],
+    ['matterhorn', 3.6, 300, { w: 190, d: 190, cell: 4, H: 135, snow: 0.5, rock: 0x77716c, tree: 0.12, seed: 11 }],
+    ['rysy', 4.55, 300, { w: 260, d: 130, cell: 4, H: 110, snow: 0.62, rock: 0x85817c, tree: 0.2, seed: 13 }],
+    ['giewont', 5.5, 285, { w: 250, d: 130, cell: 4, H: 85, snow: 1, rock: 0x8c8a84, tree: 0.3, seed: 16, cross: true }],
+  ];
+  big.forEach(([name, a, d, o]) => mtnPlace(mtnBuild(name, o), a, d));
+  const r = seeded(5), N = 18;
+  for (let i = 0; i < N; i++) {
+    const a = i / N * Math.PI * 2 + r() * 0.2, tall = r() < 0.3, H = tall ? 38 + r() * 24 : 14 + r() * 20, R = 50 + r() * 45 + (tall ? 15 : 0);
+    if (big.some(b => Math.abs(Math.atan2(Math.sin(a - b[1]), Math.cos(a - b[1]))) < 0.42)) continue;
+    mtnPlace(mtnBuild('hill', { w: R * 2.2, d: R * 2.2, cell: 5, H, R, k: 0.7 + r() * 0.6, snow: H > 50 ? 0.82 : 1, rock: i % 3 ? 0x6e7468 : 0x7a7a80, tree: 0.4, seed: 20 + i }), a, 275 + r() * 70);
   }
 }
 
