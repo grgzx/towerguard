@@ -5,9 +5,6 @@ The game is still pre-1.0, so every `0.MINOR` bump is a feature release and `PAT
 The current version is the `VERSION` constant in `js/i18n.js` (shown in the main menu); it must match the top entry here
 and the git tag `vX.Y.Z`.
 
-## 0.8.1 – 2026-11-11
-- Fixed the end-of-wave lines saying "wave undefined".
-
 ## 0.8.0 – 2026-11-11
 - Upgrade "+damage" replaced by "+life" (key `T`, ❤️ on phones): +20 maximum life per level. The life bar, low-life warning and healing follow the new maximum.
 - Version number shown in the menu; this changelog added.
