@@ -23,12 +23,12 @@ Object.assign(LINES.pl, {
   waveClear: [
     ['artur', c => `Fala ${c.o} odparta! Skarbiec zyskał ${c.p} sztuk złota. Wydaj je mądrze, rycerzu: klawisze R, T i Y.`],
     ['robin', c => `Fala ${c.o} za nami! Dzielny Sir Robin przeżył! Jak zawsze, dzięki odwadze i szybkim nogom. Premia ${c.p} złota.`],
-    ['patsy', c => `Koniec fali ${c.og}! Mogę już przestać stukać kokosami? Mamy ${c.p} złota, panie. R, T, Y!`],
+    ['patsy', c => `Koniec fali ${c.o}! Mogę już przestać stukać kokosami? Mamy ${c.p} złota, panie. R, T, Y!`],
     ['maynard', c => `Policzmy trofea: raz, dwa, pięć! Nie, trzy! Trzy, bracie, trzy! Fala ${c.o} odparta, ${c.p} złota w skarbcu.`],
     ['lancelot', c => `Pokonałem połowę wroga! Drugą połowę zostawiłem tobie, rycerzu. Mamy ${c.p} złota. Kup coś: R, T, Y.`],
-    ['dennis', c => `Spokój po fali ${c.og}! Dostaliśmy ${c.p} złota, a ja nadal nie dostałem pensji!`],
+    ['dennis', c => `Spokój po fali ${c.o}! Dostaliśmy ${c.p} złota, a ja nadal nie dostałem pensji!`],
     ['tim', c => `Fala ${c.o} rozgromiona! Mój czar zadziałał. Albo nie, ale ${c.p} złota wpadło.`],
-    ['galahad', c => `Po fali ${c.og} jest ${c.p} złota. Kupmy mydło. Albo mur. Albo mydło.`],
+    ['galahad', c => `Po fali ${c.o} jest ${c.p} złota. Kupmy mydło. Albo mur. Albo mydło.`],
   ],
   orkCall: [
     ['lancelot', c => `Orkowie od ${c.d}! Duzi, zieloni i bardzo źli. Czyli standard.`],

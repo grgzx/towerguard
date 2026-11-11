@@ -14,7 +14,7 @@ addLines('pl', {
   ],
   waveClear: [
     ['gandalf', c => `Fala ${c.o} odparta. Premia w złocie: ${c.p}. Wydajcie ją mądrze, klawiszami R, T lub Y.`],
-    ['sam', c => `Koniec fali ${c.og}. Mamy złota: ${c.p}. Starczy na drugi garnek, panie!`],
+    ['sam', c => `Koniec fali ${c.o}. Mamy złota: ${c.p}. Starczy na drugi garnek, panie!`],
     ['vizzini', c => `Fala ${c.o} odparta! Moja zasługa! Dzięki mojemu planowi. Którego nie mam.`],
     ['rincewind', c => `Fala ${c.o} przeżyta! I to bez ani jednego sprintu. Cud. Złota: ${c.p}.`],
     ['gimli', c => `Fala ${c.o} za nami! Złota: ${c.p}! Prawdziwe złoto, a nie jakiś mithril!`],
