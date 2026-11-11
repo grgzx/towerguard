@@ -18,7 +18,7 @@ addLines('en', {
   ],
   waveClear: [
     ['gandalf', c => `Wave ${c.o} repelled. ${c.p} gold. Spend it wisely. The R, T and Y keys are your friends.`],
-    ['sam', c => `End of wave ${c.og}. ${c.p} gold. Enough for a second pot, Mr. Frodo!`],
+    ['sam', c => `End of wave ${c.o}. ${c.p} gold. Enough for a second pot, Mr. Frodo!`],
     ['vizzini', c => `Wave ${c.o} repelled! My doing! My plan! Which, admittedly, I did not have.`],
     ['rincewind', c => `Wave ${c.o} survived! And without running. A miracle. ${c.p} gold.`],
     ['gimli', c => `Wave ${c.o} done! ${c.p} gold! Real gold, none of your mithril nonsense!`],

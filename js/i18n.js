@@ -1,5 +1,5 @@
 // Interface and message language: PL / EN
-const VERSION = '0.8.0'; // keep in sync with CHANGELOG.md
+const VERSION = '0.8.1'; // keep in sync with CHANGELOG.md
 const IS_TOUCH = typeof matchMedia === 'function' && matchMedia('(pointer: coarse)').matches;
 let LANG = (function () {
   try { const s = localStorage.getItem('td_lang'); if (s === 'pl' || s === 'en') return s; } catch (e) {}
