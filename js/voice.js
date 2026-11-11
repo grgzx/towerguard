@@ -80,7 +80,7 @@ function stopSpeech(clear) {
 }
 
 // chance that the line is spoken at all (urgent warnings always are)
-const CHANCE = { orkCall: 0.55, goblinCall: 0.5, thiefCall: 0.6, mageCall: 0.6, repair: 0.5, dmgUp: 0.45, manaUp: 0.45, heal: 0.5, noGold: 0.5, noMana: 0.5,
+const CHANCE = { orkCall: 0.55, goblinCall: 0.5, thiefCall: 0.6, mageCall: 0.6, repair: 0.5, hpUp: 0.45, manaUp: 0.45, heal: 0.5, noGold: 0.5, noMana: 0.5,
   mortarClose: 0.5, killMilestone: 0.8, mageDead: 0.5, firstKill: 0.8, voiceOn: 1 };
 
 // prio: 0 = chatter (dropped while someone speaks), 1 = normal, 2 = urgent (interrupts)

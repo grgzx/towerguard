@@ -181,11 +181,11 @@ addLines('en', {
     ['galahad', "I fixed the wall. I only got it slightly dirty."],
     ['artur', "The wall is fixed! Well, mostly. It was only a flesh wound."],
   ],
-  dmgUp: [
-    ['lancelot', "My weapon is sharper than my wit!"],
-    ['maynard', "The holy sharpening has worked a miracle. Three times sharper, not five."],
-    ['czarny', "A sharper weapon? Useful. For both hands. In theory."],
-    ['tim', "Greater power! Behold the sharpness of my horns!"],
+  hpUp: [
+    ['lancelot', "I feel stronger! I can take another hit in the same spot!"],
+    ['maynard', "The holy fortification has worked a miracle. Three times healthier, not five."],
+    ['czarny', "More life? Useful. Something to lose, at last."],
+    ['tim', "Greater vigour! Behold the health of my horns!"],
   ],
   manaUp: [
     ['tim', "More mana! Ni, ni, ni! Now they respect me."],

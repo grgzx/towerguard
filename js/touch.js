@@ -17,7 +17,7 @@
     '<div id="tPause" class="tbtn sm">⏸</div><div id="tVoice" class="tbtn sm">🔊</div><div id="tLang" class="tbtn sm">🌐</div></div>' +
     '<div id="tBuy">' +
     '<div id="tRepair" class="tbtn sm"><i>🔧</i><span class="tc"></span></div>' +
-    '<div id="tDmg" class="tbtn sm"><i>⚔</i><span class="tc"></span></div>' +
+    '<div id="tHp" class="tbtn sm"><i>❤️</i><span class="tc"></span></div>' +
     '<div id="tMana" class="tbtn sm"><i>🔮</i><span class="tc"></span></div></div>';
   document.body.appendChild(touch);
   const $t = id => document.getElementById(id);
@@ -69,7 +69,7 @@
   tap('tVoice', () => { toggleVoiceMsg(); $t('tVoice').textContent = VOICE.on ? '🔊' : '🔇'; });
   tap('tLang', toggleLang);
   tap('tRepair', () => live() && buy('repair'));
-  tap('tDmg', () => live() && buy('dmg'));
+  tap('tHp', () => live() && buy('hp'));
   tap('tMana', () => live() && buy('mana'));
 
   // ---- hotbar: tap = select weapon, long press = hire a helper (with a filling ring) ----
@@ -114,7 +114,7 @@
   // ---- periodic cosmetics: costs and the fire button icon ----
   setInterval(() => {
     const c = costs();
-    $t('tRepair').querySelector('.tc').textContent = c.repair; $t('tDmg').querySelector('.tc').textContent = c.dmg; $t('tMana').querySelector('.tc').textContent = c.mana;
+    $t('tRepair').querySelector('.tc').textContent = c.repair; $t('tHp').querySelector('.tc').textContent = c.hp; $t('tMana').querySelector('.tc').textContent = c.mana;
     const ic = WEAPONS[G.sel] && WEAPONS[G.sel].icon; const f = $t('tFire').firstChild; if (ic && f.textContent !== ic) f.textContent = ic;
   }, 250);
 

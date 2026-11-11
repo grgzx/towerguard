@@ -2,8 +2,8 @@
 const $ = id => document.getElementById(id);
 const G = {
   running: false, paused: false, over: false, wave: 0, gold: 80, score: 0, kills: 0, bodies: {},
-  towerHp: 1000, maxTowerHp: 1000, mana: 100, maxMana: 100, manaRegen: 7, dmgMul: 1,
-  timers: [], spawnQ: [], spawnT: 0, breakT: 3, waveActive: false, sel: 0, cds: [], shake: 0, lvl: { dmg: 0, mana: 0 },
+  towerHp: 1000, maxTowerHp: 1000, maxHp: 100, mana: 100, maxMana: 100, manaRegen: 7, dmgMul: 1,
+  timers: [], spawnQ: [], spawnT: 0, breakT: 3, waveActive: false, sel: 0, cds: [], shake: 0, lvl: { hp: 0, mana: 0 },
   player: { pos: new THREE.Vector3(0, TOWER_Y + 0.4 + EYE, 3), yaw: 0, pitch: 0, hp: 100 },
 };
 scene.add(camera);
@@ -143,7 +143,7 @@ addEventListener('keydown', e => {
   if (n >= 1 && n <= 9) selectWeapon(n - 1);
   if (e.code === 'KeyL') toggleLang();
   if (e.code === 'KeyM') toggleVoiceMsg();
-  if (e.code === 'KeyR') buy('repair'); if (e.code === 'KeyT') buy('dmg'); if (e.code === 'KeyY') buy('mana');
+  if (e.code === 'KeyR') buy('repair'); if (e.code === 'KeyT') buy('hp'); if (e.code === 'KeyY') buy('mana');
 });
 addEventListener('keyup', e => keys[e.code] = false);
 addEventListener('mousedown', e => { if (e.button === 0 && G.running && !G.paused) mouseDown = true; });
@@ -158,7 +158,7 @@ document.addEventListener('pointerlockchange', () => {
 });
 addEventListener('contextmenu', e => e.preventDefault());
 
-function costs() { return { repair: 60, dmg: 100 + G.lvl.dmg * 80, mana: 80 + G.lvl.mana * 60 }; }
+function costs() { return { repair: 60, hp: 100 + G.lvl.hp * 80, mana: 80 + G.lvl.mana * 60 }; }
 ['pl', 'en'].forEach(l => { LINES[l].orkCall = (LINES[l].orkCall || []).concat(LINES[l].orkCall2 || []); });
 function buy(w) {
   const c = costs()[w];
@@ -166,7 +166,7 @@ function buy(w) {
   if (G.gold < c) { showMsg(t('noGold')); say('noGold', {}, { prio: 1, cool: 6000 }); return; }
   G.gold -= c;
   if (w === 'repair') { G.towerHp = Math.min(G.maxTowerHp, G.towerHp + G.maxTowerHp * 0.35); showMsg(t('repaired')); say('repair', {}, { cool: 2000 }); }
-  if (w === 'dmg') { G.lvl.dmg++; G.dmgMul += 0.15; showMsg(t('dmgUp')); say('dmgUp', {}, { cool: 2000 }); }
+  if (w === 'hp') { G.lvl.hp++; G.maxHp += 20; G.player.hp += 20; showMsg(t('hpUp')); say('hpUp', {}, { cool: 2000 }); }
   if (w === 'mana') { G.lvl.mana++; G.maxMana += 25; G.manaRegen += 2; showMsg(t('manaUp')); say('manaUp', {}, { cool: 2000 }); }
   sfx('heal');
 }
@@ -185,8 +185,8 @@ function startGame() {
   stopSpeech(true); clearAmbient();
   lowEl.style.opacity = 0;
   clearStatus(); clearHelpers();
-  Object.assign(G, { weaponSayAt: performance.now(), chatT: 40, warnHp: false, warnTower: false, called: {}, running: true, paused: false, over: false, wave: 0, gold: 80, score: 0, kills: 0, bodies: {}, towerHp: 1000, maxTowerHp: 1000, mana: 100, maxMana: 100, manaRegen: 7,
-    dmgMul: 1, timers: [], spawnQ: [], breakT: 3, waveActive: false, lvl: { dmg: 0, mana: 0 } });
+  Object.assign(G, { weaponSayAt: performance.now(), chatT: 40, warnHp: false, warnTower: false, called: {}, running: true, paused: false, over: false, wave: 0, gold: 80, score: 0, kills: 0, bodies: {}, towerHp: 1000, maxTowerHp: 1000, mana: 100, maxMana: 100, maxHp: 100, manaRegen: 7,
+    dmgMul: 1, timers: [], spawnQ: [], breakT: 3, waveActive: false, lvl: { hp: 0, mana: 0 } });
   Object.assign(G.player, { hp: 100, yaw: 0, pitch: 0 }); G.player.pos.set(0, TOWER_Y + 0.4 + EYE, 3);
   _bodyKey = ''; buildHotbar(); selectWeapon(0);
   ['menu', 'over', 'pause'].forEach(i => $(i).classList.add('hidden'));
@@ -338,7 +338,7 @@ function updateBodies() {
 
 function updateHUD() {
   drawMinimap(); updateBodies();
-  const hp = G.player.hp, tf = G.towerHp / G.maxTowerHp;
+  const hp = G.player.hp / G.maxHp * 100, tf = G.towerHp / G.maxTowerHp;
   if (hp < 40) {
     const k = (40 - hp) / 40, beat = 0.7 + 0.3 * Math.sin(performance.now() / (260 - 120 * k));
     lowEl.style.opacity = Math.min(1, (0.35 + 0.65 * k) * beat);
@@ -346,10 +346,10 @@ function updateHUD() {
   if (hp < 30 && !G.warnHp) { G.warnHp = true; showMsg(t('warnHp')); say(hp < 15 ? 'critHp' : 'lowHp', {}, { prio: 2, cool: 8000 }); } else if (hp > 60) G.warnHp = false;
   if (tf < 0.3 && !G.warnTower) { G.warnTower = true; showMsg(t('warnTower')); say('lowTower', {}, { prio: 2, cool: 8000 }); } else if (tf > 0.5) G.warnTower = false;
   $('towerHp').style.width = Math.max(0, G.towerHp / G.maxTowerHp * 100) + '%';
-  $('playerHp').style.width = Math.max(0, G.player.hp) + '%';
+  $('playerHp').style.width = Math.max(0, G.player.hp / G.maxHp * 100) + '%';
   $('mana').style.width = G.mana / G.maxMana * 100 + '%';
   $('wave').textContent = G.wave; $('gold').textContent = Math.floor(G.gold); $('score').textContent = G.score;
-  const c = costs(); $('cRepair').textContent = c.repair + '💰'; $('cDmg').textContent = c.dmg + '💰'; $('cMana').textContent = c.mana + '💰';
+  const c = costs(); $('cRepair').textContent = c.repair + '💰'; $('cHp').textContent = c.hp + '💰'; $('cMana').textContent = c.mana + '💰';
   WEAPONS.forEach((w, i) => {
     const s = $('slot' + i); s.querySelector('.cd').style.height = Math.max(0, G.cds[i] / w.cd) * 100 + '%';
     s.classList.toggle('no', w.mana > G.mana);

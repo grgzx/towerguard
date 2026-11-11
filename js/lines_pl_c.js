@@ -88,9 +88,9 @@ addLines('pl', {
     ['sam', 'Mur gotowy, panie. Zrobiłem go z tego, co było pod ręką: z kamieni i dobrych intencji.'],
     ['gandalf', 'Mur gotowy. Jest mocniejszy niż poprzedni. A poprzedni był mocniejszy, niż się wydawało.'],
   ],
-  dmgUp: [
-    ['inigo', 'Moja klinga jest ostrzejsza. Tym razem pokonam tego, kogo trzeba.'],
-    ['gimli', 'Topór naostrzony! Teraz możecie bać się go dwa razy bardziej!'],
+  hpUp: [
+    ['inigo', 'Jestem zdrowszy. Teraz mogę dłużej mówić, że to nic takiego.'],
+    ['gimli', 'Krasnolud krzepki jak skała! A skała przy mnie wymięka!'],
   ],
   manaUp: [
     ['gandalf', 'Więcej many. Magii nigdy za wiele, ale lepiej nie przesadzać.'],

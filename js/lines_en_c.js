@@ -115,10 +115,10 @@ addLines('en', {
     ['rincewind', "The wall is fixed! You can all feel safe now. I certainly do not."],
     ['inigo', "The wall is repaired. I did nothing, but I did stand next to it very bravely."],
   ],
-  dmgUp: [
-    ['inigo', "My blade is sharper. This time I will cut exactly who needs cutting."],
-    ['gimli', "The axe is sharpened! Now you can fear it twice as much!"],
-    ['legolas', "My arrows are sharper. They were already sharp, but now they are elegant too."],
+  hpUp: [
+    ['inigo', "I am healthier now. I can say it is nothing for much longer."],
+    ['gimli', "Dwarven stamina! Hard as rock, and twice as stubborn!"],
+    ['legolas', "My health is up. I was already graceful, but now I am durable too."],
   ],
   manaUp: [
     ['gandalf', "More mana. A wizard is never too powerful, but let us not overdo it."],

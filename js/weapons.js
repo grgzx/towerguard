@@ -328,7 +328,7 @@ const WEAPONS = [
   { key: 9, icon: '✨', cd: 10, mana: 40,
     fire() {
       G.towerHp = Math.min(G.maxTowerHp, G.towerHp + G.maxTowerHp * 0.3);
-      G.player.hp = Math.min(100, G.player.hp + 50);
+      G.player.hp = Math.min(G.maxHp, G.player.hp + 50);
       for (let i = 0; i < 3; i++) fx.ring(new THREE.Vector3(0, TOWER_Y + 0.5 + i * 0.3, 0), 0xfff2a0, 8 + i * 3, 0.9 + i * 0.2);
       fx.burst(new THREE.Vector3(G.player.pos.x, TOWER_Y + 1, G.player.pos.z), 0xfff2a0, 30, 4, 1.2, 0.2, -2);
       healHelpers(50); showMsg(t('healed')); clearStatus(); say('heal', {}, { prio: 1, cool: 4000 }); sfx('heal');

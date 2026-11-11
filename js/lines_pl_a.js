@@ -144,10 +144,10 @@ Object.assign(LINES.pl, {
     ['dennis', 'Mur naprawiony. Dwa tygodnie roboty w trzy sekundy. Magia kapitału!'],
     ['galahad', 'Naprawiłem mur. Tylko trochę go pobrudziłem.'],
   ],
-  dmgUp: [
-    ['lancelot', 'Moja broń jest ostrzejsza niż mój dowcip!'],
-    ['maynard', 'Święte ostrzenie sprawiło cud. Trzy razy ostrzejsza, nie pięć.'],
-    ['czarny', 'Ostrzejsza broń? Przyda się. Szkoda, że nie mam czym jej trzymać.'],
+  hpUp: [
+    ['lancelot', 'Czuję się silniejszy! Mogę dostać jeszcze raz w to samo miejsce!'],
+    ['maynard', 'Święte wzmocnienie zadziałało. Trzy razy zdrowszy, nie pięć.'],
+    ['czarny', 'Więcej życia? Świetnie. Będzie co tracić.'],
   ],
   manaUp: [
     ['tim', 'Więcej many! Ni, ni, ni! Teraz mnie szanują.'],

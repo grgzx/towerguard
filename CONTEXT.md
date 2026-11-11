@@ -46,7 +46,7 @@ Script order in `index.html`: three → i18n → crew_lines → lines_pl_a-d →
 Kill counter: `G.bodies[type]` is incremented in `Enemy.die()` (also counts kills by helpers and summons). Panel `#bodies` (top left; title "Licznik wrogów" in PL, "Enemy tally" in EN) and the full list `#overBodies` on the game-over screen; enemy names are in `ENEMY_NAMES`.
 
 ## Controls
-WASD move, mouse aim, LMB fire, 1–9 weapon/spell, Shift+1–9 hire a helper, R/T/Y repair/damage/mana, P pause, **M** voices on/off, **L** language (also in pause and the menu).
+WASD move, mouse aim, LMB fire, 1–9 weapon/spell, Shift+1–9 hire a helper, R/T/Y repair/max life/max mana, P pause, **M** voices on/off, **L** language (also in pause and the menu).
 
 ## Mobile (touch)
 - `touch.js` writes into `touchIn` (`turn`, `my`, `fire`, `hold`; the left stick walks forward/back and turns the character left/right) which `main.js` reads in `loop`; no pointer lock on touch (`setPause`/`startGame` skip it).

@@ -164,9 +164,9 @@ const HFIRE = [
     } });
   },
   (h) => {
-    if (G.towerHp > G.maxTowerHp * 0.85 && G.player.hp > 70) return false;
+    if (G.towerHp > G.maxTowerHp * 0.85 && G.player.hp > G.maxHp * 0.7) return false;
     G.towerHp = Math.min(G.maxTowerHp, G.towerHp + G.maxTowerHp * 0.12);
-    G.player.hp = Math.min(100, G.player.hp + 20); healHelpers(20);
+    G.player.hp = Math.min(G.maxHp, G.player.hp + 20); healHelpers(20);
     for (let i = 0; i < 2; i++) fx.ring(new THREE.Vector3(0, TOWER_Y + 0.5 + i * 0.3, 0), 0xfff2a0, 7 + i * 3, 0.9);
     fx.burst(h.pos.clone().add(new THREE.Vector3(0, 1.5, 0)), 0xfff2a0, 18, 3, 1, 0.18, -2);
   },
