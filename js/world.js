@@ -293,11 +293,16 @@ const MTN_SHAPES = {
     return cut * Math.pow(Math.max(0, 1 - e), 0.55) * (0.97 + 0.04 * mtnNoise(x / 6, z / 6));
   },
   giewont: (x, z) => {
-    const P = [[-120, 0], [-85, 0.3], [-60, 0.62], [-48, 0.74], [-38, 0.66], [-22, 0.82], [-8, 0.74], [8, 1.0], [24, 0.8], [40, 0.84], [58, 0.62], [85, 0.3], [120, 0]];
+    // Sleeping Knight lying on his back, seen from the side: helmet, brow, nose, chin, neck, chest (Wielki Giewont with the cross), belly, knees, raised feet
+    const P = [[-130, 0], [-124, 0.34], [-116, 0.64], [-106, 0.74], [-98, 0.7], [-93, 0.78], [-89, 0.86], [-85, 0.6], [-82, 0.5], [-77, 0.56], [-71, 0.28], [-60, 0.34], [-46, 0.68],
+      [-28, 0.92], [-10, 1.0], [4, 0.9], [16, 0.62], [30, 0.56], [44, 0.66], [56, 0.8], [67, 0.68], [78, 0.82], [92, 0.6], [103, 0.5], [110, 0.6], [118, 0.2], [124, 0]];
     let ridge = 0;
-    for (let i = 1; i < P.length; i++) if (x <= P[i][0]) { ridge = P[i - 1][1] + (P[i][1] - P[i - 1][1]) * (x - P[i - 1][0]) / (P[i][0] - P[i - 1][0]); break; }
-    const across = z > 0 ? Math.pow(Math.max(0, 1 - z / 30), 0.7) : Math.pow(Math.max(0, 1 - -z / 55), 1.2);
-    return ridge * across * (0.9 + 0.2 * mtnFbm(x / 9, z / 9));
+    for (let i = 1; i < P.length; i++) if (x <= P[i][0]) {
+      const t = (x - P[i - 1][0]) / (P[i][0] - P[i - 1][0]), k = 0.5 * t + 0.5 * t * t * (3 - 2 * t);
+      ridge = P[i - 1][1] + (P[i][1] - P[i - 1][1]) * k; break;
+    }
+    const across = z > 0 ? Math.pow(Math.max(0, 1 - z / 24), 0.6) : Math.pow(Math.max(0, 1 + z / 50), 1.1);
+    return ridge * across * (0.97 + 0.06 * mtnNoise(x / 14, z / 14));
   },
   hill: (x, z, o) => {
     const k = o.k || 1, base = mtnCone(x, z / k, o.R, 1.25);
@@ -343,7 +348,7 @@ function buildHills() {
     ['everest', 2.45, 330, { w: 290, d: 260, cell: 5, H: 215, snow: 0.38, rock: 0x6d6a6a, tree: 0.08, seed: 12, haze: 0.38 }],
     ['matterhorn', 3.6, 300, { w: 190, d: 190, cell: 4, H: 135, snow: 0.5, rock: 0x77716c, tree: 0.12, seed: 11 }],
     ['rysy', 4.55, 300, { w: 260, d: 130, cell: 4, H: 110, snow: 0.62, rock: 0x85817c, tree: 0.2, seed: 13 }],
-    ['giewont', 5.5, 285, { w: 250, d: 130, cell: 4, H: 85, snow: 1, rock: 0x8c8a84, tree: 0.3, seed: 16, cross: true }],
+    ['giewont', 5.5, 285, { w: 270, d: 130, cell: 3, H: 95, snow: 1, rock: 0x8c8a84, tree: 0.25, seed: 16, cross: true }],
   ];
   big.forEach(([name, a, d, o]) => mtnPlace(mtnBuild(name, o), a, d));
   const r = seeded(5), N = 18;
