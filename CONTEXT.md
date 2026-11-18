@@ -24,6 +24,7 @@ Run: open `index.html` in a browser. Live: https://grgzx.github.io/towerguard/ (
 | `js/crew_lines.js` | `CREW` (characters: name, nameEn, pitch, rate, g, optional `voiceEn` regex), `LINES = {pl:{}, en:{}}`, `addLines(lang, obj)`, `WAVE_TITLES(_EN)`, `waveTitle`, `waveCtx`, `ordFem` |
 | `js/lines_pl_a-d.js`, `js/lines_en_a-d.js` | voice lines PL and EN (a: Monty Python events, b: weapons + `chat`/`battle`, c: extra heroes, d: new enemies and statuses) |
 | `js/lines_defenders.js` | `helperHire` and `helperDead` lines (PL/EN) |
+| `SPEC.md` | full project specification (enough detail to re-create the game); update it when mechanics change |
 | `js/lines_tips.js` | tutorial tips for waves 1–2 (`tipAim`, `tipDefender`, `tipDefenderB`, `tipShop`, `tipMana`), text depends on `IS_TOUCH`; scheduled by `waveTips()` / `TIP_PLAN` in `main.js` (wait for a quiet moment, retry every 2 s) |
 | `js/lines_action.js` | action-movie parodies (Die Hard, Terminator, Matrix, Predator, Top Gun, 300, Mission: Impossible, Bond...) spoken by the existing crew, added to the existing pools |
 | `js/lines_comedy.js` | Beverly Hills Cop, Police Academy, Monkey Island parodies and "swap the prop" fusions (ale instead of martini, coconut badge, rubber chicken with a pulley), spoken by the existing crew |
